@@ -1,0 +1,7 @@
+---
+failure-threshold: info
+no-color: false
+
+ignored:
+- DL3008
+- DL4001
