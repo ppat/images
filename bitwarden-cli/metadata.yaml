@@ -1,0 +1,8 @@
+---
+# renovate: datasource=github-releases depName=bitwarden/clients extractVersion=^cli-v(?<version>.*)$
+image_version: "2024.6.0"
+
+label_title: "bitwarden-cli"
+label_description: "bitwarden-cli running serve (for use with external-secrets operator as webhook provider)"
+
+build_timeout: 10

@@ -1,0 +1,44 @@
+FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
+ARG TARGETARCH
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /
+
+RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
+    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+
+RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
+    --mount=type=cache,target=/var/cache/debconf,id=var-cache-debconf-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=var-lib-apt-${TARGETARCH} \
+    --mount=type=tmpfs,target=/tmp \
+    --mount=type=tmpfs,target=/var/log \
+    --mount=type=tmpfs,target=/var/tmp \
+    apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends wget unzip
+
+# renovate: datasource=github-releases depName=bitwarden/clients extractVersion=^cli-v(?<version>.*)$
+ARG BW_CLI_VERSION="2024.6.0"
+WORKDIR /tmp
+RUN --mount=type=tmpfs,target=/tmp \
+    --mount=type=tmpfs,target=/var/log \
+    --mount=type=tmpfs,target=/var/tmp \
+    wget -nv --no-check-certificate "https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip" -O /tmp/bw.zip && \
+    unzip bw.zip && \
+    mv /tmp/bw /bw
+WORKDIR /
+
+# =======================================================================================================================================
+# Bitwarden CLI requires various libs not available under a small base image such as busybox.
+FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30
+ARG TARGETARCH
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /
+
+COPY --from=builder --chown=root:root --chmod=755 /bw /bw
+COPY --link --chown=root:root --chmod=755 entrypoint.sh /entrypoint.sh
+
+ENV BW_HOST=""
+ENV BW_USER=""
+ENV BW_PASSWORD=""
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD [ "serve", "--hostname=0.0.0.0", "--port=8087" ]
