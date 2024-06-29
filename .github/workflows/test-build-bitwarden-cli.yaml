@@ -1,0 +1,32 @@
+---
+# yamllint disable rule:line-length
+name: test-build-bitwarden-cli
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+    paths:
+    - 'bitwarden-cli/**'
+    - '.github/workflows/test-build-bitwarden-cli.yaml'
+    - '.github/workflows/build-image-workflow.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  load-image-metadata:
+    uses: ./.github/workflows/load-metadata.yaml
+    with:
+      image_name: 'bitwarden-cli'
+
+  test-build:
+    needs: [load-image-metadata]
+    uses: ./.github/workflows/build-image-workflow.yaml
+    secrets: inherit
+    with:
+      image_name: bitwarden-cli
+      label_title: ${{ needs.load-image-metadata.outputs.label_title }}
+      label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
+      timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
