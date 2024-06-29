@@ -1,0 +1,48 @@
+---
+# yamllint disable rule:line-length
+name: load-metadata
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+    outputs:
+      image_version:
+        value: ${{ jobs.load-from-file.outputs.image_version }}
+      label_title:
+        value: ${{ jobs.load-from-file.outputs.label_title }}
+      label_description:
+        value: ${{ jobs.load-from-file.outputs.label_description }}
+      build_timeout:
+        value: ${{ jobs.load-from-file.outputs.build_timeout }}
+
+jobs:
+  load-from-file:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      image_version: ${{ steps.load_metadata.outputs.image_version }}
+      label_title: ${{ steps.load_metadata.outputs.label_title }}
+      label_description: ${{ steps.load_metadata.outputs.label_description }}
+      build_timeout: ${{ steps.load_metadata.outputs.build_timeout }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      with:
+        fetch-depth: 1
+
+    - name: Load metadata file
+      id: load_metadata
+      shell: bash
+      env:
+        METADATA_FILE: "./${{ inputs.image_name }}/metadata.yaml"
+      run: |
+        echo "image_version=$(yq .image_version $METADATA_FILE)" >> $GITHUB_OUTPUT
+        echo "label_title=$(yq .label_title $METADATA_FILE)" >> $GITHUB_OUTPUT
+        echo "label_description=$(yq .label_description $METADATA_FILE)" >> $GITHUB_OUTPUT
+        echo "build_timeout=$(yq .build_timeout $METADATA_FILE)" >> $GITHUB_OUTPUT
