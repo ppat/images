@@ -40,9 +40,7 @@ jobs:
     env:
       IMAGE_NAME: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
       IMAGE_CACHE: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
-      # TODO: commenting out till we get auto-tagging upon publish working
-      # PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.image_version != 'none' }}
-      PUBLISH: ${{ inputs.image_version != 'none' }}
+      PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.image_version != 'none' }}
 
     outputs:
       imageid: ${{ steps.image_info.outputs.imageid }}
@@ -96,7 +94,7 @@ jobs:
       uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
       with:
         images: |
-          ${{ env.IMAGE }}
+          ${{ env.IMAGE_NAME }}
         labels: |
           org.opencontainers.image.title=${{ inputs.label_title }}
           org.opencontainers.image.description=${{ inputs.label_description }}
