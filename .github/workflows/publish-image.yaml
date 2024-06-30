@@ -61,7 +61,7 @@ jobs:
         echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
 
   publish:
-    needs: [load-image-metadata]
+    needs: [load-image-metadata, create-release]
     uses: ./.github/workflows/build-image-workflow.yaml
     secrets: inherit
     with:
