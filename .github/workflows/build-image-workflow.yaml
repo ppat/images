@@ -124,7 +124,7 @@ jobs:
 
     - name: Build image
       id: build-image
-      uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 # v6
+      uses: docker/build-push-action@15560696de535e4014efeff63c48f16952e52dd1 # v6
       with:
         context: ./${{ inputs.image_name }}
         platforms: |-
@@ -152,7 +152,7 @@ jobs:
 
     - name: Load image (non-publish workflow runs only)
       if: ${{ env.PUBLISH == 'false' }}
-      uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 # v6
+      uses: docker/build-push-action@15560696de535e4014efeff63c48f16952e52dd1 # v6
       with:
         context: ./${{ inputs.image_name }}
         platforms: ${{ (runner.arch == 'ARM64') && 'linux/arm64' || 'linux/amd64' }}
@@ -167,7 +167,7 @@ jobs:
 
     - name: Run Trivy vulnerability scanner (non-publish workflow runs only)
       if: ${{ env.PUBLISH == 'false' }}
-      uses: aquasecurity/trivy-action@0.23.0
+      uses: aquasecurity/trivy-action@7c2007bcb556501da015201bcba5aa14069b74e2 # 0.23.0
       with:
         image-ref: ${{ inputs.image_name }}:scan-test
         format: 'table'
