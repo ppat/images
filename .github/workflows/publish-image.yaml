@@ -23,16 +23,43 @@ jobs:
     with:
       image_name: ${{ github.event.inputs.image_name }}
 
-  - name: Create tag
-    uses: actions/github-script@v5
-    with:
-      script: |
-        github.rest.git.createRef({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          ref: 'refs/tags/<tagname>',
-          sha: context.sha
-        })
+  create-release:
+    needs: [load-image-metadata]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      release_ref: ${{ steps.release_info.outputs.release_ref }}
+      release_tag: ${{ steps.release_info.outputs.release_tag }}
+    env: 
+      RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      with:
+        fetch-depth: 1
+    - name: Create release tag
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: env.RELEASE_REF,
+            sha: context.sha
+          })
+    - name: Create release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ github.event.inputs.image_name }}
+        tag_name: ${{ env.RELEASE_TAG }}
+    - name: Prepare release job outputs
+      id: release_info
+      shell: bash
+      run: |
+        echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
+        echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+
   publish:
     needs: [load-image-metadata]
     uses: ./.github/workflows/build-image-workflow.yaml
@@ -42,5 +69,5 @@ jobs:
       image_version: ${{ needs.load-image-metadata.outputs.image_version }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      source_git_ref: ${{ github.ref }}
+      source_git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
