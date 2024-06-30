@@ -48,22 +48,6 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true
-    - name: show
-      shell: bash
-      # yamllint disable-line rule:indentation
-      run: |
-        echo "Stopping docker daemon..."
-        sudo systemctl stop docker
-        echo "Relocating /var/lib/docker..."
-        sudo rsync -a --stats /var/lib/docker /mnt/docker-data
-        echo "Updating /etc/docker/daemon.json..."
-        sudo mv /etc/docker/daemon.json /etc/docker/daemon.bak.json
-        cat /etc/docker/daemon.bak.json | jq '. += {"data-root":"/mnt/docker-data"}' > /etc/docker/daemon.json
-        echo "Restarting docker daemon..."
-        sudo systemctl start docker
-        echo "Checking status of docker daemon..."
-        sudo systemctl status docker
-        docker run hello-world
     - name: Create release
       shell: bash
       env:
