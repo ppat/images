@@ -51,9 +51,9 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         # name: ${{ github.event.inputs.image_name }}
-        # name: bitwarden-cli
+        name: ${{ env.RELEASE_TAG }}
         target_commitish: ${{ github.ref }}
-        tag_name: ${{ env.RELEASE_TAG }}
+        # tag_name: ${{ env.RELEASE_TAG }}
     - name: Prepare release job outputs
       id: release_info
       shell: bash
