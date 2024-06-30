@@ -55,7 +55,7 @@ jobs:
         IMAGE_NAME: 'bitwarden-cli'
       # yamllint disable-line rule:indentation
       run: |
-        echo "Fetching previous releases..."
+        echo "Fetching all previous releases..."
         gh api repos/${GITHUB_REPOSITORY}/releases > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
         echo "Filtering down to releases for this image..."
@@ -71,6 +71,7 @@ jobs:
           CHANGELOG_RANGE="main"
         fi
         echo "Determining release notes..."
+        set -x
         git log $CHANGELOG_RANGE -- ${IMAGE_NAME}/ --no-decorate --no-color --no-merges --pretty=format:"- %s" > /tmp/release_notes.txt
         CHANGE_COUNT=$(wc -l /tmp/release_notes.txt)
         if [[ $CHANGE_COUNT -ge 1 ]]; then
