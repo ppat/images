@@ -17,6 +17,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
@@ -37,23 +40,46 @@ jobs:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       with:
-        fetch-depth: 1
-    - name: Create release tag
-      uses: actions/github-script@v7
-      with:
-        # yamllint disable-line rule:indentation
-        script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: env.RELEASE_REF,
-            sha: context.sha
-          })
+        fetch-depth: 0
+        fetch-tags: true
+        ref: main
     - name: Create release
-      uses: softprops/action-gh-release@v2
-      with:
-        name: ${{ github.event.inputs.image_name }}
-        tag_name: ${{ env.RELEASE_TAG }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_NAME: ${{ github.event.inputs.image_name }}
+      # yamllint disable-line rule:indentation
+      run: |
+        echo "Fetching all previous releases..."
+        gh api repos/${GITHUB_REPOSITORY}/releases > /tmp/all_releases.json
+        cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
+        echo "Filtering down to releases for this image..."
+        cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
+        cat /tmp/image_release_tags.list | pr -t -o 4
+        echo "Determining previous release for this image..."
+        LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
+        if [[ ! -z "${LAST_RELEASE}" ]]; then
+          LAST_RELEASE_SHA=$(git rev-list -n 1 $LAST_RELEASE)
+          echo $LAST_RELEASE | pr -t -o 4
+          echo $LAST_RELEASE_SHA | pr -t -o 4
+          CHANGELOG_RANGE="${LAST_RELEASE_SHA}..main"
+        else
+          echo "No previous release for ${IMAGE_NAME}." | pr -t -o 4
+          CHANGELOG_RANGE="main"
+        fi
+        echo "Determining release notes..."
+        git log --no-decorate --no-color --no-merges --pretty=format:"- %s" $CHANGELOG_RANGE -- "${IMAGE_NAME}/" > /tmp/release_notes.txt
+        cat /tmp/release_notes.txt | pr -t -o 4
+        CHANGE_COUNT=$(wc -l < /tmp/release_notes.txt)
+        if [[ $CHANGE_COUNT -ge 1 ]]; then
+          echo "Creating release..."
+          gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file /tmp/release_notes.txt
+          echo "Done."
+        else
+          echo "No changes since last release."
+          echo "Aborting release..."
+          exit 1
+        fi
     - name: Prepare release job outputs
       id: release_info
       shell: bash
