@@ -1,0 +1,126 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/).+\\.ya?ml$",
+        "(^|/)Dockerfile$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-.]+?)\\s+depName=(?<depName>[a-zA-Z0-9-\/]+?)(\\s+repository=(?<registryUrl>[^\\s]+?))?(\\s+versioning=(?<versioning>[^\\s]+?))?(\\s+extractVersion=(?<extractVersion>[^\\s]+?))?\\s*\\n.+[\\:\\=]\\s?\"v?(?<currentValue>[^\\s]+)\""
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "extends": [
+    "config:best-practices",
+    "group:linters"
+  ],
+  "internalChecksFilter": "strict",
+  "packageRules": [
+    {
+      "groupName": "github-action dependencies",
+      "groupSlug": "github-actions-deps",
+      "matchFileNames": [
+        ".github/workflows/**"
+      ],
+      "matchManagers": [
+        "github-actions"
+      ],
+      "minimumReleaseAge": "90 days",
+      "schedule": [
+        "before 10am on Tuesday",
+        "before 10am on Thursday"
+      ]
+    },
+    {
+      "automerge": true,
+      "groupName": "github-release non-major dependencies",
+      "groupSlug": "github-release-non-major-deps",
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "minimumReleaseAge": "1 days"
+    },
+    {
+      "groupName": "github-release major dependencies",
+      "groupSlug": "github-release-deps",
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "minimumReleaseAge": "30 days",
+      "schedule": [
+        "before 10am on Tuesday",
+        "before 10am on Thursday"
+      ]
+    },
+    {
+      "groupName": "npm dependencies",
+      "groupSlug": "npm-deps",
+      "matchDatasources": [
+        "npm"
+      ],
+      "minimumReleaseAge": "90 days",
+      "schedule": [
+        "before 10am on Tuesday",
+        "before 10am on Thursday"
+      ]
+    },
+    {
+      "groupName": "python dependencies",
+      "groupSlug": "pypi-deps",
+      "matchDatasources": [
+        "pypi"
+      ],
+      "minimumReleaseAge": "90 days",
+      "schedule": [
+        "before 10am on Tuesday",
+        "before 10am on Thursday"
+      ]
+    },
+    {
+      "groupName": "pre-commit dependencies",
+      "groupSlug": "pre-commit-deps",
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "minimumReleaseAge": "90 days"
+    },
+    {
+      "description": "delay upgrading ubuntu major versions till 90 days from release (to allow time for compatibility fixes to other packages)",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchDepNames": [
+        "ubuntu"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "minimumReleaseAge": "90 days",
+      "schedule": [
+        "before 10am on Wednesday"
+      ]
+    }
+  ],
+  "prConcurrentLimit": 20,
+  "prHourlyLimit": 10,
+  "pre-commit": {
+    "enabled": true
+  },
+  "rebaseWhen": "behind-base-branch",
+  "semanticCommits": "enabled",
+  "semanticCommitScope": "deps",
+  "semanticCommitType": "chore",
+  "separateMajorMinor": true,
+  "separateMultipleMajor": false,
+  "timezone": "US/Eastern"
+}
