@@ -70,7 +70,6 @@ jobs:
         echo "Determining release notes..."
         git log --no-decorate --no-color --no-merges --pretty=format:"- %s" $CHANGELOG_RANGE -- "${IMAGE_NAME}/" > /tmp/release_notes.txt
         cat /tmp/release_notes.txt | pr -t -o 4
-        CHANGE_COUNT=
         if (( $(wc -l < /tmp/release_notes.txt) > 0 )); then
           echo "Creating release..."
           gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file /tmp/release_notes.txt
