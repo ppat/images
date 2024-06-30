@@ -55,12 +55,11 @@ jobs:
         pwd
         df -h
         ls -al /mnt
-        ls -al /home/runner/work
-        ls -al /home/runner/work/images
-        ls -al /home/runner/.docker
-        ls -al /etc/docker
-        ls -al /var/lib/docker
-        systemctl status docker
+        cat /mnt/DATALOSS_WARNING_README.txt
+        cat /home/runner/.docker/config.json
+        cat /etc/docker/daemon.json
+        sudo ls -al /var/lib/docker
+        sudo systemctl status docker
         env | grep ^GITHUB_ | sort
     - name: Create release
       shell: bash
