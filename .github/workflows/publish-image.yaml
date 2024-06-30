@@ -48,6 +48,7 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true
+        ref: main
     - name: Create release
       shell: bash
       env:
@@ -65,14 +66,15 @@ jobs:
         LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
         if [[ ! -z "${LAST_RELEASE}" ]]; then
           echo $LAST_RELEASE | pr -t -o 4
-          CHANGELOG_RANGE="${LAST_RELEASE}..main"
+          CHANGELOG_RANGE="\"${LAST_RELEASE}\"..main"
         else
           echo "No previous release for ${IMAGE_NAME}." | pr -t -o 4
           CHANGELOG_RANGE="main"
         fi
         echo "Determining release notes..."
+        git --version
         set -x
-        git log $CHANGELOG_RANGE -- ${IMAGE_NAME}/ --no-decorate --no-color --no-merges --pretty=format:"- %s" > /tmp/release_notes.txt
+        git log $CHANGELOG_RANGE -- "${IMAGE_NAME}/" --no-decorate --no-color --no-merges --pretty='format:"- %s"' > /tmp/release_notes.txt
         CHANGE_COUNT=$(wc -l /tmp/release_notes.txt)
         if [[ $CHANGE_COUNT -ge 1 ]]; then
           echo "Creating release..."
