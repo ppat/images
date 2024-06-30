@@ -52,15 +52,19 @@ jobs:
       shell: bash
       # yamllint disable-line rule:indentation
       run: |
-        pwd
-        df -h
-        ls -al /mnt
-        cat /mnt/DATALOSS_WARNING_README.txt
-        cat /home/runner/.docker/config.json
-        cat /etc/docker/daemon.json
-        sudo ls -al /var/lib/docker
         sudo systemctl status docker
         env | grep ^GITHUB_ | sort
+        echo "Stopping docker daemon..."
+        sudo systemctl stop docker
+        echo "Relocating /var/lib/docker..."
+        sudo rsync -a --progress --stats /var/lib/docker /mnt/docker-data
+        echo "Updating /etc/docker/daemon.json..."
+        sudo mv /etc/docker/daemon.json /etc/docker/daemon.bak.json
+        cat /etc/docker/daemon.bak.json | jq '. += {"data-root":"/mnt/docker-data"}' > /etc/docker/daemon.json
+        echo "Restarting docker daemon..."
+        sudo systemctl start docker
+        echo "Checking status of docker daemon..."
+        sudo systemctl status docker
     - name: Create release
       shell: bash
       env:
@@ -69,7 +73,7 @@ jobs:
       # yamllint disable-line rule:indentation
       run: |
         echo "Fetching previous releases..."
-        gh api repos/${github.repository}/releases > /tmp/all_releases.json
+        gh api repos/${GITHUB_REPOSITORY}/releases > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
         echo "Filtering down to releases for this image..."
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
@@ -84,7 +88,7 @@ jobs:
           CHANGELOG_RANGE="main"
         fi
         echo "Determining release notes..."
-        git log $CHANGELOG_RANGE --no-decorate --no-color --no-merges --pretty=format:"- %s" | grep -E '\('${IMAGE_NAME}'\)\:' > /tmp/release_notes.txt
+        git log $CHANGELOG_RANGE ${IMAGE_NAME}/ --no-decorate --no-color --no-merges --pretty=format:"- %s" > /tmp/release_notes.txt
         CHANGE_COUNT=$(wc -l /tmp/release_notes.txt)
         if [[ $CHANGE_COUNT -ge 1 ]]; then
           echo "Creating release..."
