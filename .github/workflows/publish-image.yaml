@@ -1,0 +1,46 @@
+---
+# yamllint disable rule:line-length
+name: publish-image
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: 'Image to publish'
+        required: true
+        type: choice
+        options:
+        - 'bitwarden-cli'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  load-image-metadata:
+    uses: ./.github/workflows/load-metadata.yaml
+    with:
+      image_name: ${{ github.event.inputs.image_name }}
+
+  - name: Create tag
+    uses: actions/github-script@v5
+    with:
+      script: |
+        github.rest.git.createRef({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          ref: 'refs/tags/<tagname>',
+          sha: context.sha
+        })
+  publish:
+    needs: [load-image-metadata]
+    uses: ./.github/workflows/build-image-workflow.yaml
+    secrets: inherit
+    with:
+      image_name: ${{ github.event.inputs.image_name }}
+      image_version: ${{ needs.load-image-metadata.outputs.image_version }}
+      label_title: ${{ needs.load-image-metadata.outputs.label_title }}
+      label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      source_git_ref: ${{ github.ref }}
+      timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
