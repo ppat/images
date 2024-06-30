@@ -4,6 +4,9 @@ name: publish-image
 
 # yamllint disable-line rule:truthy
 on:
+  pull_request:
+    paths:
+    - '.github/workflows/publish-image.yaml'
   workflow_dispatch:
     inputs:
       image_name:
@@ -21,7 +24,8 @@ jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
     with:
-      image_name: ${{ github.event.inputs.image_name }}
+      # image_name: ${{ github.event.inputs.image_name }}
+      image_name: bitwarden-cli
 
   create-release:
     needs: [load-image-metadata]
@@ -31,8 +35,10 @@ jobs:
       release_ref: ${{ steps.release_info.outputs.release_ref }}
       release_tag: ${{ steps.release_info.outputs.release_tag }}
     env:
-      RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
-      RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      # RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      # RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_TAG: ${{ format('{0}/{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_REF: ${{ format('refs/tags/{0}/{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
     steps:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -52,7 +58,8 @@ jobs:
     - name: Create release
       uses: softprops/action-gh-release@v2
       with:
-        name: ${{ github.event.inputs.image_name }}
+        # name: ${{ github.event.inputs.image_name }}
+        name: bitwarden-cli
         tag_name: ${{ env.RELEASE_TAG }}
     - name: Prepare release job outputs
       id: release_info
@@ -61,14 +68,14 @@ jobs:
         echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
         echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
 
-  publish:
-    needs: [load-image-metadata, create-release]
-    uses: ./.github/workflows/build-image-workflow.yaml
-    secrets: inherit
-    with:
-      image_name: ${{ github.event.inputs.image_name }}
-      image_version: ${{ needs.load-image-metadata.outputs.image_version }}
-      label_title: ${{ needs.load-image-metadata.outputs.label_title }}
-      label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      source_git_ref: ${{ needs.create-release.outputs.release_ref }}
-      timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
+  # publish:
+  #   needs: [load-image-metadata, create-release]
+  #   uses: ./.github/workflows/build-image-workflow.yaml
+  #   secrets: inherit
+  #   with:
+  #     image_name: ${{ github.event.inputs.image_name }}
+  #     image_version: ${{ needs.load-image-metadata.outputs.image_version }}
+  #     label_title: ${{ needs.load-image-metadata.outputs.label_title }}
+  #     label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+  #     source_git_ref: ${{ needs.create-release.outputs.release_ref }}
+  #     timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
