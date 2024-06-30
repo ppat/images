@@ -48,6 +48,18 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true
+    - name: show
+      shell: bash
+      # yamllint disable-line rule:indentation
+      run: |
+        pwd
+        df -h
+        echo "/home/runner"
+        sudo du -h -d 1 /home/runner
+        echo "/usr"
+        sudo du -h -d 1 /usr
+        echo "/var"
+        sudo du -h -d 1 /var
     - name: Create release
       shell: bash
       env:
@@ -55,8 +67,6 @@ jobs:
         IMAGE_NAME: 'bitwarden-cli'
       # yamllint disable-line rule:indentation
       run: |
-        pwd
-        df -h
         echo "Fetching previous releases..."
         gh api repos/${github.repository}/releases > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
