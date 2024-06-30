@@ -65,8 +65,10 @@ jobs:
         echo "Determining previous release for this image..."
         LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
         if [[ ! -z "${LAST_RELEASE}" ]]; then
+          LAST_RELEASE_SHA=$(git rev-list -n 1 $LAST_RELEASE)
           echo $LAST_RELEASE | pr -t -o 4
-          CHANGELOG_RANGE="\"${LAST_RELEASE}\"..main"
+          echo $LAST_RELEASE_SHA | pr -t -o 4
+          CHANGELOG_RANGE="${LAST_RELEASE_SHA}..main"
         else
           echo "No previous release for ${IMAGE_NAME}." | pr -t -o 4
           CHANGELOG_RANGE="main"
