@@ -55,8 +55,10 @@ jobs:
         IMAGE_NAME: 'bitwarden-cli'
       # yamllint disable-line rule:indentation
       run: |
+        pwd
+        df -h
         echo "Fetching previous releases..."
-        gh api repos/ppat/coder/releases > /tmp/all_releases.json
+        gh api repos/${github.repository}/releases > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
         echo "Filtering down to releases for this image..."
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
