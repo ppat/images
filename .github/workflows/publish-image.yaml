@@ -54,12 +54,14 @@ jobs:
       run: |
         pwd
         df -h
-        echo "/home/runner"
-        sudo du -h -d 1 /home/runner
-        echo "/usr"
-        sudo du -h -d 1 /usr
-        echo "/var"
-        sudo du -h -d 1 /var
+        ls -al /mnt
+        ls -al /home/runner/work
+        ls -al /home/runner/work/images
+        ls -al /home/runner/.docker
+        ls -al /etc/docker
+        ls -al /var/lib/docker
+        systemctl status docker
+        env | grep ^GITHUB_ | sort
     - name: Create release
       shell: bash
       env:
