@@ -40,8 +40,8 @@ jobs:
     env:
       # RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
       # RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
-      RELEASE_TAG: ${{ format('{0}/{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
-      RELEASE_REF: ${{ format('refs/tags/{0}/{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_TAG: ${{ format('{0}:{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_REF: ${{ format('refs/tags/{0}:{1}', 'bitwarden-cli', needs.load-image-metadata.outputs.image_version) }}
     steps:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -51,9 +51,9 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         # name: ${{ github.event.inputs.image_name }}
-        name: ${{ env.RELEASE_TAG }}
+        name: "bitwarden-cli/v${{ env.RELEASE_TAG }}"
         target_commitish: ${{ github.ref }}
-        # tag_name: ${{ env.RELEASE_TAG }}
+        tag_name: ${{ env.RELEASE_TAG }}
     - name: Prepare release job outputs
       id: release_info
       shell: bash
