@@ -74,7 +74,7 @@ jobs:
         echo "Determining release notes..."
         git --version
         set -x
-        git log $CHANGELOG_RANGE -- "${IMAGE_NAME}/" --no-decorate --no-color --no-merges --pretty='format:"- %s"' > /tmp/release_notes.txt
+        git log $CHANGELOG_RANGE --no-decorate --no-color --no-merges --pretty='format:"- %s"' ${IMAGE_NAME}/ > /tmp/release_notes.txt
         CHANGE_COUNT=$(wc -l /tmp/release_notes.txt)
         if [[ $CHANGE_COUNT -ge 1 ]]; then
           echo "Creating release..."
