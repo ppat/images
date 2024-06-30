@@ -46,7 +46,7 @@ jobs:
           github.rest.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: env.RELEASE_REF,
+            ref: ${{ env.RELEASE_REF }},
             sha: context.sha
           })
     - name: Create release
