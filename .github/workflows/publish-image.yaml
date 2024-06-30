@@ -46,13 +46,40 @@ jobs:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       with:
-        fetch-depth: 1
+        fetch-depth: 0
+        fetch-tags: true
     - name: Create release
       shell: bash
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_NAME: 'bitwarden-cli'
+      # yamllint disable-line rule:indentation
       run: |
-        gh release create "$RELEASE_TAG" --title "$RELEASE_TAG"
+        echo "Fetching previous releases..."
+        gh api repos/ppat/coder/releases > /tmp/all_releases.json
+        echo "Filtering down to releases for this image..."
+        cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
+        echo "Determining last release for this image..."
+        LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
+        if [[ ! -z "${LAST_RELEASE}" ]]; then
+          echo $LAST_RELEASE | pr -t -o 4
+          CHANGELOG_RANGE="${LAST_RELEASE}..main"
+        else
+          echo "No last release for ${IMAGE_NAME}." | pr -t -o 4
+          CHANGELOG_RANGE="main"
+        fi
+        echo "Determining release notes..."
+        git log $CHANGELOG_RANGE --no-decorate --no-color --no-merges --pretty=format:"- %s" | grep -E '\('${IMAGE_NAME}'\)\:' > /tmp/release_notes.txt
+        CHANGE_COUNT=$(wc -l /tmp/release_notes.txt)
+        if [[ $CHANGE_COUNT -ge 1 ]]; then
+          echo "Creating release..."
+          gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file /tmp/release_notes.txt
+          echo "Done."
+        else
+          echo "No changes since last release."
+          echo "Aborting release..."
+          exit 1
+        fi
     - name: Prepare release job outputs
       id: release_info
       shell: bash
