@@ -1,6 +1,7 @@
 FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
@@ -12,7 +13,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=var-lib-apt-${TARGETARCH} \
     --mount=type=tmpfs,target=/tmp \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+    apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
         git \
@@ -26,8 +27,6 @@ WORKDIR /usr/local/src/repositories
 RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/g')" && \
     git clone --depth 1 --single-branch --branch $RELEASE_TAG https://github.com/FreeRADIUS/freeradius-server.git
 WORKDIR /usr/local/src/repositories/freeradius-server/
-
-ENV DEBIAN_FRONTEND=noninteractive
 
 # Install build dependencies
 RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
@@ -72,18 +71,24 @@ RUN groupadd -g $FREERADIUS_GID -r freeradius && \
         --shell /usr/sbin/nologin \
         freeradius
 
+# Install timezone data
+RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
+    --mount=type=cache,target=/var/cache/debconf,id=var-cache-debconf-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=var-lib-apt-${TARGETARCH} \
+    ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq tzdata
+
 # Install the debian package from builder stage
-RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories/*.deb,target=/tmp \
+RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tmp/build \
     --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=var-cache-debconf-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=var-lib-apt-${TARGETARCH} \
-    --mount=type=tmpfs,target=/var/tmp \
-    --mount=type=tmpfs,target=/var/log \
-    export DEBIAN_FRONTEND="noninteractive" && \
+    export BUILD_DEB_FILES="$(find /tmp/build -name '*.log' -type f)" && \
+    echo "Found *.deb files from build: ${BUILD_DEB_FILES}" && \
     apt-get update && \
-    apt-get install -yq tzdata && \
-    apt-get install -y /tmp/*.deb && \
-    ln -s /etc/freeradius /etc/raddb
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y /tmp/*.deb && \
+    ln -s /etc/freeradius /etc/raddb && \
 
 EXPOSE 1812/udp 1813/udp
 ENTRYPOINT ["/usr/sbin/freeradius"]

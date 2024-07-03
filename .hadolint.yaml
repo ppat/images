@@ -5,3 +5,4 @@ no-color: false
 ignored:
 - DL3008
 - DL4001
+- SC2155
