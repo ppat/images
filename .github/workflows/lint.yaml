@@ -115,7 +115,7 @@ jobs:
         dockerfile: "Dockerfile"
         recursive: true
         failure-threshold: warning
-        config: .hadolint.yaml
+        config: ./.hadolint.yaml
 
     - name: yamllint
       if: success() || failure()
