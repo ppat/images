@@ -6,9 +6,9 @@ name: test-build-freeradius-server
 on:
   pull_request:
     paths:
-    - 'bitwarden-cli/**'
-    - '.github/workflows/test-build-freeradius-server.yaml'
-    - '.github/workflows/build-image-workflow.yaml'
+    - 'freeradius-server/**'
+    # - '.github/workflows/test-build-freeradius-server.yaml'
+    # - '.github/workflows/build-image-workflow.yaml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}

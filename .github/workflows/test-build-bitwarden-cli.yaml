@@ -7,8 +7,8 @@ on:
   pull_request:
     paths:
     - 'bitwarden-cli/**'
-    - '.github/workflows/test-build-bitwarden-cli.yaml'
-    - '.github/workflows/build-image-workflow.yaml'
+    # - '.github/workflows/test-build-bitwarden-cli.yaml'
+    # - '.github/workflows/build-image-workflow.yaml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
