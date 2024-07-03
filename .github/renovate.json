@@ -15,7 +15,8 @@
   ],
   "extends": [
     "config:best-practices",
-    "group:linters"
+    "group:linters",
+    "mergeConfidence:all-badges"
   ],
   "internalChecksFilter": "strict",
   "packageRules": [
