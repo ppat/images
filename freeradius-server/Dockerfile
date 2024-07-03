@@ -28,9 +28,7 @@ RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/
 WORKDIR /usr/local/src/repositories/freeradius-server/
 
 # Install build dependencies
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-deps-${TARGETARCH} \
-    --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     if [ -e ./debian/control.in ]; then \
@@ -39,9 +37,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
     echo 'y' | mk-build-deps -irt'apt-get -yV' debian/control
 
 # Build the server
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-build-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-build-${TARGETARCH} \
-    --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     debian/rules debian/control \
@@ -77,6 +73,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tz-${TARGETARCH} \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends tzdata
 
 # Install the debian package from builder stage
+# hadolint ignore=SC2086
 RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tmp/build \
     --mount=type=cache,target=/var/cache/apt,id=cache-apt-install-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-install-${TARGETARCH} \
