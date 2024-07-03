@@ -37,7 +37,6 @@ jobs:
       release_timestamp: ${{ steps.release.outputs.release_timestamp }}
     env:
       RELEASE_TAG_PREFIX: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
-      RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
     steps:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -55,8 +54,10 @@ jobs:
       run: |
         RELEASE_TIMESTAMP="$(date --utc +%s)"
         RELEASE_TAG="${RELEASE_TAG_PREFIX}-${RELEASE_TIMESTAMP}"
+        RELEASE_REF="refs/tags/${RELEASE_TAG}"
         echo "Setting release timestamp to $RELEASE_TIMESTAMP"
         echo "Setting release tag to $RELEASE_TAG"
+        echo "Setting release ref to $RELEASE_REF"
         echo
         echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
         echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
@@ -102,8 +103,7 @@ jobs:
     secrets: inherit
     with:
       image_name: ${{ github.event.inputs.image_name }}
-      image_version: ${{ needs.load-image-metadata.outputs.image_version }}
-      image_version_suffix: ${{ needs.create-release.outputs.release_timestamp }}
+      app_version: ${{ needs.load-image-metadata.outputs.image_version }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}

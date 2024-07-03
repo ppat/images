@@ -9,10 +9,7 @@ on:
       image_name:
         required: true
         type: string
-      image_version:
-        type: string
-        default: 'none'
-      image_version_suffix:
+      app_version:
         type: string
         default: 'none'
       label_title:
@@ -47,7 +44,7 @@ jobs:
       # PUBLISH variable affects:
       # - image tagging and docker build caches
       # - pushes to docker hub registry (all builds are pushed to homelab registry regardless)
-      PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.image_version != 'none' }}
+      PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.app_version != 'none' }}
 
     outputs:
       imageid: ${{ steps.image_info.outputs.imageid }}
@@ -72,19 +69,23 @@ jobs:
         echo "GIT_SHA=$GIT_SHA" >> $GITHUB_ENV
 
         if [[ "$PUBLISH" == "true" ]]; then
+          IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f4)"
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
           echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main\"" >> $GITHUB_ENV
           echo "CACHE_TO=\"type=registry,ref=${IMAGE_CACHE}:main,${CACHE_TO_PARAMS}\"" >> $GITHUB_ENV
         else
-          CURRENT_BRANCH="$(echo $SOURCE_GIT_REF | cut -d'/' -f3)"
-          echo "CURRENT_BRANCH=${CURRENT_BRANCH}" >> $GITHUB_ENV
-          echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main,type=registry,ref=${IMAGE_CACHE}:${CURRENT_BRANCH}\"" >> $GITHUB_ENV
-          echo "CACHE_TO=\"type=registry,ref=${IMAGE_CACHE}:${CURRENT_BRANCH},${CACHE_TO_PARAMS}\"" >> $GITHUB_ENV
+          IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f3)"
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+          echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main,type=registry,ref=${IMAGE_CACHE}:${IMAGE_TAG}\"" >> $GITHUB_ENV
+          echo "CACHE_TO=\"type=registry,ref=${IMAGE_CACHE}:${IMAGE_TAG},${CACHE_TO_PARAMS}\"" >> $GITHUB_ENV
         fi
 
     - name: Show build parameters
       shell: bash
       run: |
-        env | sort | grep -E '^(CACHE_|CURRENT_BRANCH|GIT_SHA|IMAGE_|PUBLISH)'
+        env | sort | grep -E '^(CACHE_|GIT_SHA|IMAGE_|PUBLISH)'
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3
@@ -106,13 +107,14 @@ jobs:
         labels: |
           org.opencontainers.image.title=${{ inputs.label_title }}
           org.opencontainers.image.description=${{ inputs.label_description }}
-        tags: |
-          type=raw,value=${{ inputs.image_version }}-${{ inputs.image_version_suffix }},enable=${{ env.PUBLISH == 'true' && inputs.image_version_suffix != 'none' }},priority=1000
-          type=semver,pattern={{version}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=900
-          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=800
-          type=semver,pattern={{major}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=700
+        tags: |-
+          type=raw,value=${{ env.IMAGE_TAG }},enable=${{ env.PUBLISH == 'true' }},priority=1000
+          type=semver,pattern={{version}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=900
+          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=800
+          type=semver,pattern={{major}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=700
           type=raw,value=latest,enable=${{ env.PUBLISH == 'true' }},priority=200
-          type=raw,value=${{ env.CURRENT_BRANCH }},enable=${{ env.PUBLISH == 'false' }},prefix=branch-,priority=400
+
+          type=raw,value=${{ env.IMAGE_TAG }},enable=${{ env.PUBLISH == 'false' }},prefix=branch-,priority=400
           type=raw,value=${{ env.GIT_SHA }},prefix=git-,priority=300
 
     - name: Tailscale Connect
