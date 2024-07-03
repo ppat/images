@@ -8,10 +8,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
 # Install build tooling
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tools-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-tools-${TARGETARCH} \
-    --mount=type=tmpfs,target=/tmp \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
