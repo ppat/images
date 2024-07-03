@@ -1,17 +1,13 @@
-FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
-ARG TARGETARCH
+FROM --platform=$BUILDPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
-RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
-    --mount=type=cache,target=/var/cache/debconf,id=var-cache-debconf-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=var-lib-apt-${TARGETARCH} \
-    --mount=type=tmpfs,target=/tmp \
-    --mount=type=tmpfs,target=/var/log \
-    --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/cache/debconf \
+    --mount=type=cache,target=/var/lib/apt \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends wget unzip
 
@@ -19,8 +15,6 @@ RUN --mount=type=cache,target=/var/cache/apt,id=var-cache-apt-${TARGETARCH} \
 ARG BW_CLI_VERSION="2024.6.0"
 WORKDIR /tmp
 RUN --mount=type=tmpfs,target=/tmp \
-    --mount=type=tmpfs,target=/var/log \
-    --mount=type=tmpfs,target=/var/tmp \
     wget -nv --no-check-certificate "https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip" -O /tmp/bw.zip && \
     unzip bw.zip && \
     mv /tmp/bw /bw
@@ -29,7 +23,6 @@ WORKDIR /
 # =======================================================================================================================================
 # Bitwarden CLI requires various libs not available under a small base image such as busybox.
 FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30
-ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
