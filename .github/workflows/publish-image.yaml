@@ -32,11 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
-      release_ref: ${{ steps.release_info.outputs.release_ref }}
-      release_tag: ${{ steps.release_info.outputs.release_tag }}
-      release_timestamp: ${{ steps.release_info.outputs.release_timestamp }}
+      release_ref: ${{ steps.release.outputs.release_ref }}
+      release_tag: ${{ steps.release.outputs.release_tag }}
+      release_timestamp: ${{ steps.release.outputs.release_timestamp }}
     env:
-      RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_TAG_PREFIX: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
       RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
     steps:
     - name: Checkout
@@ -46,18 +46,30 @@ jobs:
         fetch-tags: true
         ref: main
     - name: Create release
+      id: release
       shell: bash
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_NAME: ${{ github.event.inputs.image_name }}
       # yamllint disable-line rule:indentation
       run: |
+        RELEASE_TIMESTAMP="$(date --utc +%s)"
+        RELEASE_TAG="${RELEASE_TAG_PREFIX}-${RELEASE_TIMESTAMP}"
+        echo "Setting release timestamp to $RELEASE_TIMESTAMP"
+        echo "Setting release tag to $RELEASE_TAG"
+        echo
+        echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
+        echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+        echo "release_timestamp=${RELEASE_TIMESTAMP}" >> $GITHUB_OUTPUT
+        echo
         echo "Fetching all previous releases..."
         gh api repos/${GITHUB_REPOSITORY}/releases > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
+        echo
         echo "Filtering down to releases for this image..."
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
         cat /tmp/image_release_tags.list | pr -t -o 4
+        echo
         echo "Determining previous release for this image..."
         LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
         if [[ ! -z "${LAST_RELEASE}" ]]; then
@@ -69,9 +81,11 @@ jobs:
           echo "No previous release for ${IMAGE_NAME}." | pr -t -o 4
           CHANGELOG_RANGE="main"
         fi
+        echo
         echo "Determining release notes..."
         git log --no-decorate --no-color --no-merges --pretty=format:"- %s" $CHANGELOG_RANGE -- "${IMAGE_NAME}/" > /tmp/release_notes.txt
         cat /tmp/release_notes.txt | pr -t -o 4
+        echo
         if (( $(wc -m < /tmp/release_notes.txt) > 0 )); then
           echo "Creating release..."
           gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file /tmp/release_notes.txt
@@ -81,13 +95,6 @@ jobs:
           echo "Aborting release..."
           exit 1
         fi
-    - name: Prepare release job outputs
-      id: release_info
-      shell: bash
-      run: |
-        echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
-        echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
-        echo "release_timestamp=$(date --utc +%s)" >> $GITHUB_OUTPUT
 
   publish:
     needs: [load-image-metadata, create-release]

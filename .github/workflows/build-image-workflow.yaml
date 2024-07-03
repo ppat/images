@@ -41,9 +41,12 @@ jobs:
     timeout-minutes: ${{ inputs.timeout_minutes }}
 
     env:
-      IMAGE_NAME: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
+      DOCKERHUB_REPOSITORY: "ppatlabs/${{ inputs.image_name }}"
+      HOMELAB_REPOSITORY: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
       IMAGE_CACHE: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
-      # publish variable affects image tagging and docker build caches (not whether its pushed or not)
+      # PUBLISH variable affects:
+      # - image tagging and docker build caches
+      # - pushes to docker hub registry (all builds are pushed to homelab registry regardless)
       PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.image_version != 'none' }}
 
     outputs:
@@ -97,8 +100,9 @@ jobs:
       id: meta
       uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
       with:
-        images: |
-          ${{ env.IMAGE_NAME }}
+        images: |-
+          ${{ env.HOMELAB_REPOSITORY }}
+          ${{ env.PUBLISH == 'true' && env.DOCKERHUB_REPOSITORY || '' }}
         labels: |
           org.opencontainers.image.title=${{ inputs.label_title }}
           org.opencontainers.image.description=${{ inputs.label_description }}
@@ -120,15 +124,21 @@ jobs:
         # renovate: datasource=github-releases depName=tailscale/tailscale
         version: "1.68.1"
 
-    - name: Login to container registry
-      id: login
+    - name: Login to Docker Hub
+      if: ${{ env.PUBLISH == 'true' }}
+      uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Login to Homelab Registry
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
         registry: ${{ secrets.CONTAINER_REGISTRY }}
         username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
         password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
 
-    - name: Build image
+    - name: Build and publish image
       id: build-image
       uses: docker/build-push-action@15560696de535e4014efeff63c48f16952e52dd1 # v6
       with:
@@ -156,31 +166,16 @@ jobs:
         echo "digest=${IMAGE_DIGEST}" >> $GITHUB_OUTPUT
         echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
-    - name: Load image (non-publish workflow runs only)
-      if: ${{ env.PUBLISH == 'false' }}
-      uses: docker/build-push-action@15560696de535e4014efeff63c48f16952e52dd1 # v6
+    - name: Docker Hub Description
+      if: ${{ env.PUBLISH == 'true' }}
+      uses: peter-evans/dockerhub-description@v4
       with:
-        context: ./${{ inputs.image_name }}
-        platforms: ${{ (runner.arch == 'ARM64') && 'linux/arm64' || 'linux/amd64' }}
-        load: true
-        push: false
-        tags: ${{ inputs.image_name }}:scan-test
-        labels: ${{ steps.meta.outputs.labels }}
-        annotations: ${{ steps.meta.outputs.annotations }}
-        cache-from: ${{ env.CACHE_FROM }}
-        allow: network.host
-        network: host
-
-    - name: Run Trivy vulnerability scanner (non-publish workflow runs only)
-      if: ${{ env.PUBLISH == 'false' }}
-      uses: aquasecurity/trivy-action@7c2007bcb556501da015201bcba5aa14069b74e2 # 0.23.0
-      with:
-        image-ref: ${{ inputs.image_name }}:scan-test
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: true
-        vuln-type: 'os,library'
-        severity: 'MEDIUM,CRITICAL,HIGH'
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        repository: ${{ env.DOCKERHUB_REPOSITORY }}
+        readme-filepath: ./${{ inputs.image_name }}/README.md
+        short-description: ${{ inputs.label_description }}
+        enable-url-completion: true
 
     - name: Tailscale Disconnect
       if: success() || failure()
