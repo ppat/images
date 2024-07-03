@@ -27,6 +27,8 @@ RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/
     git clone --depth 1 --single-branch --branch "$RELEASE_TAG" https://github.com/FreeRADIUS/freeradius-server.git
 WORKDIR /usr/local/src/repositories/freeradius-server/
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install build dependencies
 RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-deps-${TARGETARCH} \
