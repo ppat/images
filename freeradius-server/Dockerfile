@@ -51,15 +51,15 @@ ARG FREERADIUS_UID=1001
 ARG FREERADIUS_GID=1001
 
 # Create user
-RUN groupadd -g $FREERADIUS_GID -r freeradius && \
+RUN groupadd -g $FREERADIUS_GID -r freerad && \
     useradd -u $FREERADIUS_UID \
-        -g freeradius \
+        -g freerad \
         --system \
         --no-create-home \
         --no-log-init \
         --home-dir /etc/freeradius \
         --shell /usr/sbin/nologin \
-        freeradius
+        freerad
 
 # Install timezone data
 RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tz-${TARGETARCH} \
