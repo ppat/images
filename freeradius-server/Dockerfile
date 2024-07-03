@@ -8,7 +8,10 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
 # Install build tooling
-RUN apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tools-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=lib-apt-tools-${TARGETARCH} \
+    --mount=type=tmpfs,target=/tmp \
+    apt-get update && \
     apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
@@ -25,7 +28,9 @@ RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/
 WORKDIR /usr/local/src/repositories/freeradius-server/
 
 # Install build dependencies
-RUN --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=lib-apt-deps-${TARGETARCH} \
+    --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     if [ -e ./debian/control.in ]; then \
@@ -34,7 +39,9 @@ RUN --mount=type=tmpfs,target=/var/tmp \
     echo 'y' | mk-build-deps -irt'apt-get -yV' debian/control
 
 # Build the server
-RUN --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-build-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=lib-apt-build-${TARGETARCH} \
+    --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     debian/rules debian/control \
@@ -77,7 +84,7 @@ RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tm
     export BUILD_DEB_FILES="$(find /tmp/build -name '*.deb' -type f)" && \
     echo "Found *.deb files from build: ${BUILD_DEB_FILES}" && \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends /tmp/*.deb && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends ${BUILD_DEB_FILES} && \
     ln -s /etc/freeradius /etc/raddb
 
 EXPOSE 1812/udp 1813/udp
