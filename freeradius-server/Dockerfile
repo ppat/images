@@ -53,7 +53,7 @@ ARG FREERADIUS_GID=1001
 # Create user
 RUN groupadd -g $FREERADIUS_GID -r freerad && \
     useradd -u $FREERADIUS_UID \
-        -g freeradius \
+        -g freerad \
         --system \
         --no-create-home \
         --no-log-init \
