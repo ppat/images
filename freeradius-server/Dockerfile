@@ -1,18 +1,16 @@
 FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DEBIAN_FRONTEND="noninteractive"
 WORKDIR /
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
 # Install build tooling
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tools-${TARGETARCH} \
-    --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-tools-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-tools-${TARGETARCH} \
-    --mount=type=tmpfs,target=/tmp \
+RUN --mount=type=tmpfs,target=/tmp \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+    apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
         git \
@@ -27,13 +25,8 @@ RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/
     git clone --depth 1 --single-branch --branch "$RELEASE_TAG" https://github.com/FreeRADIUS/freeradius-server.git
 WORKDIR /usr/local/src/repositories/freeradius-server/
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 # Install build dependencies
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
-    --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-deps-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-deps-${TARGETARCH} \
-    --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     if [ -e ./debian/control.in ]; then \
@@ -42,10 +35,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
     echo 'y' | mk-build-deps -irt'apt-get -yV' debian/control
 
 # Build the server
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-build-${TARGETARCH} \
-    --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-build-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-build-${TARGETARCH} \
-    --mount=type=tmpfs,target=/var/tmp \
+RUN --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     debian/rules debian/control \
