@@ -33,6 +33,7 @@ jobs:
     outputs:
       release_ref: ${{ steps.release_info.outputs.release_ref }}
       release_tag: ${{ steps.release_info.outputs.release_tag }}
+      release_timestamp: ${{ steps.release_info.outputs.release_timestamp }}
     env:
       RELEASE_TAG: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
       RELEASE_REF: ${{ format('refs/tags/{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
@@ -85,6 +86,7 @@ jobs:
       run: |
         echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
         echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+        echo "release_timestamp=$(date --utc +%s)" >> $GITHUB_OUTPUT
 
   publish:
     needs: [load-image-metadata, create-release]
@@ -93,6 +95,7 @@ jobs:
     with:
       image_name: ${{ github.event.inputs.image_name }}
       image_version: ${{ needs.load-image-metadata.outputs.image_version }}
+      image_version_suffix: ${{ needs.create-release.outputs.release_timestamp }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}
