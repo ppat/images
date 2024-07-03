@@ -1,7 +1,6 @@
 FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30 AS builder
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV DEBIAN_FRONTEND="noninteractive"
 WORKDIR /
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
@@ -13,7 +12,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tools-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=lib-apt-tools-${TARGETARCH} \
     --mount=type=tmpfs,target=/tmp \
     apt-get update && \
-    apt-get install -yq --no-install-recommends \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
         git \
@@ -25,7 +24,7 @@ ARG FREERADIUS_VERSION="3.2.3"
 # Shallow clone the FreeRADIUS source
 WORKDIR /usr/local/src/repositories
 RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/g')" && \
-    git clone --depth 1 --single-branch --branch $RELEASE_TAG https://github.com/FreeRADIUS/freeradius-server.git
+    git clone --depth 1 --single-branch --branch "$RELEASE_TAG" https://github.com/FreeRADIUS/freeradius-server.git
 WORKDIR /usr/local/src/repositories/freeradius-server/
 
 # Install build dependencies
@@ -77,7 +76,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tz-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=lib-apt-tz-${TARGETARCH} \
     ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq tzdata
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends tzdata
 
 # Install the debian package from builder stage
 RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tmp/build \
@@ -87,7 +86,7 @@ RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tm
     export BUILD_DEB_FILES="$(find /tmp/build -name '*.log' -type f)" && \
     echo "Found *.deb files from build: ${BUILD_DEB_FILES}" && \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y /tmp/*.deb && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends /tmp/*.deb && \
     ln -s /etc/freeradius /etc/raddb
 
 EXPOSE 1812/udp 1813/udp
