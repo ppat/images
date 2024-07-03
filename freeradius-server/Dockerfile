@@ -8,8 +8,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
 # Install build tooling
-RUN --mount=type=tmpfs,target=/tmp \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
         devscripts \
         equivs \
@@ -75,7 +74,7 @@ RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tm
     --mount=type=cache,target=/var/cache/apt,id=cache-apt-install-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-install-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=lib-apt-install-${TARGETARCH} \
-    export BUILD_DEB_FILES="$(find /tmp/build -name '*.log' -type f)" && \
+    export BUILD_DEB_FILES="$(find /tmp/build -name '*.deb' -type f)" && \
     echo "Found *.deb files from build: ${BUILD_DEB_FILES}" && \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends /tmp/*.deb && \
