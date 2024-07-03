@@ -12,6 +12,7 @@ on:
         type: choice
         options:
         - 'bitwarden-cli'
+        - 'freeradius-server'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
