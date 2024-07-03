@@ -20,7 +20,7 @@ jobs:
     with:
       image_name: 'freeradius-server'
 
-  test-build:
+  test-build-freeradius-server:
     needs: [load-image-metadata]
     uses: ./.github/workflows/build-image-workflow.yaml
     secrets: inherit

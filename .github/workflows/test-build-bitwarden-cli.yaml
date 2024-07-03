@@ -20,7 +20,7 @@ jobs:
     with:
       image_name: 'bitwarden-cli'
 
-  test-build:
+  test-build-bitwarden-cli:
     needs: [load-image-metadata]
     uses: ./.github/workflows/build-image-workflow.yaml
     secrets: inherit
