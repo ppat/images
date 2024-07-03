@@ -12,6 +12,9 @@ on:
       image_version:
         type: string
         default: 'none'
+      image_version_suffix:
+        type: string
+        default: 'none'
       label_title:
         required: true
         type: string
@@ -40,6 +43,7 @@ jobs:
     env:
       IMAGE_NAME: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
       IMAGE_CACHE: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
+      # publish variable affects image tagging and docker build caches (not whether its pushed or not)
       PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.image_version != 'none' }}
 
     outputs:
@@ -99,11 +103,13 @@ jobs:
           org.opencontainers.image.title=${{ inputs.label_title }}
           org.opencontainers.image.description=${{ inputs.label_description }}
         tags: |
-          type=semver,pattern={{version}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }}
-          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }}
-          type=semver,pattern={{major}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }}
-          type=raw,value=${{ env.CURRENT_BRANCH }},enable=${{ env.PUBLISH == 'false' }},prefix=branch-
-          type=raw,value=${{ env.GIT_SHA }},prefix=git-
+          type=raw,value=${{ inputs.image_version }}-${{ inputs.image_version_suffix }},enable=${{ env.PUBLISH == 'true' && inputs.image_version_suffix != 'none' }},priority=1000
+          type=semver,pattern={{version}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=900
+          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=800
+          type=semver,pattern={{major}},value=${{ inputs.image_version }},enable=${{ env.PUBLISH == 'true' }},priority=700
+          type=raw,value=latest,enable=${{ env.PUBLISH == 'true' }},priority=200
+          type=raw,value=${{ env.CURRENT_BRANCH }},enable=${{ env.PUBLISH == 'false' }},prefix=branch-,priority=400
+          type=raw,value=${{ env.GIT_SHA }},prefix=git-,priority=300
 
     - name: Tailscale Connect
       uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
@@ -131,7 +137,7 @@ jobs:
           linux/arm64
           linux/amd64
         load: false
-        push: ${{ env.PUBLISH == 'true' }}
+        push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         annotations: ${{ steps.meta.outputs.annotations }}
