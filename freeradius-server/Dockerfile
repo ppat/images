@@ -16,7 +16,7 @@ RUN apt-get update && \
         quilt \
         gcc
 
-# renovate: datasource=github-releases depName=FreeRADIUS/freeradius-server extractVersion=^(?<version>release_\\d+_\\d+_\\d+)$
+# renovate: datasource=docker depName=freeradius/freeradius-server
 ARG FREERADIUS_VERSION="3.2.3"
 # Shallow clone the FreeRADIUS source
 WORKDIR /usr/local/src/repositories

@@ -1,6 +1,6 @@
 ---
 # yamllint disable-line rule:line-length
-# renovate: datasource=github-releases depName=FreeRADIUS/freeradius-server extractVersion=^(?<version>release_\\d+_\\d+_\\d+)$
+# renovate: datasource=docker depName=freeradius/freeradius-server
 image_version: "3.2.3"
 
 label_title: "freeradius-server"
