@@ -53,6 +53,9 @@ env:
   PUBLISH_DOCKERHUB: ${{ inputs.repository_dockerhub != '' && secrets.dockerhub_username != '' && secrets.dockerhub_token != '' }}
   PUBLISH_PRIVATE_REGISTRY: ${{ secrets.repository_private_registry != '' && secrets.private_registry_username != '' && secrets.private_registry_token != '' }}
   CONNECT_TAILSCALE: ${{ secrets.tailscale_oauth_client_id != '' && secrets.tailscale_oauth_secret != '' }}
+  VERSION_SEMVER: ''
+  VERSION_RAW: ''
+  VERSION_SHA: ''
 
 jobs:
   build-image:
@@ -101,7 +104,6 @@ jobs:
         VERSION_SHA="$(git rev-parse --short HEAD)"
 
         set -x
-        echo 'VERSION_SEMVER=""' >> $GITHUB_ENV
         echo "VERSION_RAW=$VERSION_RAW" >> $GITHUB_ENV
         echo "VERSION_SHA=$VERSION_SHA" >> $GITHUB_ENV
 
