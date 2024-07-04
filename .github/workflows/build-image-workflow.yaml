@@ -73,7 +73,7 @@ jobs:
         if [[ $LAST_COMMIT_MSG =~ "[ci: bust-cache]" ]]; then
           BUST_CACHE=1
         else
-          BUST_CACHE=1
+          BUST_CACHE=0
         fi
 
         if [[ "$PUBLISH" == "true" ]]; then
