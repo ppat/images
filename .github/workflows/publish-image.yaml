@@ -21,10 +21,6 @@ concurrency:
 permissions:
   contents: write
 
-env:
-  REPOSITORY_PRIVATE_REGISTRY_PREFIX: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}
-  REPOSITORY_BUILD_CACHE_PREFIX: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}
-
 jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
@@ -104,13 +100,19 @@ jobs:
   publish:
     needs: [load-image-metadata, create-release]
     uses: ./.github/workflows/build-image-workflow.yaml
-    secrets: inherit
     with:
       image_context_path: ${{ github.event.inputs.image_name }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       repository_dockerhub: ppatlabs/${{ github.event.inputs.image_name }}
-      repository_private_registry: ${{ env.REPOSITORY_PRIVATE_REGISTRY_PREFIX }}/${{ github.event.inputs.image_name }}
-      repository_build_cache: ${{ env.REPOSITORY_BUILD_CACHE_PREFIX }}/${{ github.event.inputs.image_name }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+      private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ github.event.inputs.image_name }}
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ github.event.inputs.image_name }}
+      tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+      tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}

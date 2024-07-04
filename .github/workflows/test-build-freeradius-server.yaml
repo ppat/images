@@ -14,10 +14,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  REPOSITORY_PRIVATE_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/freeradius-server
-  REPOSITORY_BUILD_CACHE: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/freeradius-server
-
 jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
@@ -27,12 +23,16 @@ jobs:
   test-build-freeradius-server:
     needs: [load-image-metadata]
     uses: ./.github/workflows/build-image-workflow.yaml
-    secrets: inherit
     with:
       image_context_path: freeradius-server
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      repository_private_registry: ${{ env.REPOSITORY_PRIVATE_REGISTRY }}
-      repository_build_cache: ${{ env.REPOSITORY_BUILD_CACHE }}
       source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
+    secrets:
+      private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/freeradius-server
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/freeradius-server
+      tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+      tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
