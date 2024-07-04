@@ -135,7 +135,7 @@ jobs:
           else
             if [[ -z "$VERSION_SEMVER" ]]; then
               echo "Setting cache-from to use both branch and main caches..."
-              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:${VERSION_RAW}"
+              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW}"
             else
               echo "Setting cache-from to use only main cache..."
               CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main"
@@ -144,7 +144,7 @@ jobs:
 
           if [[ -z "$VERSION_SEMVER" ]]; then
             echo "Setting cache-to to push to branch cache..."
-            CACHE_TO="type=registry,ref=${IMAGE_CACHE}:${VERSION_RAW},${CACHE_PARAMS}"
+            CACHE_TO="type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW},${CACHE_PARAMS}"
           else
             echo "Setting cache-to to push to main cache..."
             CACHE_TO="type=registry,ref=${IMAGE_CACHE}:main,${CACHE_PARAMS}"
@@ -254,6 +254,7 @@ jobs:
       shell: bash
       env:
         IMAGE_ID: ${{ steps.build-image.outputs.imageid }}
+        IMAGE_TAG: ${{ env.VERSION_SEMVER != '' && env.VERSION_RAW || format('branch-{0}', env.VERSION_RAW) }}
         IMAGE_DIGEST: ${{ steps.build-image.outputs.digest }}
         IMAGE_METADATA: ${{ toJSON(steps.build-image.outputs.metadata) }}
       run: |
