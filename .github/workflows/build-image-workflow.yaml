@@ -282,7 +282,7 @@ jobs:
       run: |
         echo "digest=${IMAGE_DIGEST}" >> $GITHUB_OUTPUT
         echo "image_id=${IMAGE_ID}" >> $GITHUB_OUTPUT
-        echo "image_tag=${VERSION_RAW}" >> $GITHUB_OUTPUT
+        echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
         echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
     - name: Docker Hub Description
