@@ -80,7 +80,7 @@ jobs:
           IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f4)"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
-          if [[ "$BUST_CACHE" == "0" ]]; then
+          if [[ "$BUST_CACHE" == "1" ]]; then
             echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main\"" >> $GITHUB_ENV
           else
             echo "CACHE_FROM=\"\"" >> $GITHUB_ENV
@@ -90,7 +90,7 @@ jobs:
           IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f3)"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
-          if [[ "$BUST_CACHE" == "0" ]]; then
+          if [[ "$BUST_CACHE" == "1" ]]; then
             echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main,type=registry,ref=${IMAGE_CACHE}:${IMAGE_TAG}\"" >> $GITHUB_ENV
           else
             echo "CACHE_FROM=\"\"" >> $GITHUB_ENV
