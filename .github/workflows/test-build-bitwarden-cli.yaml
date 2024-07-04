@@ -7,14 +7,34 @@ on:
   pull_request:
     paths:
     - 'bitwarden-cli/**'
-    # - '.github/workflows/test-build-bitwarden-cli.yaml'
-    # - '.github/workflows/build-image-workflow.yaml'
+    - '.github/workflows/test-build-bitwarden-cli.yaml'
+    - '.github/workflows/build-image-workflow.yaml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  bust-cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      with:
+        fetch-depth: 1
+
+    - name: show
+      shell: bash
+      run: |
+        echo "Show env"
+        echo "--------------------------------------------------------------------------"
+        env | sort
+        echo "--------------------------------------------------------------------------"
+        echo "Show commits"
+        git log --oneline --no-merges
+        echo "--------------------------------------------------------------------------"
+
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
     with:
