@@ -102,9 +102,11 @@ jobs:
     uses: ./.github/workflows/build-image-workflow.yaml
     secrets: inherit
     with:
-      image_name: ${{ github.event.inputs.image_name }}
-      app_version: ${{ needs.load-image-metadata.outputs.image_version }}
+      image_context_path: ${{ github.event.inputs.image_name }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      repository_dockerhub: ppatlabs/${{ github.event.inputs.image_name }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ github.event.inputs.image_name }}
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ github.event.inputs.image_name }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}

@@ -7,8 +7,8 @@ on:
   pull_request:
     paths:
     - 'freeradius-server/**'
-    # - '.github/workflows/test-build-freeradius-server.yaml'
-    # - '.github/workflows/build-image-workflow.yaml'
+    - '.github/workflows/test-build-freeradius-server.yaml'
+    - '.github/workflows/build-image-workflow.yaml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -25,8 +25,10 @@ jobs:
     uses: ./.github/workflows/build-image-workflow.yaml
     secrets: inherit
     with:
-      image_name: freeradius-server
+      image_context_path: freeradius-server
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/freeradius-server
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/freeradius-server
       source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
