@@ -254,7 +254,7 @@ jobs:
       shell: bash
       env:
         IMAGE_ID: ${{ steps.build-image.outputs.imageid }}
-        IMAGE_TAG: ${{ env.VERSION_SEMVER != '' && env.VERSION_RAW || format('branch-{0}', env.VERSION_RAW) }}
+        IMAGE_TAG: ${{ steps.meta.outputs.version }}
         IMAGE_DIGEST: ${{ steps.build-image.outputs.digest }}
         IMAGE_METADATA: ${{ toJSON(steps.build-image.outputs.metadata) }}
       run: |
