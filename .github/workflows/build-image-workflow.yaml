@@ -26,28 +26,20 @@ on:
         type: number
     secrets:
       dockerhub_username:
-        type: string
         required: false
       dockerhub_token:
-        type: string
         required: false
       private_registry_username:
-        type: string
         required: false
       private_registry_token:
-        type: string
         required: false
       repository_private_registry:
-        type: string
         required: false
       repository_build_cache:
-        type: string
         required: false
       tailscale_oauth_client_id:
-        type: string
         required: false
       tailscale_oauth_secret:
-        type: string
         required: false
     outputs:
       digest:
@@ -56,6 +48,11 @@ on:
         value: ${{ jobs.build-image.outputs.imageid }}
       metadata:
         value: ${{ jobs.build-image.outputs.metadata }}
+
+env:
+  PUBLISH_DOCKERHUB: ${{ inputs.repository_dockerhub != '' && secrets.dockerhub_username != '' && secrets.dockerhub_token != '' }}
+  PUBLISH_PRIVATE_REGISTRY: ${{ secrets.repository_private_registry != '' && secrets.private_registry_username != '' && secrets.private_registry_token != '' }}
+  CONNECT_TAILSCALE: ${{ secrets.tailscale_oauth_client_id != '' && secrets.tailscale_oauth_secret != '' }}
 
 jobs:
   build-image:
@@ -150,7 +147,7 @@ jobs:
         echo "CACHE_TO=\"$CACHE_TO\"" >> $GITHUB_ENV
 
     - name: Automatically set other parameters
-      if: ${{ secrets.repository_private_registry != '' }}
+      if: ${{ env.CONNECT_TAILSCALE == 'true' }}
       shell: bash
       env:
         PRIVATE_REGISTRY_REPOSITORY: ${{ secrets.repository_private_registry }}
@@ -199,7 +196,7 @@ jobs:
           type=raw,value=${{ env.VERSION_SHA }},prefix=git-,priority=300
 
     - name: Tailscale Connect
-      if: ${{ secrets.tailscale_oauth_client_id != '' && secrets.tailscale_oauth_secret != null }}
+      if: ${{ env.CONNECT_TAILSCALE == 'true' }}
       uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
       with:
         oauth-client-id: ${{ secrets.tailscale_oauth_client_id }}
@@ -209,14 +206,14 @@ jobs:
         version: "1.68.1"
 
     - name: Login to Docker Hub
-      if: ${{ inputs.repository_dockerhub != '' }}
+      if: ${{ env.PUBLISH_DOCKERHUB == 'true' }}
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
         username: ${{ secrets.dockerhub_username }}
         password: ${{ secrets.dockerhub_token }}
 
     - name: Login to Homelab Registry
-      if: ${{ secrets.repository_private_registry != '' }}
+      if: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' }}
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
         registry: ${{ env.PRIVATE_REGISTRY }}
@@ -232,7 +229,7 @@ jobs:
           linux/arm64
           linux/amd64
         load: false
-        push: ${{ secrets.repository_private_registry != '' || inputs.repository_dockerhub != '' }}
+        push: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         annotations: ${{ steps.meta.outputs.annotations }}
@@ -252,7 +249,7 @@ jobs:
         echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
     - name: Docker Hub Description
-      if: ${{ inputs.repository_dockerhub != '' }}
+      if: ${{ env.PUBLISH_DOCKERHUB == 'true }}
       uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
       with:
         username: ${{ secrets.dockerhub_username }}
@@ -263,5 +260,5 @@ jobs:
         enable-url-completion: true
 
     - name: Tailscale Disconnect
-      if: ${{ (success() || failure()) && (secrets.tailscale_oauth_client_id != '' && secrets.tailscale_oauth_secret != null) }}
+      if: ${{ (success() || failure()) && env.CONNECT_TAILSCALE == 'true' }}
       run: sudo -E tailscale logout
