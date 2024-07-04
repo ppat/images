@@ -62,6 +62,7 @@ env:
   VERSION_SHA: ''
   CACHE_FROM: ''
   CACHE_TO: ''
+  CACHE_LATEST: ''
 
 jobs:
   build-image:
@@ -126,6 +127,7 @@ jobs:
           echo "No repository for docker build cache specified, disabling build cache all together."
           CACHE_FROM=""
           CACHE_TO=""
+          CACHE_LATEST=""
         else
           LAST_COMMIT_MSG=$(git log --oneline --no-merges -1)
           if [[ "$LAST_COMMIT_MSG" =~ "[ci: bust-cache]" ]]; then
@@ -134,11 +136,11 @@ jobs:
             CACHE_FROM=""
           else
             if [[ -z "$VERSION_SEMVER" ]]; then
-              echo "Setting cache-from to use both branch and main caches..."
-              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW}"
+              echo "Setting cache-from to use current branch, main branch and last build of any branch as caches..."
+              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW} type=registry,ref=${IMAGE_CACHE}:cache-latest"
             else
-              echo "Setting cache-from to use only main cache..."
-              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main"
+              echo "Setting cache-from to use only main branch and current build of any branch as caches..."
+              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:cache-latest"
             fi
           fi
 
@@ -149,11 +151,13 @@ jobs:
             echo "Setting cache-to to push to main cache..."
             CACHE_TO="type=registry,ref=${IMAGE_CACHE}:main,${CACHE_PARAMS}"
           fi
+          CACHE_LATEST="type=registry,ref=${IMAGE_CACHE}:cache-latest,${CACHE_PARAMS}"
         fi
 
         set -x
         echo "CACHE_FROM=\"$CACHE_FROM\"" >> $GITHUB_ENV
         echo "CACHE_TO=\"$CACHE_TO\"" >> $GITHUB_ENV
+        echo "CACHE_LATEST=\"$CACHE_LATEST\"" >> $GITHUB_ENV
 
     - name: Automatically set other parameters
       if: ${{ env.CONNECT_TAILSCALE == 'true' }}
@@ -245,6 +249,24 @@ jobs:
         cache-from: ${{ env.CACHE_FROM }}
         cache-to: ${{ env.CACHE_TO }}
         no-cache: ${{ env.CACHE_FROM == '' && env.CACHE_TO == '' }}
+        sbom: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        provenance: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        secrets: ${{ secrets.build_secrets }}
+
+    - name: Also cache build as cache-latest
+      if: ${{ env.CACHE_LATEST != '' }}
+      uses: docker/build-push-action@1a162644f9a7e87d8f4b053101d1d9a712edc18c # v6
+      with:
+        context: ./${{ inputs.image_context_path }}
+        platforms: |-
+          linux/arm64
+          linux/amd64
+        load: false
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        annotations: ${{ steps.meta.outputs.annotations }}
+        cache-to: ${{ env.CACHE_LATEST }}
         sbom: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
         provenance: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
         secrets: ${{ secrets.build_secrets }}
