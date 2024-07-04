@@ -6,4 +6,5 @@ image_version: "3.2.3"
 label_title: "freeradius-server"
 label_description: "Freeradius Server image with support for both amd64 and arm64 architectures."
 
+
 build_timeout: 180

@@ -38,7 +38,11 @@ RUN --mount=type=tmpfs,target=/var/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/tmp \
     debian/rules debian/control \
-    && dpkg-buildpackage --jobs=auto -b -uc
+    && dpkg-buildpackage --jobs=auto -b -uc && \
+    mkdir -p "/build/${TARGETARCH}" && \
+    for f in $(ls /usr/local/src/repositories/*.deb); do mv "$f" "/build/${TARGETARCH}/$(basename $f)"; done && \
+    echo "Built *.deb files:" && \
+    ls "/build/${TARGETARCH}/" | pr -t -o 4
 
 
 # =======================================================================================================================================
@@ -47,8 +51,8 @@ ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
-ARG FREERADIUS_UID=1001
-ARG FREERADIUS_GID=1001
+ARG FREERADIUS_UID=101
+ARG FREERADIUS_GID=101
 
 # Create user
 RUN groupadd -g $FREERADIUS_GID -r freerad && \
@@ -61,24 +65,51 @@ RUN groupadd -g $FREERADIUS_GID -r freerad && \
         --shell /usr/sbin/nologin \
         freerad
 
-# Install timezone data
-RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-tz-${TARGETARCH} \
-    --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-tz-${TARGETARCH} \
-    --mount=type=cache,target=/var/lib/apt,id=lib-apt-tz-${TARGETARCH} \
+# Install system dependencies for freeradius
+RUN --mount=type=cache,target=/var/cache/apt,id=cache-apt-deps-${TARGETARCH} \
+    --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-deps-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=lib-apt-deps-${TARGETARCH} \
     ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends tzdata
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+        adduser \
+        ca-certificates \
+        openssl \
+        readline-common \
+        ssl-cert \
+        tzdata
 
 # Install the debian package from builder stage
-# hadolint ignore=SC2086
-RUN --mount=type=bind,from=builder,source=/usr/local/src/repositories,target=/tmp/build \
+# hadolint ignore=SC2086,DL3003,SC2035
+RUN --mount=type=bind,from=builder,source=/build/${TARGETARCH},target=/build \
     --mount=type=cache,target=/var/cache/apt,id=cache-apt-install-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-install-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=lib-apt-install-${TARGETARCH} \
-    export BUILD_DEB_FILES="$(find /tmp/build -name '*.deb' -type f)" && \
-    echo "Found *.deb files from build: ${BUILD_DEB_FILES}" && \
+    ls -al /build/*.deb && \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends ${BUILD_DEB_FILES} && \
+    export DEBIAN_FRONTEND="noninteractive" && \
+    apt-get install -y --no-install-recommends \
+        /build/freeradius-common*.deb \
+        /build/libfreeradius3_*.deb \
+        /build/freeradius-utils_*.deb && \
+    apt-get install -y --no-install-recommends \
+        /build/freeradius_*.deb \
+        /build/freeradius-config_*.deb \
+        /build/freeradius-dbg_*.deb \
+        /build/freeradius-dhcp_*.deb \
+        /build/freeradius-freetds_*.deb \
+        /build/freeradius-krb5_*.deb \
+        /build/freeradius-ldap_*.deb \
+        /build/freeradius-memcached_*.deb \
+        /build/freeradius-mysql_*.deb \
+        /build/freeradius-perl-util_*.deb \
+        /build/freeradius-postgresql_*.deb \
+        /build/freeradius-python3_*.deb \
+        /build/freeradius-redis_*.deb \
+        /build/freeradius-rest_*.deb \
+        /build/freeradius-unbound_*.deb \
+        /build/freeradius-unixodbc_*.deb \
+        /build/freeradius-yubikey_*.deb && \
     ln -s /etc/freeradius /etc/raddb
 
 EXPOSE 1812/udp 1813/udp
