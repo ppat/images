@@ -6,49 +6,72 @@ name: build-image-workflow
 on:
   workflow_call:
     inputs:
-      image_name:
+      image_context_path:
         required: true
         type: string
-      app_version:
-        type: string
-        default: 'none'
       label_title:
         required: true
         type: string
       label_description:
         required: true
         type: string
+      repository_dockerhub:
+        type: string
+        required: false
       source_git_ref:
         required: true
         type: string
       timeout_minutes:
         required: true
         type: number
+    secrets:
+      build_secrets:
+        required: false
+      dockerhub_username:
+        required: false
+      dockerhub_token:
+        required: false
+      private_registry_username:
+        required: false
+      private_registry_token:
+        required: false
+      repository_private_registry:
+        required: false
+      repository_build_cache:
+        required: false
+      tailscale_oauth_client_id:
+        required: false
+      tailscale_oauth_secret:
+        required: false
     outputs:
-      imageid:
-        value: ${{ jobs.build-image.outputs.imageid }}
       digest:
         value: ${{ jobs.build-image.outputs.digest }}
+      image_id:
+        value: ${{ jobs.build-image.outputs.image_id }}
+      image_tag:
+        value: ${{ jobs.build-image.outputs.image_tag }}
       metadata:
         value: ${{ jobs.build-image.outputs.metadata }}
+
+env:
+  PUBLISH_DOCKERHUB: ${{ inputs.repository_dockerhub != '' && secrets.dockerhub_username != '' && secrets.dockerhub_token != '' }}
+  PUBLISH_PRIVATE_REGISTRY: ${{ secrets.repository_private_registry != '' && secrets.private_registry_username != '' && secrets.private_registry_token != '' }}
+  CONNECT_TAILSCALE: ${{ secrets.tailscale_oauth_client_id != '' && secrets.tailscale_oauth_secret != '' }}
+  VERSION_SEMVER: ''
+  VERSION_RAW: ''
+  VERSION_SHA: ''
+  CACHE_FROM: ''
+  CACHE_TO: ''
 
 jobs:
   build-image:
     runs-on: ubuntu-latest
     timeout-minutes: ${{ inputs.timeout_minutes }}
 
-    env:
-      DOCKERHUB_REPOSITORY: "ppatlabs/${{ inputs.image_name }}"
-      HOMELAB_REPOSITORY: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
-      IMAGE_CACHE: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
-      # PUBLISH variable affects:
-      # - image tagging and docker build caches
-      # - pushes to docker hub registry (all builds are pushed to homelab registry regardless)
-      PUBLISH: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') && inputs.app_version != 'none' }}
-
     outputs:
-      imageid: ${{ steps.image_info.outputs.imageid }}
       digest: ${{ steps.image_info.outputs.digest }}
+      image_id: ${{ steps.image_info.outputs.image_id }}
+      image_tag: ${{ steps.image_info.outputs.image_tag }}
       metadata: ${{ steps.image_info.outputs.metadata }}
 
     steps:
@@ -59,49 +82,93 @@ jobs:
         repository: ${{ github.repository }}
         ref: ${{ inputs.source_git_ref }}
 
-    - name: Set required parameters as environment variables
+    - name: Automatically set image tag from git tag
+      if: ${{ startsWith(inputs.source_git_ref, 'refs/tags/') }}
       shell: bash
       env:
         SOURCE_GIT_REF: ${{ inputs.source_git_ref }}
-        CACHE_TO_PARAMS: image-manifest=true,oci-mediatypes=true,mode=max,compression=zstd
       # yamllint disable-line rule:indentation
       run: |
-        GIT_SHA="$(git rev-parse --short HEAD)"
-        echo "GIT_SHA=$GIT_SHA" >> $GITHUB_ENV
+        # use the git ref segment after the final slash (as tag can contain a slash)
+        VERSION_RAW="$(echo $SOURCE_GIT_REF | grep -oE '[^/]+$')"
+        VERSION_SEMVER="$(echo $VERSION_RAW | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+        VERSION_SHA="$(git rev-parse --short HEAD)"
 
-        LAST_COMMIT_MSG=$(git log --oneline --no-merges -1)
-        if [[ $LAST_COMMIT_MSG =~ "[ci: bust-cache]" ]]; then
-          BUST_CACHE=1
+        set -x
+        echo "VERSION_SEMVER=$VERSION_SEMVER" >> $GITHUB_ENV
+        echo "VERSION_RAW=$VERSION_RAW" >> $GITHUB_ENV
+        echo "VERSION_SHA=$VERSION_SHA" >> $GITHUB_ENV
+
+    - name: Automatically set image tag from branch
+      if: ${{ startsWith(inputs.source_git_ref, 'refs/heads/') }}
+      shell: bash
+      env:
+        SOURCE_GIT_REF: ${{ inputs.source_git_ref }}
+      # yamllint disable-line rule:indentation
+      run: |
+        # use the git ref segment after the final slash (as branch can contain a slash)
+        VERSION_RAW="$(echo $SOURCE_GIT_REF | grep -oE '[^/]+$')"
+        VERSION_SHA="$(git rev-parse --short HEAD)"
+
+        set -x
+        echo "VERSION_RAW=$VERSION_RAW" >> $GITHUB_ENV
+        echo "VERSION_SHA=$VERSION_SHA" >> $GITHUB_ENV
+
+    - name: Automatically set image build cache parameters
+      shell: bash
+      env:
+        SOURCE_GIT_REF: ${{ inputs.source_git_ref }}
+        IMAGE_CACHE: ${{ secrets.repository_build_cache }}
+        CACHE_PARAMS: image-manifest=true,oci-mediatypes=true,mode=max,compression=zstd
+      # yamllint disable-line rule:indentation
+      run: |
+        if [[ "$IMAGE_CACHE" == '' ]]; then
+          echo "No repository for docker build cache specified, disabling build cache all together."
+          CACHE_FROM=""
+          CACHE_TO=""
         else
-          BUST_CACHE=0
+          LAST_COMMIT_MSG=$(git log --oneline --no-merges -1)
+          if [[ "$LAST_COMMIT_MSG" =~ "[ci: bust-cache]" ]]; then
+            echo "Instruction to bust cache detected in commit message."
+            echo "Disabling use of cache for the build. This build itself will still be cached."
+            CACHE_FROM=""
+          else
+            if [[ -z "$VERSION_SEMVER" ]]; then
+              echo "Setting cache-from to use both branch and main caches..."
+              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW}"
+            else
+              echo "Setting cache-from to use only main cache..."
+              CACHE_FROM="type=registry,ref=${IMAGE_CACHE}:main"
+            fi
+          fi
+
+          if [[ -z "$VERSION_SEMVER" ]]; then
+            echo "Setting cache-to to push to branch cache..."
+            CACHE_TO="type=registry,ref=${IMAGE_CACHE}:branch-${VERSION_RAW},${CACHE_PARAMS}"
+          else
+            echo "Setting cache-to to push to main cache..."
+            CACHE_TO="type=registry,ref=${IMAGE_CACHE}:main,${CACHE_PARAMS}"
+          fi
         fi
 
-        if [[ "$PUBLISH" == "true" ]]; then
-          IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f4)"
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+        set -x
+        echo "CACHE_FROM=\"$CACHE_FROM\"" >> $GITHUB_ENV
+        echo "CACHE_TO=\"$CACHE_TO\"" >> $GITHUB_ENV
 
-          if [[ "$BUST_CACHE" == "0" ]]; then
-            echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main\"" >> $GITHUB_ENV
-          else
-            echo "CACHE_FROM=\"\"" >> $GITHUB_ENV
-          fi
-          echo "CACHE_TO=\"type=registry,ref=${IMAGE_CACHE}:main,${CACHE_TO_PARAMS}\"" >> $GITHUB_ENV
-        else
-          IMAGE_TAG="$(echo $SOURCE_GIT_REF | cut -d'/' -f3)"
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
-
-          if [[ "$BUST_CACHE" == "0" ]]; then
-            echo "CACHE_FROM=\"type=registry,ref=${IMAGE_CACHE}:main,type=registry,ref=${IMAGE_CACHE}:${IMAGE_TAG}\"" >> $GITHUB_ENV
-          else
-            echo "CACHE_FROM=\"\"" >> $GITHUB_ENV
-          fi
-          echo "CACHE_TO=\"type=registry,ref=${IMAGE_CACHE}:${IMAGE_TAG},${CACHE_TO_PARAMS}\"" >> $GITHUB_ENV
-        fi
+    - name: Automatically set other parameters
+      if: ${{ env.CONNECT_TAILSCALE == 'true' }}
+      shell: bash
+      env:
+        PRIVATE_REGISTRY_REPOSITORY: ${{ secrets.repository_private_registry }}
+      # yamllint disable-line rule:indentation
+      run: |
+        PRIVATE_REGISTRY="$(echo $PRIVATE_REGISTRY_REPOSITORY | grep -oE '^[^/]*')"
+        echo "PRIVATE_REGISTRY=$PRIVATE_REGISTRY" >> $GITHUB_ENV
 
     - name: Show build parameters
       shell: bash
       run: |
-        env | sort | grep -E '^(CACHE_|GIT_SHA|IMAGE_|PUBLISH)'
+        env | sort | grep -E '^(CACHE_|VERSION_)'
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@5927c834f5b4fdf503fca6f4c7eccda82949e1ee # v3
@@ -118,83 +185,95 @@ jobs:
       uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
       with:
         images: |-
-          ${{ env.HOMELAB_REPOSITORY }}
-          ${{ env.PUBLISH == 'true' && env.DOCKERHUB_REPOSITORY || '' }}
+          ${{ secrets.repository_private_registry != '' && secrets.repository_private_registry || '' }}
+          ${{ inputs.repository_dockerhub != '' && inputs.repository_dockerhub || '' }}
         labels: |
           org.opencontainers.image.title=${{ inputs.label_title }}
           org.opencontainers.image.description=${{ inputs.label_description }}
+          org.opencontainers.image.version=${{ env.VERSION_RAW }}
+        annotations: |
+          org.opencontainers.image.title=${{ inputs.label_title }}
+          org.opencontainers.image.description=${{ inputs.label_description }}
+          org.opencontainers.image.version=${{ env.VERSION_RAW }}
         tags: |-
-          type=raw,value=${{ env.IMAGE_TAG }},enable=${{ env.PUBLISH == 'true' }},priority=1000
-          type=semver,pattern={{version}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=900
-          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=800
-          type=semver,pattern={{major}},value=${{ inputs.app_version }},enable=${{ env.PUBLISH == 'true' }},priority=700
-          type=raw,value=latest,enable=${{ env.PUBLISH == 'true' }},priority=200
-
-          type=raw,value=${{ env.IMAGE_TAG }},enable=${{ env.PUBLISH == 'false' }},prefix=branch-,priority=400
-          type=raw,value=${{ env.GIT_SHA }},prefix=git-,priority=300
+          type=raw,value=${{ env.VERSION_RAW }},enable=${{ env.VERSION_SEMVER != '' }},priority=1000
+          type=semver,pattern={{version}},value=${{ env.VERSION_SEMVER }},enable=${{ env.VERSION_SEMVER != '' }},priority=900
+          type=semver,pattern={{major}}.{{minor}},value=${{ env.VERSION_SEMVER }},enable=${{ env.VERSION_SEMVER != '' }},priority=800
+          type=semver,pattern={{major}},value=${{ env.VERSION_SEMVER }},enable=${{ env.VERSION_SEMVER != '' }},priority=700
+          type=raw,value=latest,enable=${{ env.VERSION_SEMVER != '' }},priority=200
+          type=raw,value=${{ env.VERSION_RAW }},enable=${{ env.VERSION_SEMVER == '' }},prefix=branch-,priority=400
+          type=raw,value=${{ env.VERSION_SHA }},prefix=git-,priority=300
 
     - name: Tailscale Connect
+      if: ${{ env.CONNECT_TAILSCALE == 'true' }}
       uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
       with:
-        oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-        oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+        oauth-client-id: ${{ secrets.tailscale_oauth_client_id }}
+        oauth-secret: ${{ secrets.tailscale_oauth_secret }}
         tags: tag:github-action-ci-runner
         # renovate: datasource=github-releases depName=tailscale/tailscale
         version: "1.68.1"
 
     - name: Login to Docker Hub
-      if: ${{ env.PUBLISH == 'true' }}
+      if: ${{ env.PUBLISH_DOCKERHUB == 'true' }}
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.dockerhub_username }}
+        password: ${{ secrets.dockerhub_token }}
 
     - name: Login to Homelab Registry
+      if: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' }}
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
-        registry: ${{ secrets.CONTAINER_REGISTRY }}
-        username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-        password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+        registry: ${{ env.PRIVATE_REGISTRY }}
+        username: ${{ secrets.private_registry_username }}
+        password: ${{ secrets.private_registry_token }}
 
     - name: Build and publish image
       id: build-image
       uses: docker/build-push-action@1a162644f9a7e87d8f4b053101d1d9a712edc18c # v6
       with:
-        context: ./${{ inputs.image_name }}
+        context: ./${{ inputs.image_context_path }}
         platforms: |-
           linux/arm64
           linux/amd64
         load: false
-        push: true
+        push: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         annotations: ${{ steps.meta.outputs.annotations }}
         cache-from: ${{ env.CACHE_FROM }}
         cache-to: ${{ env.CACHE_TO }}
+        no-cache: ${{ env.CACHE_FROM == '' && env.CACHE_TO == '' }}
+        sbom: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        provenance: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        secrets: ${{ secrets.build_secrets }}
 
     - name: Prepare job outputs from image build
       id: image_info
       shell: bash
       env:
         IMAGE_ID: ${{ steps.build-image.outputs.imageid }}
+        IMAGE_TAG: ${{ env.VERSION_SEMVER != '' && env.VERSION_RAW || format('branch-{0}', env.VERSION_RAW) }}
         IMAGE_DIGEST: ${{ steps.build-image.outputs.digest }}
         IMAGE_METADATA: ${{ toJSON(steps.build-image.outputs.metadata) }}
       run: |
-        echo "imageid=${IMAGE_ID}" >> $GITHUB_OUTPUT
         echo "digest=${IMAGE_DIGEST}" >> $GITHUB_OUTPUT
+        echo "image_id=${IMAGE_ID}" >> $GITHUB_OUTPUT
+        echo "image_tag=${VERSION_RAW}" >> $GITHUB_OUTPUT
         echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
     - name: Docker Hub Description
-      if: ${{ env.PUBLISH == 'true' }}
+      if: ${{ env.PUBLISH_DOCKERHUB == 'true' }}
       uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-        repository: ${{ env.DOCKERHUB_REPOSITORY }}
-        readme-filepath: ./${{ inputs.image_name }}/README.md
+        username: ${{ secrets.dockerhub_username }}
+        password: ${{ secrets.dockerhub_token }}
+        repository: ${{ inputs.repository_dockerhub }}
+        readme-filepath: ./${{ inputs.image_context_path }}/README.md
         short-description: ${{ inputs.label_description }}
         enable-url-completion: true
 
     - name: Tailscale Disconnect
-      if: success() || failure()
+      if: ${{ (success() || failure()) && env.CONNECT_TAILSCALE == 'true' }}
       run: sudo -E tailscale logout
