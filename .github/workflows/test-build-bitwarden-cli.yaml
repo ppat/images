@@ -15,31 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  bust-cache:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-    - name: Checkout
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      with:
-        repository: ${{ github.repository }}
-        ref: ${{ github.head_ref }}
-        fetch-depth: 1
-        fetch-tags: false
-
-    - name: show
-      shell: bash
-      run: |
-        echo "Show env"
-        echo "--------------------------------------------------------------------------"
-        env | sort
-        echo "--------------------------------------------------------------------------"
-        echo "Show commits"
-        git log --oneline --no-merges -1
-        echo "--------------------------------------------------------------------------"
-        echo "${{toJSON(github.event)}}"
-        echo "--------------------------------------------------------------------------"
-
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
     with:
