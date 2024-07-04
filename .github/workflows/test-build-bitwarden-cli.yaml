@@ -35,7 +35,9 @@ jobs:
         env | sort
         echo "--------------------------------------------------------------------------"
         echo "Show commits"
-        git log --oneline --no-merges
+        git log --oneline --no-merges -1
+        echo "--------------------------------------------------------------------------"
+        echo "${{toJSON(github.event)}}" | jq -r
         echo "--------------------------------------------------------------------------"
 
   load-image-metadata:
