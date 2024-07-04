@@ -25,6 +25,8 @@ on:
         required: true
         type: number
     secrets:
+      build_secrets:
+        required: false
       dockerhub_username:
         required: false
       dockerhub_token:
@@ -56,6 +58,8 @@ env:
   VERSION_SEMVER: ''
   VERSION_RAW: ''
   VERSION_SHA: ''
+  CACHE_FROM: ''
+  CACHE_TO: ''
 
 jobs:
   build-image:
@@ -237,6 +241,10 @@ jobs:
         annotations: ${{ steps.meta.outputs.annotations }}
         cache-from: ${{ env.CACHE_FROM }}
         cache-to: ${{ env.CACHE_TO }}
+        no-cache: ${{ env.CACHE_FROM == '' && env.CACHE_TO == '' }}
+        sbom: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        provenance: ${{ env.PUBLISH_PRIVATE_REGISTRY == 'true' || env.PUBLISH_DOCKERHUB == 'true' }}
+        secrets: ${{ secrets.build_secrets }}
 
     - name: Prepare job outputs from image build
       id: image_info
