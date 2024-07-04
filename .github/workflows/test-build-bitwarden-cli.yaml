@@ -37,7 +37,7 @@ jobs:
         echo "Show commits"
         git log --oneline --no-merges -1
         echo "--------------------------------------------------------------------------"
-        echo "${{toJSON(github.event)}}" | jq -r
+        echo "${{toJSON(github.event)}}"
         echo "--------------------------------------------------------------------------"
 
   load-image-metadata:
