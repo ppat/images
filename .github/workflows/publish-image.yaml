@@ -21,6 +21,10 @@ concurrency:
 permissions:
   contents: write
 
+env:
+  REPOSITORY_PRIVATE_REGISTRY_PREFIX: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}
+  REPOSITORY_BUILD_CACHE_PREFIX: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}
+
 jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
@@ -106,7 +110,7 @@ jobs:
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       repository_dockerhub: ppatlabs/${{ github.event.inputs.image_name }}
-      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ github.event.inputs.image_name }}
-      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ github.event.inputs.image_name }}
+      repository_private_registry: ${{ env.REPOSITORY_PRIVATE_REGISTRY_PREFIX }}/${{ github.event.inputs.image_name }}
+      repository_build_cache: ${{ env.REPOSITORY_BUILD_CACHE_PREFIX }}/${{ github.event.inputs.image_name }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
