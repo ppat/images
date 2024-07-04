@@ -249,7 +249,7 @@ jobs:
         echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
     - name: Docker Hub Description
-      if: ${{ env.PUBLISH_DOCKERHUB == 'true }}
+      if: ${{ env.PUBLISH_DOCKERHUB == 'true' }}
       uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
       with:
         username: ${{ secrets.dockerhub_username }}
