@@ -29,19 +29,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - name: Tailscale Connect
-      uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
-      with:
-        oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-        oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
-        tags: tag:github-action-ci-runner
-        # renovate: datasource=github-releases depName=tailscale/tailscale
-        version: "1.68.1"
-
     - name: Run Trivy vulnerability scanner (non-publish workflow runs only)
       uses: aquasecurity/trivy-action@7c2007bcb556501da015201bcba5aa14069b74e2 # 0.23.0
       with:
-        image-ref: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ matrix.image }}:latest
+        image-ref: docker.io/ppatlabs/${{ matrix.image }}:latest
         scan-type: image
         format: 'sarif'
         output: 'trivy-results.sarif'
@@ -50,16 +41,9 @@ jobs:
         vuln-type: 'os,library'
         severity: "MEDIUM,HIGH,CRITICAL"
         scanners: "vuln"
-      env:
-        TRIVY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-        TRIVY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'
-
-    - name: Tailscale Disconnect
-      if: ${{ success() || failure() }}
-      run: sudo -E tailscale logout
