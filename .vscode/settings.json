@@ -1,0 +1,30 @@
+{
+    "docker.languageserver.formatter.ignoreMultilineInstructions": true,
+    "editor.detectIndentation": true,
+    "editor.indentSize": 2,
+    "editor.insertSpaces": true,
+    "explorer.excludeGitIgnore": true,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/package-lock.json": true
+    },
+    "search.useIgnoreFiles": true,
+
+
+    "[dockerfile]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 4
+    },
+    "[javascript]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 2
+    },
+    "[json]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 2
+    },
+    "[shellscript]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 2
+    }
+}
