@@ -40,7 +40,7 @@ RUN --mount=type=tmpfs,target=/var/tmp \
     debian/rules debian/control \
     && dpkg-buildpackage --jobs=auto -b -uc && \
     mkdir -p "/build/${TARGETARCH}" && \
-    find /usr/local/src/repositories -name '*.deb' -exec mv -t "/build/${TARGETARCH}" {} && \
+    find /usr/local/src/repositories -name '*.deb' -exec mv -t "/build/${TARGETARCH}" {} + && \
     echo "Built *.deb files:" && \
     ls "/build/${TARGETARCH}/" | pr -t -o 4
 
