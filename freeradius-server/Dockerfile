@@ -42,7 +42,7 @@ RUN --mount=type=tmpfs,target=/var/tmp \
     mkdir -p "/build/${TARGETARCH}" && \
     find /usr/local/src/repositories -name '*.deb' -exec mv -t "/build/${TARGETARCH}" {} + && \
     echo "Built *.deb files:" && \
-    ls "/build/${TARGETARCH}/" | pr -t -o 4
+    find "/build/${TARGETARCH}/" -name '*.deb' | pr -t -o 4
 
 
 # =======================================================================================================================================
