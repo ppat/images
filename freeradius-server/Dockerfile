@@ -40,9 +40,9 @@ RUN --mount=type=tmpfs,target=/var/tmp \
     debian/rules debian/control \
     && dpkg-buildpackage --jobs=auto -b -uc && \
     mkdir -p "/build/${TARGETARCH}" && \
-    for f in $(ls /usr/local/src/repositories/*.deb); do mv "$f" "/build/${TARGETARCH}/$(basename $f)"; done && \
+    find /usr/local/src/repositories -name '*.deb' -exec mv -t "/build/${TARGETARCH}" {} + && \
     echo "Built *.deb files:" && \
-    ls "/build/${TARGETARCH}/" | pr -t -o 4
+    find "/build/${TARGETARCH}/" -name '*.deb' | pr -t -o 4
 
 
 # =======================================================================================================================================
@@ -85,7 +85,6 @@ RUN --mount=type=bind,from=builder,source=/build/${TARGETARCH},target=/build \
     --mount=type=cache,target=/var/cache/apt,id=cache-apt-install-${TARGETARCH} \
     --mount=type=cache,target=/var/cache/debconf,id=cache-debconf-install-${TARGETARCH} \
     --mount=type=cache,target=/var/lib/apt,id=lib-apt-install-${TARGETARCH} \
-    ls -al /build/*.deb && \
     apt-get update && \
     export DEBIAN_FRONTEND="noninteractive" && \
     apt-get install -y --no-install-recommends \
