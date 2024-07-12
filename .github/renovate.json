@@ -110,6 +110,12 @@
       "schedule": [
         "before 10am on Wednesday"
       ]
+    },
+    {
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "pinDigests": false
     }
   ],
   "prConcurrentLimit": 20,
