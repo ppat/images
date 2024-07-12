@@ -43,6 +43,7 @@
     },
     {
       "automerge": true,
+      "automergeType": "pr",
       "groupName": "github-release non-major dependencies",
       "groupSlug": "github-release-non-major-deps",
       "matchDatasources": [
@@ -52,7 +53,8 @@
         "minor",
         "patch"
       ],
-      "minimumReleaseAge": "1 days"
+      "minimumReleaseAge": "1 days",
+      "platformAutomerge": true
     },
     {
       "groupName": "github-release major dependencies",
@@ -70,6 +72,8 @@
       ]
     },
     {
+      "automerge": true,
+      "automergeType": "pr",
       "groupName": "npm dependencies",
       "groupSlug": "npm-deps",
       "matchDatasources": [
@@ -79,9 +83,12 @@
       "schedule": [
         "before 10am on Tuesday",
         "before 10am on Thursday"
-      ]
+      ],
+      "platformAutomerge": true
     },
     {
+      "automerge": true,
+      "automergeType": "pr",
       "groupName": "python dependencies",
       "groupSlug": "pypi-deps",
       "matchDatasources": [
@@ -91,15 +98,19 @@
       "schedule": [
         "before 10am on Tuesday",
         "before 10am on Thursday"
-      ]
+      ],
+      "platformAutomerge": true
     },
     {
+      "automerge": true,
+      "automergeType": "pr",
       "groupName": "pre-commit dependencies",
       "groupSlug": "pre-commit-deps",
       "matchManagers": [
         "pre-commit"
       ],
-      "minimumReleaseAge": "90 days"
+      "minimumReleaseAge": "90 days",
+      "platformAutomerge": true
     },
     {
       "description": "delay upgrading ubuntu major versions till 90 days from release (to allow time for compatibility fixes to other packages)",
