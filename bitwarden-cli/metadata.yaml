@@ -5,4 +5,5 @@ image_version: "2024.7.0"
 label_title: "bitwarden-cli"
 label_description: "bitwarden-cli running serve (for use with external-secrets operator as webhook provider)"
 
+
 build_timeout: 10
