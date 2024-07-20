@@ -1,28 +1,26 @@
 ---
 # yamllint disable rule:line-length
-name: publish-image
+name: release-workflow
 
 # yamllint disable-line rule:truthy
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       image_name:
-        description: 'Image to publish'
         required: true
-        type: choice
-        options:
-        - 'bitwarden-cli'
-        - 'freeradius-server'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+        type: string
+      source_git_ref:
+        required: true
+        type: string
+    outputs:
+      release_tag:
+        value: ${{ jobs.create-release.outputs.release_tag }}
 
 jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
     with:
-      image_name: ${{ github.event.inputs.image_name }}
+      image_name: ${{ inputs.image_name }}
 
   create-release:
     needs: [load-image-metadata]
@@ -35,20 +33,20 @@ jobs:
       release_tag: ${{ steps.release.outputs.release_tag }}
       release_timestamp: ${{ steps.release.outputs.release_timestamp }}
     env:
-      RELEASE_TAG_PREFIX: ${{ format('{0}/{1}', github.event.inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
+      RELEASE_TAG_PREFIX: ${{ format('{0}/{1}', inputs.image_name, needs.load-image-metadata.outputs.image_version) }}
     steps:
     - name: Checkout
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       with:
         fetch-depth: 0
         fetch-tags: true
-        ref: main
+        ref: ${{ inputs.source_git_ref }}
     - name: Create release
       id: release
       shell: bash
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_NAME: ${{ github.event.inputs.image_name }}
+        IMAGE_NAME: ${{ inputs.image_name }}
       # yamllint disable-line rule:indentation
       run: |
         RELEASE_TIMESTAMP="$(date --utc +%s)"
@@ -100,10 +98,10 @@ jobs:
     needs: [load-image-metadata, create-release]
     uses: ./.github/workflows/build-image-workflow.yaml
     with:
-      image_context_path: ${{ github.event.inputs.image_name }}
+      image_context_path: ${{ inputs.image_name }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      repository_dockerhub: ppatlabs/${{ github.event.inputs.image_name }}
+      repository_dockerhub: ppatlabs/${{ inputs.image_name }}
       source_git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
     secrets:
@@ -111,7 +109,7 @@ jobs:
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
       private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ github.event.inputs.image_name }}
-      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ github.event.inputs.image_name }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
       tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
       tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
