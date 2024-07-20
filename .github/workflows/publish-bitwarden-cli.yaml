@@ -1,0 +1,24 @@
+---
+# yamllint disable rule:line-length
+name: publish-bitwarden-cli
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - bitwarden-cli/**
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    uses: ./.github/workflows/release-workflow.yaml
+    secrets: inherit
+    with:
+      image_name: bitwarden-cli
+      source_git_ref: ${{ github.ref }}
