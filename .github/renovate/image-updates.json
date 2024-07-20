@@ -1,0 +1,72 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "image-updates | all | configure update type separation",
+      "matchFileNames": [
+        "**/Dockerfile",
+        "**/metadata.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "separateMajorMinor": true,
+      "separateMinorPatch": false,
+      "separateMultipleMajor": true,
+      "separateMultipleMinor": false
+    },
+    {
+      "automerge": true,
+      "automergeType": "pr",
+      "description": "image-updates | patch | configure automerge, min release age and semantic commit type",
+      "matchFileNames": [
+        "**/Dockerfile",
+        "**/metadata.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "minimumReleaseAge": "1 days",
+      "platformAutomerge": true,
+      "semanticCommitType": "fix"
+    },
+    {
+      "automerge": true,
+      "automergeType": "pr",
+      "description": "image-updates | minor | configure automerge, min release age and semantic commit type",
+      "matchFileNames": [
+        "**/Dockerfile",
+        "**/metadata.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "minimumReleaseAge": "7 days",
+      "platformAutomerge": true,
+      "semanticCommitType": "feat"
+    },
+    {
+      "automerge": false,
+      "commitBody": "BREAKING CHANGE",
+      "description": "image-updates | major | configure automerge, breaking change indicator, min release age and semantic commit type",
+      "matchFileNames": [
+        "**/Dockerfile",
+        "**/metadata.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "minimumReleaseAge": "30 days",
+      "semanticCommitType": "feat"
+    }
+  ]
+}
