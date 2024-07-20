@@ -16,102 +16,17 @@
   "extends": [
     "config:best-practices",
     "group:linters",
-    "mergeConfidence:all-badges"
+    "mergeConfidence:all-badges",
+    "github>ppat/renovate-presets:default-commit-message",
+    "github>ppat/renovate-presets:ci-dependencies",
+    "github>ppat/renovate-presets:ci-dev-tools",
+    "github>ppat/renovate-presets:ci-github-actions",
+    "github>ppat/images//.github/renovate/image-updates",
+    "github>ppat/images//.github/renovate/image-updates-bitwarden-cli",
+    "github>ppat/images//.github/renovate/image-updates-freeradius-server"
   ],
   "internalChecksFilter": "strict",
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": [
-      "every 30 day"
-    ]
-  },
   "packageRules": [
-    {
-      "groupName": "github-action dependencies",
-      "groupSlug": "github-actions-deps",
-      "matchFileNames": [
-        ".github/workflows/**"
-      ],
-      "matchManagers": [
-        "github-actions"
-      ],
-      "minimumReleaseAge": "90 days",
-      "schedule": [
-        "before 10am on Tuesday",
-        "before 10am on Thursday"
-      ]
-    },
-    {
-      "automerge": true,
-      "automergeType": "pr",
-      "groupName": "github-release non-major dependencies",
-      "groupSlug": "github-release-non-major-deps",
-      "matchDatasources": [
-        "github-releases"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "minimumReleaseAge": "1 days",
-      "platformAutomerge": true
-    },
-    {
-      "groupName": "github-release major dependencies",
-      "groupSlug": "github-release-deps",
-      "matchDatasources": [
-        "github-releases"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "minimumReleaseAge": "30 days",
-      "schedule": [
-        "before 10am on Tuesday",
-        "before 10am on Thursday"
-      ]
-    },
-    {
-      "automerge": true,
-      "automergeType": "pr",
-      "groupName": "npm dependencies",
-      "groupSlug": "npm-deps",
-      "matchDatasources": [
-        "npm"
-      ],
-      "minimumReleaseAge": "90 days",
-      "schedule": [
-        "before 10am on Tuesday",
-        "before 10am on Thursday"
-      ],
-      "platformAutomerge": true
-    },
-    {
-      "automerge": true,
-      "automergeType": "pr",
-      "groupName": "python dependencies",
-      "groupSlug": "pypi-deps",
-      "matchDatasources": [
-        "pypi"
-      ],
-      "minimumReleaseAge": "90 days",
-      "schedule": [
-        "before 10am on Tuesday",
-        "before 10am on Thursday"
-      ],
-      "platformAutomerge": true
-    },
-    {
-      "automerge": true,
-      "automergeType": "pr",
-      "groupName": "pre-commit dependencies",
-      "groupSlug": "pre-commit-deps",
-      "matchManagers": [
-        "pre-commit"
-      ],
-      "minimumReleaseAge": "90 days",
-      "platformAutomerge": true
-    },
     {
       "description": "delay upgrading ubuntu major versions till 90 days from release (to allow time for compatibility fixes to other packages)",
       "matchDatasources": [
@@ -123,12 +38,13 @@
       "matchUpdateTypes": [
         "major"
       ],
-      "minimumReleaseAge": "90 days",
-      "schedule": [
-        "before 10am on Wednesday"
-      ]
+      "minimumReleaseAge": "90 days"
     },
     {
+      "description": "don't pin digest when using docker datasource with regex manager",
+      "matchDatasources": [
+        "docker"
+      ],
       "matchManagers": [
         "custom.regex"
       ],
@@ -137,14 +53,6 @@
   ],
   "prConcurrentLimit": 20,
   "prHourlyLimit": 10,
-  "pre-commit": {
-    "enabled": true
-  },
   "rebaseWhen": "behind-base-branch",
-  "semanticCommits": "enabled",
-  "semanticCommitScope": "deps",
-  "semanticCommitType": "chore",
-  "separateMajorMinor": true,
-  "separateMultipleMajor": false,
   "timezone": "US/Eastern"
 }

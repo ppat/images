@@ -42,13 +42,13 @@ jobs:
         POETRY_VERSION: "1.8.3"
 
     - name: Set up python
-      uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5
+      uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
       with:
-        python-version: '3.11'
+        python-version: '3.12'
         cache: 'poetry'
 
     - name: Set up node
-      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
+      uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
       with:
         node-version-file: '.node-version'
         cache: 'npm'
@@ -67,6 +67,7 @@ jobs:
       run: |
         poetry --version
         poetry install --no-interaction
+        poetry env info
 
     - name: Install node packages
       run: npm ci --no-fund --no-audit
@@ -124,12 +125,10 @@ jobs:
 
     - name: yamllint
       if: success() || failure()
-      run: |
-        set -x
-        poetry run yamllint -c .yamllint --strict --format github .
+      run: poetry run yamllint -c .yamllint --strict --format github .
 
     - name: actionlint
-      if: (success() || failure()) && steps.changed-files-yaml.outputs.actions_any_changed == 'true' || github.event_name == 'workflow_dispatch'
+      if: (success() || failure()) && (steps.changed-files-yaml.outputs.actions_any_changed == 'true' || github.event_name == 'workflow_dispatch')
       shell: bash
       run: |
         [[ "$RUNNER_ARCH" == "ARM64" ]] && export PKG_ARCH=arm64 || export PKG_ARCH=amd64
@@ -143,11 +142,11 @@ jobs:
         ACTIONLINT_VERSION: "1.7.1"
 
     - name: commitlint
-      if: (success() || failure()) && github.event_name == 'pull_request'
+      if: (success() || failure()) && (github.event_name == 'pull_request')
       run: npx commitlint --color --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
     - name: validate-renovate-config
-      if: (success() || failure()) && steps.changed-files-yaml.outputs.renovate_any_changed == 'true' || github.event_name == 'workflow_dispatch'
+      if: (success() || failure()) && (steps.changed-files-yaml.outputs.renovate_any_changed == 'true' || github.event_name == 'workflow_dispatch')
       shell: bash
       run: |
         npm install --no-fund --no-audit renovate

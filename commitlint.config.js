@@ -34,8 +34,13 @@ module.exports = {
     'scope-enum': [2, 'always',
       [
         '',
-        'deps',
-        'release'
+        'bitwarden-cli',
+        'build',
+        'dev-tools',
+        'freeradius-server',
+        'github-actions',
+        'release',
+        'renovate'
       ]
     ],
     // 'scope-empty': [2, 'always'],
