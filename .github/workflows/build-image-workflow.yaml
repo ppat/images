@@ -235,7 +235,7 @@ jobs:
 
     - name: Build and publish image
       id: build-image
-      uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6
+      uses: docker/build-push-action@16ebe778df0e7752d2cfcbd924afdbbd89c1a755 # v6
       with:
         context: ./${{ inputs.image_context_path }}
         platforms: |-
@@ -255,7 +255,7 @@ jobs:
 
     - name: Also cache build as cache-latest
       if: ${{ env.CACHE_LATEST != '' }}
-      uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6
+      uses: docker/build-push-action@16ebe778df0e7752d2cfcbd924afdbbd89c1a755 # v6
       with:
         context: ./${{ inputs.image_context_path }}
         platforms: |-
