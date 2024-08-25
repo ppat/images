@@ -1,7 +1,7 @@
 ---
 # yamllint disable-line rule:line-length
 # renovate: datasource=docker depName=freeradius/freeradius-server
-image_version: "3.2.5"
+image_version: "3.2.6"
 
 label_title: "freeradius-server"
 label_description: "Freeradius Server image with support for both amd64 and arm64 architectures."
