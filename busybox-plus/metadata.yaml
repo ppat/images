@@ -1,0 +1,7 @@
+---
+image_version: "0.0.1"
+
+label_title: "busybox-plus"
+label_description: "busybox-plus provides busybox based image with a few additional tools"
+
+build_timeout: 10

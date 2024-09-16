@@ -1,0 +1,38 @@
+---
+# yamllint disable rule:line-length
+name: test-build-busybox-plus
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+    paths:
+    - 'busybox-plus/**'
+    - '.github/workflows/test-build-busybox-plus.yaml'
+    - '.github/workflows/build-image-workflow.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  load-image-metadata:
+    uses: ./.github/workflows/load-metadata.yaml
+    with:
+      image_name: 'busybox-plus'
+
+  test-build-busybox-plus:
+    needs: [load-image-metadata]
+    uses: ./.github/workflows/build-image-workflow.yaml
+    with:
+      image_context_path: busybox-plus
+      label_title: ${{ needs.load-image-metadata.outputs.label_title }}
+      label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
+      timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
+    secrets:
+      private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/busybox-plus
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/busybox-plus
+      tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+      tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
