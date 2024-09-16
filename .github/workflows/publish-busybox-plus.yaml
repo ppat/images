@@ -1,0 +1,27 @@
+---
+# yamllint disable rule:line-length
+name: publish-busybox-plus
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - busybox-plus/**
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/release-workflow.yaml
+    secrets: inherit
+    with:
+      image_name: busybox-plus
+      source_git_ref: ${{ github.ref }}
