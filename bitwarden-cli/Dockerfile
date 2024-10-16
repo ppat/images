@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM ubuntu:noble@sha256:dfc10878be8d8fc9c61cbff33166cb1d1fe44391539243703c72766894fa834a AS builder
+FROM --platform=$BUILDPLATFORM ubuntu:noble@sha256:d4f6f70979d0758d7a6f81e34a61195677f4f4fa576eaf808b79f17499fd93d1 AS builder
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
@@ -22,7 +22,7 @@ WORKDIR /
 
 # =======================================================================================================================================
 # Bitwarden CLI requires various libs not available under a small base image such as busybox.
-FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:dfc10878be8d8fc9c61cbff33166cb1d1fe44391539243703c72766894fa834a
+FROM --platform=$TARGETPLATFORM ubuntu:noble@sha256:d4f6f70979d0758d7a6f81e34a61195677f4f4fa576eaf808b79f17499fd93d1
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
