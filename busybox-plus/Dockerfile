@@ -1,4 +1,4 @@
-FROM golang:1.23.1-bookworm@sha256:eac972dedeafc7b375b606672c0a453e4697a7eac308a205c5e3907b1eed2ab6 AS gotools
+FROM golang:1.23.2-bookworm@sha256:2341ddffd3eddb72e0aebab476222fbc24d4a507c4d490a51892ec861bdb71fc AS gotools
 ENV GOBIN=/bin
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
 
