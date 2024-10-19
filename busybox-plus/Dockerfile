@@ -3,7 +3,7 @@ ENV GOBIN=/bin
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
 
 # =======================================================================================================================================
-FROM busybox:1.36.1@sha256:c230832bd3b0be59a6c47ed64294f9ce71e91b327957920b6929a0caa8353140
+FROM busybox:1.37.0@sha256:768e5c6f5cb6db0794eec98dc7a967f40631746c32232b78a3105fb946f3ab83
 WORKDIR /
 
 COPY --from=gotools --chown=root:root --chmod=755 /bin/envsubst /bin/envsubt
