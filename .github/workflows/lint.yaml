@@ -55,7 +55,7 @@ jobs:
         cache-dependency-path: 'package-lock.json'
 
     - name: Setup tflint
-      uses: terraform-linters/setup-tflint@19a52fbac37dacb22a09518e4ef6ee234f2d4987 # v4
+      uses: terraform-linters/setup-tflint@8093687ecc9dcbfa88d07c103ad4176739a7287e # v4
 
     - name: Cache pre-commit hooks
       uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4
