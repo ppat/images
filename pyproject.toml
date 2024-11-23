@@ -5,5 +5,5 @@ package-mode = false
 python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "3.8.0"
+pre-commit = "4.0.1"
 yamllint = "1.35.1"
