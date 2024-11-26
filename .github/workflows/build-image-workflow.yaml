@@ -53,8 +53,6 @@ on:
         value: ${{ jobs.build-image.outputs.image_id }}
       image_tag:
         value: ${{ jobs.build-image.outputs.image_tag }}
-      metadata:
-        value: ${{ jobs.build-image.outputs.metadata }}
 
 env:
   PUBLISH_DOCKERHUB: ${{ inputs.repository_dockerhub != '' && secrets.dockerhub_username != '' && secrets.dockerhub_token != '' }}
@@ -76,7 +74,6 @@ jobs:
       digest: ${{ steps.image_info.outputs.digest }}
       image_id: ${{ steps.image_info.outputs.image_id }}
       image_tag: ${{ steps.image_info.outputs.image_tag }}
-      metadata: ${{ steps.image_info.outputs.metadata }}
 
     steps:
     - name: Checkout
@@ -277,12 +274,10 @@ jobs:
         IMAGE_ID: ${{ steps.build-image.outputs.imageid }}
         IMAGE_TAG: ${{ steps.meta.outputs.version }}
         IMAGE_DIGEST: ${{ steps.build-image.outputs.digest }}
-        IMAGE_METADATA: ${{ toJSON(steps.build-image.outputs.metadata) }}
       run: |
         echo "digest=${IMAGE_DIGEST}" >> $GITHUB_OUTPUT
         echo "image_id=${IMAGE_ID}" >> $GITHUB_OUTPUT
         echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-        echo "metadata=${IMAGE_METADATA}" >> $GITHUB_OUTPUT
 
     - name: Docker Hub Description
       if: ${{ env.PUBLISH_DOCKERHUB == 'true' }}
