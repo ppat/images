@@ -24,4 +24,5 @@ jobs:
     secrets: inherit
     with:
       image_name: busybox-plus
+      platforms: linux/amd64,linux/arm64
       source_git_ref: ${{ github.ref }}
