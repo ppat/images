@@ -27,6 +27,7 @@ jobs:
       image_context_path: freeradius-server
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
+      platforms: linux/amd64,linux/arm64
       source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
     secrets:
