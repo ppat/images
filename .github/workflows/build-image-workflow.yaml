@@ -210,7 +210,7 @@ jobs:
 
     - name: Tailscale Connect
       if: ${{ env.CONNECT_TAILSCALE == 'true' }}
-      uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
+      uses: tailscale/github-action@8688eb839e58e6b25c1ae96cd99d1c173299b842 # v3
       with:
         oauth-client-id: ${{ secrets.tailscale_oauth_client_id }}
         oauth-secret: ${{ secrets.tailscale_oauth_secret }}
