@@ -43,7 +43,7 @@ RUN aqua install --all && \
 
 
 # =======================================================================================================================================
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim@sha256:d365f4920711a9074c4bcd178e8f457ee59250426441ab2a5f8106ed8fe948eb
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
