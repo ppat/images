@@ -57,42 +57,21 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         curl \
         dnsutils \
         findutils \
-        fio \
-        git \
-        gnupg \
         jq \
-        inetutils-tools \
-        iotop \
-        iputils-ping \
-        iputils-tracepath \
         less \
-        locales \
         lsof \
         netcat-openbsd \
         net-tools \
         nmap \
+        openssl \
         psmisc \
-        screen \
-        strace \
-        sysstat \
         traceroute \
-        tzdata \
         vim \
         watch \
         wget \
         xz-utils \
         && \
     find /usr -name __pycache__ -exec rm -rf {} +
-
-# generate locales (needed for many applications, specially python)
-RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
-    locale-gen en_US.UTF-8
-# Make typing unicode characters in the terminal work.
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-RUN echo 'LC_ALL=en_US.UTF-8' >> /etc/environment && \
-    echo 'LANG=en_US.UTF-8' >> /etc/environment
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
