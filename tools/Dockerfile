@@ -3,15 +3,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget
-
-# yq
-# renovate: datasource=github-releases depName=mikefarah/yq
-ARG YQ_VERSION="4.44.6"
-ARG YQ_ARCH="amd64"
-RUN wget --progress=dot:giga -c "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${YQ_ARCH}.tar.gz" -O - | tar -xzv -C /tmp && \
-    install -o root -g root -m 0755 "/tmp/yq_linux_${YQ_ARCH}" /usr/local/sbin/yq && \
-    rm -rf /tmp/* /var/log/* /var/tmp/*
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget findutils
 
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
 ARG AQUA_INSTALLER_VERSION="3.1.0"
@@ -26,18 +18,10 @@ ENV PATH=/root/.local/share/aquaproj-aqua/bin:$PATH
 ENV AQUA_GLOBAL_CONFIG=/etc/aqua/aqua.yaml
 COPY aqua.yaml aqua-checksums.json /etc/aqua/
 
-RUN echo "Installing binaries with aqua..." && \
-    aqua install --all && \
-    ls -al /root/.local/share/aquaproj-aqua/bin
-
-RUN ls -al /usr/local/sbin/yq && ls -al /etc/aqua/aqua.yaml
-
 # hadolint ignore=SC2046
-RUN /usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2
-
-# hadolint ignore=SC2046
-RUN mkdir -p /dist && \
-    aqua cp -o /dist $(/usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
+RUN aqua install --all && \
+    mkdir -p /dist && \
+    aqua cp -o /dist $(find /root/.local/share/aquaproj-aqua/bin -type l -executable -not -name aqua -exec basename {} \;)
 
 
 # =======================================================================================================================================
@@ -47,3 +31,20 @@ WORKDIR /
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
 ENTRYPOINT ["/bin/sh"]
+
+
+#22 0.053 btop
+#22 0.053 dust
+#22 0.053 procs
+#22 0.053 flux2
+#22 0.053 helm
+#22 0.053 fzf
+#22 0.053 kubectl
+#22 0.053 krew
+#22 0.053 kustomize
+#22 0.053 yq
+#22 0.053 duf
+#22 0.053 bat
+#22 0.053 fd
+#22 0.053 hyperfine
+#22 0.053 ripgrep
