@@ -2,10 +2,7 @@ FROM ubuntu:noble@sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea9
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
-RUN --mount=type=tmpfs,target=/var/cache/apt \
-    --mount=type=tmpfs,target=/var/cache/debconf \
-    --mount=type=tmpfs,target=/var/lib/apt \
-    apt-get update && \
+RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget
 
 # yq
