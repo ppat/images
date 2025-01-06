@@ -122,7 +122,7 @@ jobs:
         CACHE_PARAMS: image-manifest=true,oci-mediatypes=true,mode=max,compression=zstd
       # yamllint disable-line rule:indentation
       run: |
-        if [[ "$IMAGE_CACHE" == '' ]]; then
+        if [[ "$IMAGE_CACHE" == '' || "$CONNECT_TAILSCALE" != 'true' ]]; then
           echo "No repository for docker build cache specified, disabling build cache all together."
           CACHE_FROM=""
           CACHE_TO=""
