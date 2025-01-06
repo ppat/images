@@ -108,9 +108,3 @@ jobs:
     secrets:
       dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
-      private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-      private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
-      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
-      tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-      tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
