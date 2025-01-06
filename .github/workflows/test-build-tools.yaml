@@ -1,12 +1,12 @@
 ---
 # yamllint disable rule:line-length
-name: test-build-busybox-plus
+name: test-build-tools
 
 on:
   pull_request:
     paths:
-    - 'busybox-plus/**'
-    - '.github/workflows/test-build-busybox-plus.yaml'
+    - 'tools/**'
+    - '.github/workflows/test-build-tools.yaml'
     - '.github/workflows/build-image-workflow.yaml'
 
 concurrency:
@@ -17,13 +17,13 @@ jobs:
   load-image-metadata:
     uses: ./.github/workflows/load-metadata.yaml
     with:
-      image_name: 'busybox-plus'
+      image_name: 'tools'
 
-  test-build-busybox-plus:
+  test-build-tools:
     needs: [load-image-metadata]
     uses: ./.github/workflows/build-image-workflow.yaml
     with:
-      image_context_path: busybox-plus
+      image_context_path: tools
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       platforms: linux/amd64,linux/arm64

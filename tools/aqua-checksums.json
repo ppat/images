@@ -1,0 +1,169 @@
+{
+  "checksums": [
+    {
+      "id": "github_release/github.com/BurntSushi/ripgrep/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "C827481C4FF4EA10C9DC7A4022C8DE5DB34A5737CB74484D62EB94A95841AB2F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/BurntSushi/ripgrep/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "4CF9F2741E6C465FFDB7C26F38056A59E2A2544B51F7CC128EF28337EEAE4D8E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/aristocratos/btop/v1.4.0/btop-aarch64-linux-musl.tbz",
+      "checksum": "4872C4D328CD39B535091470D44C91A786B879881DD11053154468C9A73E22B4",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/aristocratos/btop/v1.4.0/btop-x86_64-linux-musl.tbz",
+      "checksum": "2E49CDE9C0F273E5B1699D2C4F1CE5D1C08CCA5FD90E5E0226DBAC9FD00C82F3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bootandy/dust/v1.1.1/dust-v1.1.1-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "4D0E7F3E39CE85E98CC69260AB6F40E460A455CD8575AF1BA70D14A2940AE553",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.64.0/gh_2.64.0_linux_amd64.tar.gz",
+      "checksum": "0E44A4C43014BD513550EC190B7C33F5F8B63D162927A1F6445EF38EA25CD2FA",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/cli/cli/v2.64.0/gh_2.64.0_linux_arm64.tar.gz",
+      "checksum": "002CBF4D1CF349C5A6BD68C7D1FEC88C821BE19E13C9D0CD08B1B596B5A069AA",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/dalance/procs/v0.14.8/procs-v0.14.8-x86_64-linux.zip",
+      "checksum": "F573C1762922A107E7C18F7AE6ECA2447DDE22BF1A580C2612B0C5FCEF495F11",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.32.7/k9s_Linux_amd64.tar.gz",
+      "checksum": "03934727BFBF39B1E61A74D8E045796CDA2DE14F8CE4C01DF27F43D4494021DE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/derailed/k9s/v0.32.7/k9s_Linux_arm64.tar.gz",
+      "checksum": "B890A7A212A3FC69E6EA4B2A29D59F80ED501A27AD654C819A155CC7C3C6AA8D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.4.0/flux_2.4.0_linux_amd64.tar.gz",
+      "checksum": "7B70B75AF20E28FC30EE66CF5372EC8D51DD466FD2EE21AA42690984DE70B09B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.4.0/flux_2.4.0_linux_arm64.tar.gz",
+      "checksum": "4B8C95A1E8AD262DD33A67D28E22979CF3E022A9283D4676763B6728247D92A0",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.57.0/fzf-0.57.0-linux_amd64.tar.gz",
+      "checksum": "A3C087A5F40E8BB4D9BFB26FAFFA094643DF111A469646BEF53154A54AF9FF92",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.57.0/fzf-0.57.0-linux_arm64.tar.gz",
+      "checksum": "E0B3FD1BB769997907D373B0511401801CD643CE939D26AD42E9FE2836BED625",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_amd64.tar.gz",
+      "checksum": "E471396B0ED4F2BE092B4854CC030DFCBB12B86197972E7BEF0CB89AD9C72477",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_arm64.tar.gz",
+      "checksum": "F8F0CDBF698ED3E8CB46E7BD213754701341A10E11CCB69C90D4863E0CF5A16A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.5.0/kustomize_v5.5.0_linux_amd64.tar.gz",
+      "checksum": "6703A3A70A0C47CF0B37694030B54F1175A9DFEB17B3818B623ED58B9DBC2A77",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.5.0/kustomize_v5.5.0_linux_arm64.tar.gz",
+      "checksum": "B4170D1ACB8CFACACE9F72884BEF957FF56EFDCD4813B66E7604AABC8B57E93D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mikefarah/yq/v4.44.6/yq_linux_amd64",
+      "checksum": "0C2B24E645B57D8E7C0566D18643A6D4F5580FEEEA3878127354A46F2A1E4598",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/mikefarah/yq/v4.44.6/yq_linux_arm64",
+      "checksum": "9477AC3CC447B6C083986129E35AF8122EB2B938FE55C9C3E40436FB966E5813",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/muesli/duf/v0.8.1/duf_0.8.1_linux_arm64.tar.gz",
+      "checksum": "66D304427BB30E5766E66E740394B0B07BD852B64CC5CDA755EAB33ADF853E72",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/muesli/duf/v0.8.1/duf_0.8.1_linux_x86_64.tar.gz",
+      "checksum": "A8343EED730DF04ACFC0BA1553B99B4EF91D5122CAB58EE241EA8196948408D7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.24.0/bat-v0.24.0-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "FECCAE9A0576D97609C57E32D3914C5116136EAB0DF74C2AB74EF397D42C5B10",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/bat/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "D39A21E3DA57FE6A3E07184B3C1DC245F8DBA379AF569D3668B6DCDFE75E3052",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "6DE8BE7A3D8CA27954A6D1E22BC327AF4CF6FC7622791E68B820197F915C422B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "D9BFA25EC28624545C222992E1B00673B7C9CA5EB15393C40369F10B28F9C932",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/hyperfine/v1.19.0/hyperfine-v1.19.0-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "7F9C0522E1ACF869E0558E085C43F2CEA3E30E4F7A4B7BC3D5540CBDEE7B4273",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/sharkdp/hyperfine/v1.19.0/hyperfine-v1.19.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "825287143F397774093539CA2458854AB3735C0E8A1AAF075C22EDCE7D261556",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.31.4/bin/linux/amd64/kubectl",
+      "checksum": "298E19E9C6C17199011404278F0FF8168A7ECA4217EDAD9097AF577023A5620F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.31.4/bin/linux/arm64/kubectl",
+      "checksum": "B97E93C20E3BE4B8C8FA1235A41B4D77D4F2022ED3D899230DBBBBD43D26F872",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.16.4-linux-amd64.tar.gz",
+      "checksum": "FC307327959AA38ED8F9F7E66D45492BB022A66C3E5DA6063958254B9767D179",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.16.4-linux-arm64.tar.gz",
+      "checksum": "D3F8F15B3D9EC8C8678FBF3280C3E5902EFABE5912E2F9FCF29107EFBC8EAD69",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.290.0/registry.yaml",
+      "checksum": "05B4781DC2A416FAA71A32D18B88AB035B86314B70ADB8C8ADE5031AC2EC8870",
+      "algorithm": "sha256"
+    }
+  ]
+}
