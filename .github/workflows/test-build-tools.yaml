@@ -32,7 +32,7 @@ jobs:
     secrets:
       private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       private_registry_token: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
-      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/busybox-plus
-      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/busybox-plus
+      repository_private_registry: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_PATH }}/tools
+      repository_build_cache: ${{ secrets.CONTAINER_REGISTRY }}/${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/tools
       tailscale_oauth_client_id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
       tailscale_oauth_secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
