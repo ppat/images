@@ -1,3 +1,3 @@
 # busybox-plus
 
-`ppatlabs/tools` is a busybox based image with useful tools for debugging and troubleshooting purposes with kubernetes.
+`ppatlabs/tools` supplies useful tools for debugging and troubleshooting purposes (specially within kubernetes with `kubectl debug`).
