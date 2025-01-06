@@ -43,9 +43,57 @@ RUN aqua install --all && \
 
 
 # =======================================================================================================================================
-FROM busybox:1.37.0@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
+FROM debian:bookworm-slim
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/cache/debconf,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+        bash \
+        ca-certificates \
+        curl \
+        dnsutils \
+        findutils \
+        fio \
+        git \
+        gnupg \
+        jq \
+        inetutils-tools \
+        iotop \
+        iputils-ping \
+        iputils-tracepath \
+        less \
+        locales \
+        lsof \
+        netcat-openbsd \
+        net-tools \
+        nmap \
+        psmisc \
+        screen \
+        strace \
+        sysstat \
+        traceroute \
+        tzdata \
+        vim \
+        watch \
+        wget \
+        xz-utils \
+        && \
+    find /usr -name __pycache__ -exec rm -rf {} +
+
+# generate locales (needed for many applications, specially python)
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    locale-gen en_US.UTF-8
+# Make typing unicode characters in the terminal work.
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN echo 'LC_ALL=en_US.UTF-8' >> /etc/environment && \
+    echo 'LANG=en_US.UTF-8' >> /etc/environment
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]
