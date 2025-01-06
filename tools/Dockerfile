@@ -27,16 +27,17 @@ ENV AQUA_GLOBAL_CONFIG=/etc/aqua/aqua.yaml
 COPY aqua.yaml aqua-checksums.json /etc/aqua/
 
 RUN echo "Installing binaries with aqua..." && \
-    aqua install --all
+    aqua install --all && \
+    ls -al /root/.local/share/aquaproj-aqua/bin
+
+RUN ls -al /usr/local/sbin/yq && ls -al /etc/aqua/aqua.yaml
+
+# hadolint ignore=SC2046
+RUN /usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2
 
 # hadolint ignore=SC2046
 RUN mkdir -p /dist && \
-    ls -al /usr/local/sbin/yq && \
-    ls -al /etc/aqua/aqua.yaml && \
-    /usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2 && \
-    set -x && \
-    aqua cp -o /dist $(/usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2) && \
-    set +x
+    aqua cp -o /dist $(/usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
 
 
 # =======================================================================================================================================
