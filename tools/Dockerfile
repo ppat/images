@@ -3,7 +3,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget findutils
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+        ca-certificates \
+        curl \
+        findutils \
+        wget \
+        xz-utils
 
 # upx
 # renovate: datasource=github-releases depName=upx/upx
