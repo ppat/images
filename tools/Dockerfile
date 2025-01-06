@@ -8,8 +8,9 @@ RUN apt-get update && \
 # yq
 # renovate: datasource=github-releases depName=mikefarah/yq
 ARG YQ_VERSION="4.44.6"
-RUN wget --progress=dot:giga -c "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH:?}.tar.gz" -O - | tar -xzv -C /tmp && \
-    install -o root -g root -m 0755 "/tmp/yq_linux_${TARGETARCH:?}" /usr/local/sbin/yq && \
+ARG YQ_ARCH="amd64"
+RUN wget --progress=dot:giga -c "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${YQ_ARCH}.tar.gz" -O - | tar -xzv -C /tmp && \
+    install -o root -g root -m 0755 "/tmp/yq_linux_${YQ_ARCH}" /usr/local/sbin/yq && \
     rm -rf /tmp/* /var/log/* /var/tmp/*
 
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
