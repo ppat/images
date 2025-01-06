@@ -3,15 +3,24 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+        ca-certificates \
+        curl \
+        findutils \
+        wget \
+        xz-utils
 
-# yq
-# renovate: datasource=github-releases depName=mikefarah/yq
-ARG YQ_VERSION="4.44.6"
-ARG YQ_ARCH="amd64"
-RUN wget --progress=dot:giga -c "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${YQ_ARCH}.tar.gz" -O - | tar -xzv -C /tmp && \
-    install -o root -g root -m 0755 "/tmp/yq_linux_${YQ_ARCH}" /usr/local/sbin/yq && \
-    rm -rf /tmp/* /var/log/* /var/tmp/*
+# upx
+# renovate: datasource=github-releases depName=upx/upx
+ARG UPX_VERSION="4.2.4"
+ARG TARGETARCH="amd64"
+WORKDIR /tmp
+RUN --mount=type=tmpfs,target=/tmp \
+    --mount=type=tmpfs,target=/var/log \
+    --mount=type=tmpfs,target=/var/tmp \
+    wget  --progress=dot:giga "https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-${TARGETARCH}_linux.tar.xz" -O /tmp/upx.tar.xz && \
+    xz -d /tmp/upx.tar.xz && \
+    tar xvf upx.tar -C /usr/local/sbin --strip-components 1 "upx-${UPX_VERSION}-${TARGETARCH}_linux/upx"
 
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
 ARG AQUA_INSTALLER_VERSION="3.1.0"
@@ -29,7 +38,8 @@ COPY aqua.yaml aqua-checksums.json /etc/aqua/
 # hadolint ignore=SC2046
 RUN aqua install --all && \
     mkdir -p /dist && \
-    aqua cp -o /dist $(yq '.packages[].name' aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
+    aqua cp -o /dist $(find /root/.local/share/aquaproj-aqua/bin -type l -executable -not -name aqua -exec basename {} \;) && \
+    upx $(find /dist  -type f -executable)
 
 
 # =======================================================================================================================================
