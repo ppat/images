@@ -8,6 +8,7 @@ RUN apt-get update && \
 # upx
 # renovate: datasource=github-releases depName=upx/upx
 ARG UPX_VERSION="4.2.4"
+ARG TARGETARCH="amd64"
 WORKDIR /tmp
 RUN --mount=type=tmpfs,target=/tmp \
     --mount=type=tmpfs,target=/var/log \
