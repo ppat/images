@@ -20,8 +20,9 @@ ENV PATH=/root/.local/share/aquaproj-aqua/bin:$PATH
 ENV AQUA_GLOBAL_CONFIG=/etc/aqua/aqua.yaml
 COPY aqua.yaml aqua-checksums.json /etc/aqua/
 
+# hadolint ignore=SC2046
 RUN aqua install --all && \
-    aqua cp -o /dist $(cat aqua.yaml | yq .packages[].name | cut -d'@' -f1 | cut -d'/' -f2)
+    aqua cp -o /dist $(yq '.packages[].name' aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
 
 
 # =======================================================================================================================================
