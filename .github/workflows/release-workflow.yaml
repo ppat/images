@@ -2,7 +2,6 @@
 # yamllint disable rule:line-length
 name: release-workflow
 
-# yamllint disable-line rule:truthy
 on:
   workflow_call:
     inputs:
@@ -27,7 +26,7 @@ jobs:
 
   create-release:
     needs: [load-image-metadata]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
       release_ref: ${{ steps.release.outputs.release_ref }}
