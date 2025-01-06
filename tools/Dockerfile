@@ -39,7 +39,7 @@ COPY aqua.yaml aqua-checksums.json /etc/aqua/
 RUN aqua install --all && \
     mkdir -p /dist && \
     aqua cp -o /dist $(find /root/.local/share/aquaproj-aqua/bin -type l -executable -not -name aqua -exec basename {} \;) && \
-    upx $(find /dist -executable)
+    upx $(find /dist  -type f -executable)
 
 
 # =======================================================================================================================================
