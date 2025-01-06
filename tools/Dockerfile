@@ -53,25 +53,46 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
         bash \
+        bsdextrautils \
         ca-certificates \
         curl \
         dnsutils \
         findutils \
+        inetutils-tools \
+        iputils-ping \
+        iputils-tracepath \
         jq \
         less \
+        locales \
         lsof \
+        lz4 \
         netcat-openbsd \
         net-tools \
         nmap \
         openssl \
         psmisc \
+        pv \
+        screen \
+        strace \
         traceroute \
+        unzip \
         vim \
         watch \
         wget \
         xz-utils \
+        zstd \
         && \
     find /usr -name __pycache__ -exec rm -rf {} +
+
+# generate locales
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    locale-gen en_US.UTF-8
+# Make unicode characters work in terminal
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN echo 'LC_ALL=en_US.UTF-8' >> /etc/environment && \
+    echo 'LANG=en_US.UTF-8' >> /etc/environment
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
