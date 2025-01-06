@@ -1,5 +1,6 @@
-FROM debian:bookworm AS aqua
+FROM ubuntu:noble@sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea92cc6734ab AS aqua
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /
 
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/var/cache/debconf \
@@ -22,6 +23,7 @@ COPY aqua.yaml aqua-checksums.json /etc/aqua/
 
 # hadolint ignore=SC2046
 RUN aqua install --all && \
+    mkdir -p /dist && \
     aqua cp -o /dist $(yq '.packages[].name' aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
 
 
