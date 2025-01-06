@@ -41,7 +41,8 @@ rules:
   new-lines:
     type: unix
   trailing-spaces: enable
-  truthy: enable
+  truthy:
+    allowed-values: ["true", "false", "on"]
 
 ignore:
 - node_modules/

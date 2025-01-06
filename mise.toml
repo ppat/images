@@ -1,0 +1,15 @@
+[tools]
+actionlint = "1.7.4"
+bun = "1.1.42"
+node = "22.12.0"
+"npm:renovate" = "39.83.5"
+pre-commit = "4.0.1"
+shellcheck = "0.10.0"
+uv = "0.5.14"
+yamllint = "1.35.1"
+
+[settings.npm]
+bun = true
+
+[settings.pipx]
+uvx = true

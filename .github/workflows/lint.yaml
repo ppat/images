@@ -1,8 +1,7 @@
 ---
 # yamllint disable rule:line-length
-name: Lint all
+name: lint
 
-# yamllint disable-line rule:truthy
 on:
   pull_request:
   workflow_dispatch:
@@ -13,7 +12,7 @@ concurrency:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
     - name: Checkout
@@ -28,91 +27,76 @@ jobs:
         files_yaml: |
           actions:
           - .github/workflows/**
-          - .shellcheckrc
-          renovate:
-          - .github/renovate.json
           docker:
           - '**/Dockerfile'
-          - '.hadolint.yaml'
-
-    - name: Setup poetry
-      run: pipx install poetry==$POETRY_VERSION
-      env:
-        # renovate: datasource=pypi depName=poetry
-        POETRY_VERSION: "1.8.5"
+          renovate:
+          - .github/renovate.json
+          - .github/renovate/**
+          shellscripts:
+          - '**.sh'
+          yaml:
+          - '**.yaml'
 
     - name: Set up python
       uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
       with:
         python-version: '3.12'
-        cache: 'poetry'
 
-    - name: Set up node
-      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+    - name: Setup mise
+      uses: jdx/mise-action@5083fe46898c414b2475087cc79da59e7da859e8 # v2.1.11
       with:
-        node-version-file: '.node-version'
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
-
-    - name: Setup tflint
-      uses: terraform-linters/setup-tflint@8093687ecc9dcbfa88d07c103ad4176739a7287e # v4
+        # renovate: datasource=github-releases depName=jdx/mise
+        version: "v2025.1.0"
+        install: true
+        cache: true
+        cache_key_prefix: mise-v1
 
     - name: Cache pre-commit hooks
       uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
       with:
         path: ~/.cache/pre-commit/
-        key: pre-commit|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
-
-    - name: Install python requirements
-      run: |
-        poetry --version
-        poetry install --no-interaction
-        poetry env info
+        key: pre-commit-${{runner.os}}-${{runner.arch}}-${{env.pythonLocation}}-${{hashFiles('.pre-commit-config.yaml')}}
+        restore-keys: |
+          pre-commit--${{runner.os}}-${{runner.arch}}-
 
     - name: Install node packages
       run: npm ci --no-fund --no-audit
 
     - name: Install pre-commit hooks
-      run: poetry run pre-commit install --install-hooks --hook-type pre-commit
+      if: success() || failure()
+      run: pre-commit install --install-hooks --hook-type pre-commit
 
     - name: check-added-large-files
-      run: poetry run pre-commit run --all-files --color=always check-added-large-files
+      if: success() || failure()
+      run: pre-commit run --all-files --color=always check-added-large-files
 
     - name: check-executables-have-shebangs
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always check-executables-have-shebangs
+      run: pre-commit run --all-files --color=always check-executables-have-shebangs
 
     - name: check-json
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always check-json
-
-    - name: check-shebang-scripts-are-executable
-      if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always check-shebang-scripts-are-executable
+      run: pre-commit run --all-files --color=always check-json
 
     - name: detect-private-key
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always detect-private-key
+      run: pre-commit run --all-files --color=always detect-private-key
 
     - name: end-of-file-fixer
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always end-of-file-fixer
+      run: pre-commit run --all-files --color=always end-of-file-fixer
 
     - name: forbid-new-submodules
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always forbid-new-submodules
+      run: pre-commit run --all-files --color=always forbid-new-submodules
 
     - name: mixed-line-ending
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always mixed-line-ending
+      run: pre-commit run --all-files --color=always mixed-line-ending
 
     - name: trailing-whitespace
       if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always trailing-whitespace
-
-    - name: shellcheck
-      if: success() || failure()
-      run: poetry run pre-commit run --all-files --color=always shellcheck
+      run: pre-commit run --all-files --color=always trailing-whitespace
 
     - name: hadolint
       if: (success() || failure()) && steps.changed-files-yaml.outputs.docker_any_changed == 'true' || github.event_name == 'workflow_dispatch'
@@ -124,22 +108,51 @@ jobs:
         config: ./.hadolint.yaml
 
     - name: yamllint
-      if: success() || failure()
-      run: poetry run yamllint -c .yamllint --strict --format github .
+      if: (success() || failure()) && (steps.changed-files-yaml.outputs.yaml_any_changed == 'true' || github.event_name == 'workflow_dispatch')
+      env:
+        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.yaml_all_changed_files }}
+      shell: bash
+      # yamllint disable-line rule:indentation
+      run: |
+        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
+          yamllint -c .yamllint --list-files --strict --format github .
+        else
+          yamllint -c .yamllint --list-files --strict --format github $CHANGED_FILES
+        fi
+
+    - name: shellcheck
+      if: (success() || failure()) && (steps.changed-files-yaml.outputs.shellscripts_any_changed == 'true' || github.event_name == 'workflow_dispatch')
+      env:
+        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.shellscripts_all_changed_files }}
+      shell: bash
+      # yamllint disable-line rule:indentation
+      run: |
+        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
+          set -x
+          find . -type f -name '*.sh' -not -path './node_modules/*' -executable -exec shellcheck --rcfile .shellcheckrc {} +
+          set +x
+        else
+          set -x
+          shellcheck --rcfile .shellcheckrc $CHANGED_FILES
+          set +x
+        fi
 
     - name: actionlint
       if: (success() || failure()) && (steps.changed-files-yaml.outputs.actions_any_changed == 'true' || github.event_name == 'workflow_dispatch')
-      shell: bash
-      run: |
-        [[ "$RUNNER_ARCH" == "ARM64" ]] && export PKG_ARCH=arm64 || export PKG_ARCH=amd64
-        wget --quiet -c https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_${PKG_ARCH}.tar.gz -O /tmp/actionlint.tar.gz
-        tar -xzf /tmp/actionlint.tar.gz -C /tmp
-        sudo install -o root -g root -m 0755 /tmp/actionlint /usr/local/sbin/actionlint
-        set -x
-        actionlint -shellcheck "shellcheck -c .shellcheckrc"
       env:
-        # renovate: datasource=github-releases depName=rhysd/actionlint
-        ACTIONLINT_VERSION: "1.7.4"
+        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.actions_all_changed_files }}
+      shell: bash
+      # yamllint disable-line rule:indentation
+      run: |
+        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
+          set -x
+          actionlint -shellcheck "shellcheck --rcfile .shellcheckrc"
+          set +x
+        else
+          set -x
+          actionlint -shellcheck "shellcheck --rcfile .shellcheckrc" $CHANGED_FILES
+          set +x
+        fi
 
     - name: commitlint
       if: (success() || failure()) && (github.event_name == 'pull_request')
@@ -148,15 +161,23 @@ jobs:
     - name: validate-renovate-config
       if: (success() || failure()) && (steps.changed-files-yaml.outputs.renovate_any_changed == 'true' || github.event_name == 'workflow_dispatch')
       shell: bash
+      env:
+        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.renovate_all_changed_files }}
       # yamllint disable-line rule:indentation
       run: |
-        npm install --no-fund --no-audit renovate
-        echo "Validating renovate main configuration..."
-        echo ".github/renovate.json:"
-        npx --yes --package renovate -- renovate-config-validator .github/renovate.json | pr -t -o 4
-        echo
-        echo "Validating renovate sub configuration..."
-        for rc in $(find .github/renovate -type f -name '*.json' | sort); do
-          echo "${rc}:"
-          npx --yes --package renovate -- renovate-config-validator ${rc} | pr -t -o 4
-        done
+        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
+          echo "Validating main configuration..."
+          echo ".github/renovate.json:"
+          renovate-config-validator .github/renovate.json | pr -t -o 4
+          echo "Validating all 'extends' configuration files..."
+          for rc in $(find .github/renovate -type f -name '*.json' | sort); do
+            echo "${rc}:"
+            renovate-config-validator ${rc} | pr -t -o 4
+          done
+        else
+          echo "Validating changed configuration files..."
+          for rc in ${CHANGED_FILES}; do
+            echo "${rc}:"
+            renovate-config-validator ${rc} | pr -t -o 4
+          done
+        fi

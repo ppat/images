@@ -2,7 +2,6 @@
 # yamllint disable rule:line-length
 name: publish-bitwarden-cli
 
-# yamllint disable-line rule:truthy
 on:
   push:
     branches:
