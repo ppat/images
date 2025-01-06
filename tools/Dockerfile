@@ -31,8 +31,11 @@ RUN echo "Installing binaries with aqua..." && \
 
 # hadolint ignore=SC2046
 RUN mkdir -p /dist && \
+    ls -al /usr/local/sbin/yq && \
+    ls -al /etc/aqua/aqua.yaml && \
+    /usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2 && \
     set -x && \
-    aqua cp -o /dist $(yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2) && \
+    aqua cp -o /dist $(/usr/local/sbin/yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2) && \
     set +x
 
 
