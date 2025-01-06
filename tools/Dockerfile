@@ -26,12 +26,14 @@ ENV PATH=/root/.local/share/aquaproj-aqua/bin:$PATH
 ENV AQUA_GLOBAL_CONFIG=/etc/aqua/aqua.yaml
 COPY aqua.yaml aqua-checksums.json /etc/aqua/
 
+RUN echo "Installing binaries with aqua..." && \
+    aqua install --all
+
 # hadolint ignore=SC2046
-RUN aqua install --all && \
-    mkdir -p /dist && \
-    BINARIES="$(yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)" && \
-    echo "Copying aqua binaries: ${BINARIES}" && \
-    aqua cp -o /dist ${BINARIES}
+RUN mkdir -p /dist && \
+    set -x && \
+    aqua cp -o /dist $(yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2) && \
+    set +x
 
 
 # =======================================================================================================================================
