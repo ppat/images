@@ -43,9 +43,36 @@ RUN aqua install --all && \
 
 
 # =======================================================================================================================================
-FROM busybox:1.37.0@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
+FROM debian:bookworm-slim
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/cache/debconf,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+        bash \
+        ca-certificates \
+        curl \
+        dnsutils \
+        findutils \
+        jq \
+        less \
+        lsof \
+        netcat-openbsd \
+        net-tools \
+        nmap \
+        openssl \
+        psmisc \
+        traceroute \
+        vim \
+        watch \
+        wget \
+        xz-utils \
+        && \
+    find /usr -name __pycache__ -exec rm -rf {} +
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]
