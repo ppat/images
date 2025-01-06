@@ -29,7 +29,9 @@ COPY aqua.yaml aqua-checksums.json /etc/aqua/
 # hadolint ignore=SC2046
 RUN aqua install --all && \
     mkdir -p /dist && \
-    aqua cp -o /dist $(yq '.packages[].name' aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)
+    BINARIES="$(yq '.packages[].name' /etc/aqua/aqua.yaml | cut -d'@' -f1 | cut -d'/' -f2)" && \
+    echo "Copying aqua binaries: ${BINARIES}" && \
+    aqua cp -o /dist ${BINARIES}
 
 
 # =======================================================================================================================================
