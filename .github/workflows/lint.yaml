@@ -11,7 +11,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  detect-changes:
+    outputs:
+      actions_any_changed: ${{ steps.changed-files-yaml.outputs.actions_any_changed }}
+      actions_all_changed_files: ${{ steps.changed-files-yaml.outputs.actions_all_changed_files}}
+      docker_any_changed: ${{ steps.changed-files-yaml.outputs.docker_any_changed }}
+      docker_all_changed_files: ${{ steps.changed-files-yaml.outputs.docker_all_changed_files}}
+      renovate_any_changed: ${{ steps.changed-files-yaml.outputs.renovate_any_changed }}
+      renovate_all_changed_files: ${{ steps.changed-files-yaml.outputs.renovate_all_changed_files}}
+      shellscripts_any_changed: ${{ steps.changed-files-yaml.outputs.shellscripts_any_changed }}
+      shellscripts_all_changed_files: ${{ steps.changed-files-yaml.outputs.shellscripts_all_changed_files}}
+      yaml_any_changed: ${{ steps.changed-files-yaml.outputs.yaml_any_changed }}
+      yaml_all_changed_files: ${{ steps.changed-files-yaml.outputs.yaml_all_changed_files}}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -37,147 +48,57 @@ jobs:
           yaml:
           - '**.yaml'
 
-    - name: Set up python
-      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
-      with:
-        python-version: '3.12'
+  commit-messages:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'pull_request' }}
+    uses: ppat/github-workflows/.github/workflows/lint-commit-messages.yaml@main
+    with:
+      git_ref: ${{ github.head_ref }}
+      fetch_depth: ${{ github.event.pull_request.commits }}
+      from: ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }}
+      to: ${{ github.event.pull_request.head.sha }}
 
-    - name: Setup mise
-      uses: jdx/mise-action@5083fe46898c414b2475087cc79da59e7da859e8 # v2.1.11
-      with:
-        # renovate: datasource=github-releases depName=jdx/mise
-        version: "v2025.1.0"
-        install: true
-        cache: true
-        cache_key_prefix: mise-v1
+  github-actions:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.actions_any_changed == 'true' }}
+    uses: ppat/github-workflows/.github/workflows/lint-github-actions.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
+      files: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || needs.detect-changes.outputs.actions_all_changed_files }}
 
-    - name: Cache pre-commit hooks
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
-      with:
-        path: ~/.cache/pre-commit/
-        key: pre-commit-${{runner.os}}-${{runner.arch}}-${{env.pythonLocation}}-${{hashFiles('.pre-commit-config.yaml')}}
-        restore-keys: |
-          pre-commit--${{runner.os}}-${{runner.arch}}-
+  docker-files:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.docker_any_changed == 'true' }}
+    uses: ppat/github-workflows/.github/workflows/lint-hadolint.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
+      files: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || needs.detect-changes.outputs.docker_all_changed_files }}
 
-    - name: Install node packages
-      run: npm ci --no-fund --no-audit
+  pre-commit:
+    uses: ppat/github-workflows/.github/workflows/lint-pre-commit.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
 
-    - name: Install pre-commit hooks
-      if: success() || failure()
-      run: pre-commit install --install-hooks --hook-type pre-commit
+  renovate-config-check:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.renovate_any_changed == 'true' }}
+    uses: ppat/github-workflows/.github/workflows/lint-renovate-config-check.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
+      files: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || needs.detect-changes.outputs.renovate_all_changed_files }}
 
-    - name: check-added-large-files
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always check-added-large-files
+  shellcheck:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.shellscripts_any_changed == 'true' }}
+    uses: ppat/github-workflows/.github/workflows/lint-shellcheck.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
+      files: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || needs.detect-changes.outputs.shellscripts_all_changed_files }}
 
-    - name: check-executables-have-shebangs
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always check-executables-have-shebangs
-
-    - name: check-json
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always check-json
-
-    - name: detect-private-key
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always detect-private-key
-
-    - name: end-of-file-fixer
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always end-of-file-fixer
-
-    - name: forbid-new-submodules
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always forbid-new-submodules
-
-    - name: mixed-line-ending
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always mixed-line-ending
-
-    - name: trailing-whitespace
-      if: success() || failure()
-      run: pre-commit run --all-files --color=always trailing-whitespace
-
-    - name: hadolint
-      if: (success() || failure()) && steps.changed-files-yaml.outputs.docker_any_changed == 'true' || github.event_name == 'workflow_dispatch'
-      uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
-      with:
-        dockerfile: "Dockerfile"
-        recursive: true
-        failure-threshold: warning
-        config: ./.hadolint.yaml
-
-    - name: yamllint
-      if: (success() || failure()) && (steps.changed-files-yaml.outputs.yaml_any_changed == 'true' || github.event_name == 'workflow_dispatch')
-      env:
-        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.yaml_all_changed_files }}
-      shell: bash
-      # yamllint disable-line rule:indentation
-      run: |
-        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
-          yamllint -c .yamllint --list-files --strict --format github .
-        else
-          yamllint -c .yamllint --list-files --strict --format github $CHANGED_FILES
-        fi
-
-    - name: shellcheck
-      if: (success() || failure()) && (steps.changed-files-yaml.outputs.shellscripts_any_changed == 'true' || github.event_name == 'workflow_dispatch')
-      env:
-        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.shellscripts_all_changed_files }}
-      shell: bash
-      # yamllint disable-line rule:indentation
-      run: |
-        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
-          set -x
-          find . -type f -name '*.sh' -not -path './node_modules/*' -executable -exec shellcheck --rcfile .shellcheckrc {} +
-          set +x
-        else
-          set -x
-          shellcheck --rcfile .shellcheckrc $CHANGED_FILES
-          set +x
-        fi
-
-    - name: actionlint
-      if: (success() || failure()) && (steps.changed-files-yaml.outputs.actions_any_changed == 'true' || github.event_name == 'workflow_dispatch')
-      env:
-        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.actions_all_changed_files }}
-      shell: bash
-      # yamllint disable-line rule:indentation
-      run: |
-        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
-          set -x
-          actionlint -shellcheck "shellcheck --rcfile .shellcheckrc"
-          set +x
-        else
-          set -x
-          actionlint -shellcheck "shellcheck --rcfile .shellcheckrc" $CHANGED_FILES
-          set +x
-        fi
-
-    - name: commitlint
-      if: (success() || failure()) && (github.event_name == 'pull_request')
-      run: npx commitlint --color --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
-
-    - name: validate-renovate-config
-      if: (success() || failure()) && (steps.changed-files-yaml.outputs.renovate_any_changed == 'true' || github.event_name == 'workflow_dispatch')
-      shell: bash
-      env:
-        CHANGED_FILES: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || steps.changed-files-yaml.outputs.renovate_all_changed_files }}
-      # yamllint disable-line rule:indentation
-      run: |
-        if [[ "${CHANGED_FILES}" == "ALL" ]]; then
-          echo "Validating main configuration..."
-          echo ".github/renovate.json:"
-          renovate-config-validator .github/renovate.json | pr -t -o 4
-          echo "Validating all 'extends' configuration files..."
-          for rc in $(find .github/renovate -type f -name '*.json' | sort); do
-            echo "${rc}:"
-            renovate-config-validator ${rc} | pr -t -o 4
-          done
-        else
-          echo "Validating changed configuration files..."
-          for rc in ${CHANGED_FILES}; do
-            echo "${rc}:"
-            renovate-config-validator ${rc} | pr -t -o 4
-          done
-        fi
+  yaml:
+    needs: [detect-changes]
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.yaml_any_changed == 'true' }}
+    uses: ppat/github-workflows/.github/workflows/lint-yaml.yaml@main
+    with:
+      git_ref: ${{ github.head_ref || github.ref }}
+      files: ${{ github.event_name == 'workflow_dispatch' && 'ALL' || needs.detect-changes.outputs.yaml_all_changed_files }}
