@@ -1,0 +1,7 @@
+---
+image_version: "0.0.1"
+
+label_title: "tools"
+label_description: "ppatlabs/tools supplies useful tools for debugging and troubleshooting within kubernetes."
+
+build_timeout: 10

@@ -1,13 +1,13 @@
 ---
 # yamllint disable rule:line-length
-name: publish-busybox-plus
+name: publish-tools
 
 on:
   push:
     branches:
     - main
     paths:
-    - busybox-plus/**
+    - tools/**
   workflow_dispatch:
 
 concurrency:
@@ -22,6 +22,6 @@ jobs:
     uses: ./.github/workflows/release-workflow.yaml
     secrets: inherit
     with:
-      image_name: busybox-plus
+      image_name: tools
       platforms: linux/amd64,linux/arm64
       source_git_ref: ${{ github.ref }}
