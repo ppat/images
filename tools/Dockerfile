@@ -8,6 +8,13 @@ RUN --mount=type=tmpfs,target=/var/cache/apt \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl
 
+# yq
+# renovate: datasource=github-releases depName=mikefarah/yq
+ARG YQ_VERSION="4.44.6"
+RUN wget --progress=dot:giga -c "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH}.tar.gz" -O - | tar -xzv -C /tmp && \
+    install -o root -g root -m 0755 /tmp/yq_linux_${TARGETARCH} /usr/local/sbin/yq && \
+    rm -rf /tmp/* /var/log/* /var/tmp/*
+
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
 ARG AQUA_INSTALLER_VERSION="3.1.0"
 RUN curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v${AQUA_INSTALLER_VERSION}/aqua-installer && \
