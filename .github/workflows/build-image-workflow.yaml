@@ -214,7 +214,7 @@ jobs:
         oauth-client-id: ${{ secrets.tailscale_oauth_client_id }}
         oauth-secret: ${{ secrets.tailscale_oauth_secret }}
         tags: tag:github-action-ci-runner
-        args: --exit-node
+        args: --accept-dns=false
         # renovate: datasource=github-releases depName=tailscale/tailscale
         version: "1.78.1"
 
