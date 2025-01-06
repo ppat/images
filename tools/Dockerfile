@@ -5,6 +5,17 @@ WORKDIR /
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl wget findutils
 
+# upx
+# renovate: datasource=github-releases depName=upx/upx
+ARG UPX_VERSION="4.2.4"
+WORKDIR /tmp
+RUN --mount=type=tmpfs,target=/tmp \
+    --mount=type=tmpfs,target=/var/log \
+    --mount=type=tmpfs,target=/var/tmp \
+    wget  --progress=dot:giga "https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-${TARGETARCH}_linux.tar.xz" -O /tmp/upx.tar.xz && \
+    xz -d /tmp/upx.tar.xz && \
+    tar xvf upx.tar -C /usr/local/sbin --strip-components 1 "upx-${UPX_VERSION}-${TARGETARCH}_linux/upx"
+
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
 ARG AQUA_INSTALLER_VERSION="3.1.0"
 RUN curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v${AQUA_INSTALLER_VERSION}/aqua-installer && \
@@ -21,7 +32,8 @@ COPY aqua.yaml aqua-checksums.json /etc/aqua/
 # hadolint ignore=SC2046
 RUN aqua install --all && \
     mkdir -p /dist && \
-    aqua cp -o /dist $(find /root/.local/share/aquaproj-aqua/bin -type l -executable -not -name aqua -exec basename {} \;)
+    aqua cp -o /dist $(find /root/.local/share/aquaproj-aqua/bin -type l -executable -not -name aqua -exec basename {} \;) && \
+    upx $(find /dist -executable)
 
 
 # =======================================================================================================================================
@@ -31,20 +43,3 @@ WORKDIR /
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
 ENTRYPOINT ["/bin/sh"]
-
-
-#22 0.053 btop
-#22 0.053 dust
-#22 0.053 procs
-#22 0.053 flux2
-#22 0.053 helm
-#22 0.053 fzf
-#22 0.053 kubectl
-#22 0.053 krew
-#22 0.053 kustomize
-#22 0.053 yq
-#22 0.053 duf
-#22 0.053 bat
-#22 0.053 fd
-#22 0.053 hyperfine
-#22 0.053 ripgrep
