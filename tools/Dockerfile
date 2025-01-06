@@ -6,7 +6,7 @@ RUN --mount=type=tmpfs,target=/var/cache/apt \
     --mount=type=tmpfs,target=/var/cache/debconf \
     --mount=type=tmpfs,target=/var/lib/apt \
     apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends curl
+    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends ca-certificates curl
 
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
 ARG AQUA_INSTALLER_VERSION="3.1.0"
