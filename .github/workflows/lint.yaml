@@ -49,7 +49,6 @@ jobs:
           - '**.yaml'
 
   commit-messages:
-    needs: [detect-changes]
     if: ${{ github.event_name == 'pull_request' }}
     uses: ppat/github-workflows/.github/workflows/lint-commit-messages.yaml@main
     with:
