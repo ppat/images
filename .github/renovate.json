@@ -17,10 +17,9 @@
     "config:best-practices",
     "group:linters",
     "mergeConfidence:all-badges",
-    "github>ppat/renovate-presets:default-commit-message",
-    "github>ppat/renovate-presets:ci-dependencies",
-    "github>ppat/renovate-presets:ci-dev-tools",
-    "github>ppat/renovate-presets:ci-github-actions",
+    "github>ppat/renovate-presets",
+    "github>ppat/renovate-presets:dev-tools",
+    "github>ppat/renovate-presets:github-actions",
     "github>ppat/images//.github/renovate/image-updates",
     "github>ppat/images//.github/renovate/image-updates-bitwarden-cli",
     "github>ppat/images//.github/renovate/image-updates-freeradius-server"
