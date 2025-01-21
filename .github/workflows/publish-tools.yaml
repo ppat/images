@@ -3,11 +3,11 @@
 name: publish-tools
 
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - tools/**
+  # push:
+  #   branches:
+  #   - main
+  #   paths:
+  #   - tools/**
   workflow_dispatch:
 
 concurrency:
