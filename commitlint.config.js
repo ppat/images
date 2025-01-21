@@ -40,7 +40,8 @@ module.exports = {
         'freeradius-server',
         'github-actions',
         'release',
-        'renovate'
+        'renovate',
+        'tools'
       ]
     ],
     // 'scope-empty': [2, 'always'],

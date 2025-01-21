@@ -1,0 +1,81 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "addLabels": [
+        "dependency-type:aqua-registry"
+      ],
+      "commitMessageTopic": "aqua registry: {{packageName}}",
+      "groupName": "{{packageName}}",
+      "matchFileNames": [
+        "tools/aqua.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "aquaproj/aqua-registry"
+      ],
+      "semanticCommitScope": "tools",
+      "separateMajorMinor": true,
+      "separateMinorPatch": false,
+      "separateMultipleMajor": true,
+      "separateMultipleMinor": false
+    },
+    {
+      "automerge": true,
+      "matchFileNames": [
+        "tools/aqua.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "aquaproj/aqua-registry"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "minimumReleaseAge": "7 days",
+      "semanticCommitType": "fix"
+    },
+    {
+      "automerge": true,
+      "matchFileNames": [
+        "tools/aqua.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "aquaproj/aqua-registry"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "minimumReleaseAge": "30 days",
+      "semanticCommitType": "feat"
+    },
+    {
+      "automerge": false,
+      "commitBody": "BREAKING CHANGE",
+      "matchFileNames": [
+        "tools/aqua.yaml"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "aquaproj/aqua-registry"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "minimumReleaseAge": "90 days",
+      "reviewers": [
+        "ppat"
+      ],
+      "semanticCommitType": "feat"
+    }
+  ]
+}
