@@ -49,6 +49,7 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
     apk add \
         bash \
         bind-tools \
+        btrfs-progs \
         ca-certificates \
         curl \
         e2fsprogs \
@@ -61,7 +62,6 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
         libcap \
         lsof \
         lz4 \
-        musl-locales \
         netcat-openbsd \
         net-tools \
         nmap \
@@ -79,16 +79,6 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
         wget \
         xz \
         zstd
-
-# generate locales
-RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
-    locale-gen en_US.UTF-8
-# Make unicode characters work in terminal
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-RUN echo 'LC_ALL=en_US.UTF-8' >> /etc/environment && \
-    echo 'LANG=en_US.UTF-8' >> /etc/environment
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
