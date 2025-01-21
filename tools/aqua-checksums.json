@@ -56,6 +56,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz",
+      "checksum": "9B9A8CA8D45A041586323B355F613B94E3301DC6214A43ADCCFAE225A783F0BC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_arm64.tar.gz",
+      "checksum": "A5394047156D09BA6FEC7549B45FC7478A5527A799B4EC52E64950E762597EB3",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_amd64.tar.gz",
       "checksum": "E471396B0ED4F2BE092B4854CC030DFCBB12B86197972E7BEF0CB89AD9C72477",
       "algorithm": "sha256"
@@ -73,6 +83,16 @@
     {
       "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.5.0/kustomize_v5.5.0_linux_arm64.tar.gz",
       "checksum": "B4170D1ACB8CFACACE9F72884BEF957FF56EFDCD4813B66E7604AABC8B57E93D",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.6.0/kustomize_v5.6.0_linux_amd64.tar.gz",
+      "checksum": "54E4031DDC4E7FC59E408DA29E7C646E8E57B8088C51B84B3DF0864F47B5148F",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.6.0/kustomize_v5.6.0_linux_arm64.tar.gz",
+      "checksum": "AD8AB62D4F6D59A8AFDA0EEC4BA2E5CD2F86BF1AFEEA4B78D06DAAC945EB0660",
       "algorithm": "sha256"
     },
     {
@@ -153,6 +173,16 @@
     {
       "id": "http/get.helm.sh/helm-v3.16.4-linux-arm64.tar.gz",
       "checksum": "D3F8F15B3D9EC8C8678FBF3280C3E5902EFABE5912E2F9FCF29107EFBC8EAD69",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz",
+      "checksum": "FB5D12662FDE6EEFF36AC4CCACBF3ABED96B0EE2DE07AFDDE4EDB14E613AEE24",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.17.0-linux-arm64.tar.gz",
+      "checksum": "C4D4BE8E80082B7EAA411E3E231D62CF05D01CDDFEF59B0D01006A7901E11EE4",
       "algorithm": "sha256"
     },
     {
