@@ -21,7 +21,7 @@ jobs:
 
   test-build-bitwarden-cli:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@images-workflow
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@main
     with:
       image_context_path: bitwarden-cli
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
