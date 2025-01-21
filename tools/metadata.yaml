@@ -1,5 +1,5 @@
 ---
-image_version: "0.0.1"
+image_version: "0.1.0"
 
 label_title: "tools"
 label_description: "ppatlabs/tools supplies useful tools for debugging and troubleshooting within kubernetes."
