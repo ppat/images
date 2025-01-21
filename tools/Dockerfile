@@ -1,4 +1,4 @@
-FROM alpine:3.21.2 as aqua
+FROM alpine:3.21.2 AS aqua
 
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
     apk add \
@@ -46,31 +46,45 @@ RUN aqua install --all && \
 FROM alpine:3.21.2
 
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
-    apk add \
+apk add \
+        acl \
+        attr \
         bash \
         bind-tools \
         btrfs-progs \
         ca-certificates \
+        cryptsetup \
         curl \
+        dmidecode \
+        dosfstools \
         e2fsprogs \
         e2fsprogs-extra \
         findutils \
         gnupg \
+        hdparm \
+        iproute2 \
+        iptables \
         iputils \
         jq \
         less \
         libcap \
         lsof \
+        lvm2 \
         lz4 \
+        mtr \
         netcat-openbsd \
         net-tools \
         nmap \
+        nvme-cli \
         openssl \
         parted \
         procps \
         pv \
         screen \
+        smartmontools \
         strace \
+        sysstat \
+        tcpdump \
         traceroute \
         unzip \
         util-linux \
