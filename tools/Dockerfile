@@ -1,4 +1,4 @@
-FROM alpine:3.21.2 as aqua
+FROM alpine:3.21.2 AS aqua
 
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
     apk add \
