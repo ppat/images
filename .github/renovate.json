@@ -17,12 +17,17 @@
     "config:best-practices",
     "group:linters",
     "mergeConfidence:all-badges",
+    "github>aquaproj/aqua-renovate-config#2.6.0",
+    "github>suzuki-shunsuke/renovate-config:yaml-language-server#3.0.0",
     "github>ppat/renovate-presets",
     "github>ppat/renovate-presets:dev-tools",
     "github>ppat/renovate-presets:github-actions",
     "github>ppat/images//.github/renovate/image-updates",
     "github>ppat/images//.github/renovate/image-updates-bitwarden-cli",
-    "github>ppat/images//.github/renovate/image-updates-freeradius-server"
+    "github>ppat/images//.github/renovate/image-updates-freeradius-server",
+    "github>ppat/images//.github/renovate/aqua-cli-tools",
+    "github>ppat/images//.github/renovate/aqua-registry",
+    "github>ppat/renovate-presets:kubernetes"
   ],
   "internalChecksFilter": "strict",
   "packageRules": [
