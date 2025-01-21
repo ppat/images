@@ -82,4 +82,5 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
+ENV LANG=C.UTF-8
 ENTRYPOINT ["/bin/bash"]
