@@ -1,14 +1,13 @@
-FROM ubuntu:noble@sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea92cc6734ab AS aqua
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-WORKDIR /
+FROM alpine:3.21.2 as aqua
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    apk add \
+        bash \
         ca-certificates \
         curl \
         findutils \
         wget \
-        xz-utils
+        xz
 
 # upx
 # renovate: datasource=github-releases depName=upx/upx
@@ -19,6 +18,7 @@ RUN --mount=type=tmpfs,target=/tmp \
     --mount=type=tmpfs,target=/var/log \
     --mount=type=tmpfs,target=/var/tmp \
     wget  --progress=dot:giga "https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-${TARGETARCH}_linux.tar.xz" -O /tmp/upx.tar.xz && \
+    mkdir -p /usr/local/sbin && \
     xz -d /tmp/upx.tar.xz && \
     tar xvf upx.tar -C /usr/local/sbin --strip-components 1 "upx-${UPX_VERSION}-${TARGETARCH}_linux/upx"
 
@@ -43,57 +43,44 @@ RUN aqua install --all && \
 
 
 # =======================================================================================================================================
-FROM debian:bookworm-slim@sha256:f70dc8d6a8b6a06824c92471a1a258030836b26b043881358b967bf73de7c5ab
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-WORKDIR /
+FROM alpine:3.21.2
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/cache/debconf,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    apk add \
         bash \
-        bsdextrautils \
+        bind-tools \
+        btrfs-progs \
         ca-certificates \
         curl \
-        dnsutils \
+        e2fsprogs \
+        e2fsprogs-extra \
         findutils \
-        inetutils-tools \
-        iputils-ping \
-        iputils-tracepath \
+        gnupg \
+        iputils \
         jq \
         less \
-        locales \
+        libcap \
         lsof \
         lz4 \
         netcat-openbsd \
         net-tools \
         nmap \
         openssl \
-        psmisc \
+        parted \
+        procps \
         pv \
         screen \
         strace \
         traceroute \
         unzip \
+        util-linux \
+        util-linux-misc \
         vim \
-        watch \
         wget \
-        xz-utils \
-        zstd \
-        && \
-    find /usr -name __pycache__ -exec rm -rf {} +
-
-# generate locales
-RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
-    locale-gen en_US.UTF-8
-# Make unicode characters work in terminal
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-RUN echo 'LC_ALL=en_US.UTF-8' >> /etc/environment && \
-    echo 'LANG=en_US.UTF-8' >> /etc/environment
+        xz \
+        zstd
 
 COPY --from=aqua --chown=root:root --chmod=755 /dist/* /usr/local/bin/
 
+ENV LANG=C.UTF-8
 ENTRYPOINT ["/bin/bash"]

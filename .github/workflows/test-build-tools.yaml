@@ -26,7 +26,7 @@ jobs:
       image_context_path: tools
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      platforms: linux/amd64
+      platforms: linux/amd64,linux/arm64
       private_registry_repository: ${{ vars.CONTAINER_REGISTRY_PATH }}/tools
       private_registry_build_cache: ${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/tools
       source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
