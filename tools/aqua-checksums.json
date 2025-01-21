@@ -26,28 +26,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/cli/cli/v2.64.0/gh_2.64.0_linux_amd64.tar.gz",
-      "checksum": "0E44A4C43014BD513550EC190B7C33F5F8B63D162927A1F6445EF38EA25CD2FA",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/cli/cli/v2.64.0/gh_2.64.0_linux_arm64.tar.gz",
-      "checksum": "002CBF4D1CF349C5A6BD68C7D1FEC88C821BE19E13C9D0CD08B1B596B5A069AA",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/dalance/procs/v0.14.8/procs-v0.14.8-x86_64-linux.zip",
       "checksum": "F573C1762922A107E7C18F7AE6ECA2447DDE22BF1A580C2612B0C5FCEF495F11",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/derailed/k9s/v0.32.7/k9s_Linux_amd64.tar.gz",
-      "checksum": "03934727BFBF39B1E61A74D8E045796CDA2DE14F8CE4C01DF27F43D4494021DE",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/derailed/k9s/v0.32.7/k9s_Linux_arm64.tar.gz",
-      "checksum": "B890A7A212A3FC69E6EA4B2A29D59F80ED501A27AD654C819A155CC7C3C6AA8D",
       "algorithm": "sha256"
     },
     {
@@ -121,8 +101,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-gnu.tar.gz",
-      "checksum": "6DE8BE7A3D8CA27954A6D1E22BC327AF4CF6FC7622791E68B820197F915C422B",
+      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "4E8E596646D047D904F2C5CA74B39DCCC69978B6E1FB101094E534B0B59C1BB0",
       "algorithm": "sha256"
     },
     {
@@ -161,9 +141,9 @@
       "algorithm": "sha256"
     },
     {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.290.0/registry.yaml",
-      "checksum": "05B4781DC2A416FAA71A32D18B88AB035B86314B70ADB8C8ADE5031AC2EC8870",
-      "algorithm": "sha256"
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.298.0/registry.yaml",
+      "checksum": "B051BC84D0019915F92A2DB856707A827EAC9E1C921D7BAA68A534485CAAEA004D86462BFDE6266A6BBE85CB35E7D70BD5284D60F635FEE5F862714C2E7BAF76",
+      "algorithm": "sha512"
     }
   ]
 }
