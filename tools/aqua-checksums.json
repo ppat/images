@@ -56,6 +56,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz",
+      "checksum": "9B9A8CA8D45A041586323B355F613B94E3301DC6214A43ADCCFAE225A783F0BC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_arm64.tar.gz",
+      "checksum": "A5394047156D09BA6FEC7549B45FC7478A5527A799B4EC52E64950E762597EB3",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_amd64.tar.gz",
       "checksum": "E471396B0ED4F2BE092B4854CC030DFCBB12B86197972E7BEF0CB89AD9C72477",
       "algorithm": "sha256"
