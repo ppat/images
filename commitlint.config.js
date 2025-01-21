@@ -34,6 +34,7 @@ module.exports = {
     'scope-enum': [2, 'always',
       [
         '',
+        'aqua',
         'bitwarden-cli',
         'build',
         'dev-tools',
