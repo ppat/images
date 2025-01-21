@@ -31,6 +31,11 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/dalance/procs/v0.14.9/procs-v0.14.9-x86_64-linux.zip",
+      "checksum": "B3D1BAAF8BEADF6E97D0F9FD9847447800F067601C95C64B5456BDDAC72AA558",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/fluxcd/flux2/v2.4.0/flux_2.4.0_linux_amd64.tar.gz",
       "checksum": "7B70B75AF20E28FC30EE66CF5372EC8D51DD466FD2EE21AA42690984DE70B09B",
       "algorithm": "sha256"
