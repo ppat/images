@@ -8,6 +8,7 @@ on:
     - 'tools/**'
     - '.github/workflows/test-build-tools.yaml'
     - '.github/workflows/build-image-workflow.yaml'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
