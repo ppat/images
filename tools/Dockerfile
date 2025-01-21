@@ -74,7 +74,6 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
         util-linux \
         util-linux-misc \
         vim \
-        watch \
         wget \
         xz \
         zstd
