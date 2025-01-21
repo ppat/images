@@ -1,3 +1,30 @@
 # tools
 
 `ppatlabs/tools` supplies useful tools for debugging and troubleshooting purposes (specially within kubernetes with `kubectl debug`).
+
+## System Tools
+
+| Category | Tools | Description |
+|-----------|-----------|-------------|
+| File System Management | **dosfstools**:<br>`mkfs.fat`, `mkfs.vfat`, `fsck.fat`, `fatlabel`<br><br>**e2fsprogs**:<br>`mkfs.ext2`, `mkfs.ext3`, `mkfs.ext4`, `e2fsck`, `resize2fs`, `tune2fs`, `dumpe2fs`, `debugfs`<br><br>**btrfs-progs**:<br>`btrfs`, `btrfs-convert`, `btrfs-find-root`, `btrfs-map-logical`, `btrfs-select-super`<br><br>**util-linux**:<br>`findmnt`, `lsblk`, `wipefs`, `fstrim`<br><br>**parted**:<br>`parted`, `partprobe`<br><br>**findutils**:<br>`find`, `locate`, `updatedb`, `xargs`<br><br>**lvm2**:<br>`lvm`, `lvchange`, `lvcreate`, `lvdisplay`, `lvextend`, `lvreduce`, `lvremove`, `lvresize`, `lvs`, `pvcreate`, `pvdisplay`, `pvs`, `vgcreate`, `vgdisplay`, `vgs`<br><br>**cryptsetup**:<br>`cryptsetup`, `cryptsetup-reencrypt`, `integritysetup`<br><br>**attr**:<br>`attr`, `getfattr`, `setfattr`<br><br>**acl**:<br>`getfacl`, `setfacl`, `chacl` | Tools for creating, managing, and maintaining various filesystems, logical volumes, disk encryption, and file attributes |
+| Process Management | **procps**:<br>`ps`, `top`, `watch`, `pgrep`, `pkill`, `pidof`, `sysctl`, `vmstat`, `w`, `uptime`, `free`<br><br>**lsof**:<br>`lsof`<br><br>**strace**:<br>`strace`<br><br>**pv**:<br>`pv`<br><br>**screen**:<br>`screen`<br><br>**sysstat**:<br>`iostat`, `mpstat`, `pidstat`, `sar`, `sadf` | Utilities for monitoring and controlling system processes and performance |
+| Network Tools | **iputils**:<br>`ping`, `ping6`, `arping`<br><br>**traceroute**:<br>`traceroute`<br><br>**netcat-openbsd**:<br>`nc`<br><br>**bind-tools**:<br>`dig`, `nslookup`, `host`, `nsupdate`<br><br>**net-tools**:<br>`ifconfig`, `netstat`, `route`, `arp`, `nameif`, `rarp`, `slattach`<br><br>**nmap**:<br>`nmap`, `ncat`, `ndiff`<br><br>**curl**:<br>`curl`<br><br>**wget**:<br>`wget`<br><br>**iptables**:<br>`iptables`, `iptables-save`, `iptables-restore`<br><br>**iproute2**:<br>`ip`, `ss`, `tc`, `bridge`, `rtacct`, `rtmon`, `tipc`<br><br>**tcpdump**:<br>`tcpdump`<br><br>**mtr**:<br>`mtr`, `mtr-packet` | Tools for network diagnostics, packet analysis, routing, and traffic control |
+| Security, Crypto & Certificates | **openssl**:<br>`openssl`, `c_rehash`<br><br>**gnupg**:<br>`gpg`, `gpgv`, `gpg-agent`, `gpg-connect-agent`<br><br>**libcap**:<br>`setcap`, `getcap`, `capsh`<br><br>**ca-certificates**:<br>`update-ca-certificates` | Cryptography, key management, certificate management, and security-related utilities |
+| System Information & Hardware | **util-linux**:<br>`lscpu`, `lsipc`, `lslocks`, `lsns`, `dmesg`, `uname`, `arch`, `hostname`, `lsblk`, `blkid`, `findfs`<br><br>**hdparm**:<br>`hdparm`<br><br>**dmidecode**:<br>`dmidecode`, `biosdecode`, `vpddecode`, `ownership`<br><br>**nvme-cli**:<br>`nvme`<br><br>**smartmontools**:<br>`smartctl`, `smartd` | Commands for querying system information, hardware details, and storage device management |
+| Compression Tools | **xz**:<br>`xz`, `unxz`, `xzcat`, `lzma`, `unlzma`<br><br>**lz4**:<br>`lz4`, `unlz4`, `lz4cat`<br><br>**zstd**:<br>`zstd`, `unzstd`, `zstdcat`, `zstdgrep`<br><br>**unzip**:<br>`unzip` | Utilities for compressing and decompressing files |
+| Text Processing | **vim**:<br>`vim`, `vimdiff`<br><br>**less**:<br>`less`<br><br>**jq**:<br>`jq`<br><br>**findutils**:<br>`find`, `xargs`<br><br>**util-linux-misc**:<br>`more`, `col`, `colcrt`, `colrm`, `column`, `rev`, `hexdump` | Tools for viewing, searching, and manipulating text files |
+| Shell & Terminal | **bash**:<br>`bash`<br><br>**screen**:<br>`screen`<br><br>**ncurses**:<br>`reset`, `clear`, `tty` | Shell interpreter and terminal management utilities |
+| Basic System Utils | **util-linux**:<br>`mount`, `umount`, `swaplabel`, `whereis`, `which`, `kill`, `logger`, `wall`, `write`, `su`, `chsh`, `newgrp`, `login`, `nologin`<br><br>**util-linux-misc**:<br>`rename`, `getopt`, `flock` | Common system administration utilities |
+
+## CLI Tools
+
+| Category | Tools | Description |
+|-----------|--------|-------------|
+| System Monitoring & Performance | [btop](https://github.com/aristocratos/btop):<br> Resource monitor, shows CPU, memory, disks, network and processes<br><br>[hyperfine](https://github.com/sharkdp/hyperfine):<br>Command-line benchmarking tool<br><br>[procs](https://github.com/dalance/procs):<br>Modern replacement for ps written in Rust | Tools for monitoring system resources, benchmarking, and process management |
+| File System Navigation & Analysis | [dust](https://github.com/bootandy/dust):<br>More intuitive version of du in Rust<br><br>[duf](https://github.com/muesli/duf):<br>Disk Usage/Free Utility<br><br>[fd](https://github.com/sharkdp/fd):<br>Simple, fast and user-friendly alternative to find<br><br>[fzf](https://github.com/junegunn/fzf):<br>General-purpose command-line fuzzy finder | Tools for analyzing disk usage, finding files, and navigating the filesystem |
+| Text Processing & Search | [bat](https://github.com/sharkdp/bat):<br>Cat clone with syntax highlighting and Git integration<br><br>[ripgrep](https://github.com/BurntSushi/ripgrep):<br>Fast line-oriented search tool, alternative to grep<br><br>[yq](https://github.com/mikefarah/yq):<br>YAML/XML/JSON processor - jq wrapper for YAML/XML documents | Tools for viewing, searching, and processing text files and structured data |
+| Kubernetes & Container Management | [flux](https://fluxcd.io/):<br>GitOps toolkit for Kubernetes<br><br>[helm](https://helm.sh/):<br>Kubernetes package manager<br><br>[kubectl](https://kubernetes.io/docs/reference/kubectl/)<br>Kubernetes command-line tool<br><br>[krew](https://krew.sigs.k8s.io/):<br>kubectl plugin manager<br><br>[kustomize](https://kustomize.io/):<br>Kubernetes native configuration management | Tools for managing Kubernetes clusters, applications, and configurations |
+
+Notes:
+- All tools listed are modern, often written in languages like Rust or Go.
+- Most offer significant improvements over traditional Unix tools.
