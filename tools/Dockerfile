@@ -1,7 +1,8 @@
-FROM alpine:3.21.2@sha256:56fa17d2a7e7f168a043a2712e63aed1f8543aeafdcee47c58dcffe38ed51099 as aqua
+FROM alpine:3.21.2 as aqua
 
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
     apk add \
+        bash \
         ca-certificates \
         curl \
         findutils \
@@ -42,7 +43,7 @@ RUN aqua install --all && \
 
 
 # =======================================================================================================================================
-FROM alpine:3.21.2@sha256:56fa17d2a7e7f168a043a2712e63aed1f8543aeafdcee47c58dcffe38ed51099
+FROM alpine:3.21.2
 
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
     apk add \
