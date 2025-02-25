@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:f70dc8d6a8b6a06824c92471a1a258030836b26b043881358b967bf73de7c5ab AS builder
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:12c396bd585df7ec21d5679bb6a83d4878bc4415ce926c9e5ea6426d23c60bdc AS builder
 
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -47,7 +47,7 @@ RUN --mount=type=tmpfs,target=/var/tmp \
 
 
 # =======================================================================================================================================
-FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:f70dc8d6a8b6a06824c92471a1a258030836b26b043881358b967bf73de7c5ab
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:12c396bd585df7ec21d5679bb6a83d4878bc4415ce926c9e5ea6426d23c60bdc
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
