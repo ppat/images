@@ -19,7 +19,7 @@ jobs:
       contents: read
     with:
       # renovate: datasource=github-releases depName=aquaproj/aqua
-      aqua_version: v2.45.0
+      aqua_version: v2.45.1
       working_directory: tools
       prune: false
     secrets:
