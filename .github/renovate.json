@@ -22,12 +22,12 @@
     "github>ppat/renovate-presets",
     "github>ppat/renovate-presets:dev-tools",
     "github>ppat/renovate-presets:github-actions",
+    "github>ppat/renovate-presets:kubernetes",
     "github>ppat/images//.github/renovate/image-updates",
     "github>ppat/images//.github/renovate/image-updates-bitwarden-cli",
     "github>ppat/images//.github/renovate/image-updates-freeradius-server",
     "github>ppat/images//.github/renovate/aqua-cli-tools",
-    "github>ppat/images//.github/renovate/aqua-registry",
-    "github>ppat/renovate-presets:kubernetes"
+    "github>ppat/images//.github/renovate/aqua-registry"
   ],
   "internalChecksFilter": "strict",
   "packageRules": [
