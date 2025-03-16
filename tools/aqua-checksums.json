@@ -26,6 +26,11 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/bootandy/dust/v1.1.2/dust-v1.1.2-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "88C1CBCD7629B42462B424F3CC248E4BE226ADFDBF613597235A01F663291B7D",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/dalance/procs/v0.14.9/procs-v0.14.9-x86_64-linux.zip",
       "checksum": "B3D1BAAF8BEADF6E97D0F9FD9847447800F067601C95C64B5456BDDAC72AA558",
       "algorithm": "sha256"
@@ -48,6 +53,16 @@
     {
       "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_arm64.tar.gz",
       "checksum": "A5394047156D09BA6FEC7549B45FC7478A5527A799B4EC52E64950E762597EB3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.60.0/fzf-0.60.0-linux_amd64.tar.gz",
+      "checksum": "C7AF0376077054767ED88637F72CAB78C563E2B44C4E0101EBFD84FFFDBCD339",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.60.0/fzf-0.60.0-linux_arm64.tar.gz",
+      "checksum": "D96556BA5E2B6595380AEFF0F218F243DBDE56750C26693FE23E54111E6BA624",
       "algorithm": "sha256"
     },
     {
@@ -138,6 +153,16 @@
     {
       "id": "http/dl.k8s.io/v1.32.1/bin/linux/arm64/kubectl",
       "checksum": "98206FD83A4FD17F013F8C61C33D0AE8EC3A7C53EC59EF3D6A0A9400862DC5B2",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.32.2/bin/linux/amd64/kubectl",
+      "checksum": "4F6A959DCC5B702135F8354CC7109B542A2933C46B808B248A214C1F69F817EA",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.32.2/bin/linux/arm64/kubectl",
+      "checksum": "7381BEA99C83C264100F324C2CA6E7E13738A73B8928477AC805991440A065CD",
       "algorithm": "sha256"
     },
     {
