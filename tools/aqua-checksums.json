@@ -131,6 +131,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "http/dl.k8s.io/v1.32.1/bin/linux/amd64/kubectl",
+      "checksum": "E16C80F1A9F94DB31063477EB9E61A2E24C1A4EEE09BA776B029048F5369DB0C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/dl.k8s.io/v1.32.1/bin/linux/arm64/kubectl",
+      "checksum": "98206FD83A4FD17F013F8C61C33D0AE8EC3A7C53EC59EF3D6A0A9400862DC5B2",
+      "algorithm": "sha256"
+    },
+    {
       "id": "http/get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz",
       "checksum": "FB5D12662FDE6EEFF36AC4CCACBF3ABED96B0EE2DE07AFDDE4EDB14E613AEE24",
       "algorithm": "sha256"
