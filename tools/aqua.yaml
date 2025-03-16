@@ -8,7 +8,7 @@ checksum:
   - linux/arm64
 registries:
 - type: standard
-  ref: v4.307.0 # renovate: depName=aquaproj/aqua-registry
+  ref: v4.313.0 # renovate: depName=aquaproj/aqua-registry
 packages:
 - name: aristocratos/btop@v1.4.0
 - name: bootandy/dust@v1.1.1
