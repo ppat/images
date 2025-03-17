@@ -15,7 +15,7 @@ packages:
 - name: dalance/procs@v0.14.9
 - name: fluxcd/flux2@v2.4.0
 - name: helm/helm@v3.17.1
-- name: junegunn/fzf@v0.60.0
+- name: junegunn/fzf@v0.60.3
 - name: kubernetes/kubectl@v1.32.2
 - name: kubernetes-sigs/krew@v0.4.4
   command_aliases:
