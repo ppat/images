@@ -13,7 +13,7 @@ packages:
 - name: aristocratos/btop@v1.4.0
 - name: bootandy/dust@v1.1.2
 - name: dalance/procs@v0.14.9
-- name: fluxcd/flux2@v2.4.0
+- name: fluxcd/flux2@v2.5.0
 - name: helm/helm@v3.17.2
 - name: junegunn/fzf@v0.60.3
 - name: kubernetes/kubectl@v1.32.3
