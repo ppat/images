@@ -46,6 +46,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/fluxcd/flux2/v2.5.0/flux_2.5.0_linux_amd64.tar.gz",
+      "checksum": "6D9EE65232269A81C765604D88D7AFE347330ACEB1C77F0BC45A2D1F93802FCE",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.5.0/flux_2.5.0_linux_arm64.tar.gz",
+      "checksum": "470F9330C8180498C4F0D5F822D91631A6E63CF03AC7B8648889A6DBA4C626CA",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz",
       "checksum": "9B9A8CA8D45A041586323B355F613B94E3301DC6214A43ADCCFAE225A783F0BC",
       "algorithm": "sha256"
