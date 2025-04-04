@@ -12,7 +12,7 @@ registries:
 packages:
 - name: aristocratos/btop@v1.4.0
 - name: bootandy/dust@v1.1.2
-- name: dalance/procs@v0.14.9
+- name: dalance/procs@v0.14.10
 - name: fluxcd/flux2@v2.5.1
 - name: helm/helm@v3.17.2
 - name: junegunn/fzf@v0.60.3
