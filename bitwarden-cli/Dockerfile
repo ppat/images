@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends wget unzip
 
 # renovate: datasource=github-releases depName=bitwarden/clients extractVersion=^cli-v(?<version>.*)$
-ARG BW_CLI_VERSION="2025.2.0"
+ARG BW_CLI_VERSION="2025.3.0"
 WORKDIR /tmp
 RUN --mount=type=tmpfs,target=/tmp \
     wget -nv --no-check-certificate "https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip" -O /tmp/bw.zip && \
