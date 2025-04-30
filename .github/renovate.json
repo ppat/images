@@ -18,7 +18,7 @@
     "group:linters",
     "mergeConfidence:all-badges",
     "github>aquaproj/aqua-renovate-config#2.7.5",
-    "github>suzuki-shunsuke/renovate-config:yaml-language-server#3.0.0",
+    "github>suzuki-shunsuke/renovate-config:yaml-language-server#3.2.1",
     "github>ppat/renovate-presets",
     "github>ppat/renovate-presets:dev-tools",
     "github>ppat/renovate-presets:github-actions",
