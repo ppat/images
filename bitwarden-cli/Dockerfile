@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM debian:bookworm-slim@sha256:4b50eb66f977b4062683ff434ef18ac191da862dbe966961bc11990cf5791a8d AS builder
+FROM --platform=$BUILDPLATFORM debian:bookworm-slim@sha256:90522eeb7e5923ee2b871c639059537b30521272f10ca86fdbbbb2b75a8c40cd AS builder
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
@@ -22,7 +22,7 @@ WORKDIR /
 
 # =======================================================================================================================================
 # Bitwarden CLI requires various libs not available under a small base image such as busybox/alpine.
-FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:4b50eb66f977b4062683ff434ef18ac191da862dbe966961bc11990cf5791a8d
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:90522eeb7e5923ee2b871c639059537b30521272f10ca86fdbbbb2b75a8c40cd
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
