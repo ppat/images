@@ -17,7 +17,7 @@
     "config:best-practices",
     "group:linters",
     "mergeConfidence:all-badges",
-    "github>aquaproj/aqua-renovate-config#2.8.1",
+    "github>aquaproj/aqua-renovate-config#2.8.2",
     "github>suzuki-shunsuke/renovate-config:yaml-language-server#3.2.1",
     "github>ppat/renovate-presets",
     "github>ppat/renovate-presets:dev-tools",
