@@ -13,13 +13,24 @@ repos:
   - id: mixed-line-ending
     args: [--fix=lf]
   - id: trailing-whitespace
+- repo: https://github.com/sirosen/texthooks
+  rev: 0.6.8
+  hooks:
+  - id: fix-smartquotes
+  - id: fix-ligatures
+  - id: fix-spaces
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.37.1
   hooks:
   - id: yamllint
     args: [--strict]
-- repo: https://github.com/koalaman/shellcheck-precommit
-  rev: v0.10.0
+- repo: https://github.com/DavidAnson/markdownlint-cli2
+  rev: v0.18.1
+  hooks:
+  - id: markdownlint-cli2
+    args: ["--fix", "--config", ".markdownlint-cli2.yaml"]
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.10.0.1
   hooks:
   - id: shellcheck
 - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
@@ -28,9 +39,10 @@ repos:
   - id: commitlint
     stages: [commit-msg]
     additional_dependencies:
-    - '@commitlint/config-conventional@19.2.2'
-    - '@commitlint/ensure@19.0.3'
-    - 'commitlint-plugin-function-rules@4.0.0'
+    - '@commitlint/cli@19.6.1'
+    - '@commitlint/config-conventional@19.6.0'
+    - '@commitlint/ensure@19.5.0'
+    - 'commitlint-plugin-function-rules@4.0.1'
     args: ['--verbose']
 - repo: https://github.com/hadolint/hadolint
   rev: v2.12.0
