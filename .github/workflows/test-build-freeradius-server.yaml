@@ -24,7 +24,7 @@ jobs:
 
   test-build-freeradius-server:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@v0.1.1
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@dc55978a6b8efbc82d89b78caa1f41647a02da3c # v0.1.1
     with:
       image_context_path: freeradius-server
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
