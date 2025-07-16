@@ -31,6 +31,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-aarch64-linux-musl.tbz",
+      "checksum": "E8845D3F69F6A32D00258A1F79C093970666ECE3D05A430C7B24A16C56577BF5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-x86_64-linux-musl.tbz",
+      "checksum": "FEC7D1B59C671290A0F80D5A32617EA6D60412485FC04318FD194B9550FF6B49",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/bootandy/dust/v1.1.1/dust-v1.1.1-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "4D0E7F3E39CE85E98CC69260AB6F40E460A455CD8575AF1BA70D14A2940AE553",
       "algorithm": "sha256"
@@ -43,6 +53,11 @@
     {
       "id": "github_release/github.com/bootandy/dust/v1.2.1/dust-v1.2.1-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "15716B5C0DF538F30025D2DB7C509FC6D5540F4ECC1EAF555E0C639C67ED7ABF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/bootandy/dust/v1.2.2/dust-v1.2.2-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "F170ECC426DD807018FC4155174070387AF16435BE7CABE4EED0B438A7CB7CA0",
       "algorithm": "sha256"
     },
     {
@@ -103,6 +118,16 @@
     {
       "id": "github_release/github.com/fluxcd/flux2/v2.6.3/flux_2.6.3_linux_arm64.tar.gz",
       "checksum": "A8901AC1733C622E23EEA6B9C8C0CB2E0F9379B319F6FA92F0D1096F25D4660E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.6.4/flux_2.6.4_linux_amd64.tar.gz",
+      "checksum": "9D3E21AD53BAA0D5A062E1BD6F1A22D18B95906C682845BCA9FFA272CFF8A590",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/fluxcd/flux2/v2.6.4/flux_2.6.4_linux_arm64.tar.gz",
+      "checksum": "674E605F527841BB9B50A692B3CE497752CFC81438F85B4D1523D86ACA637353",
       "algorithm": "sha256"
     },
     {
@@ -353,6 +378,16 @@
     {
       "id": "http/get.helm.sh/helm-v3.18.3-linux-arm64.tar.gz",
       "checksum": "3382EBDC6D6E027371551A63FC6E0A3073A1AEC1061E346692932DA61CFD8D24",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.18.4-linux-amd64.tar.gz",
+      "checksum": "F8180838C23D7C7D797B208861FECB591D9CE1690D8704ED1E4CB8E2ADD966C1",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "http/get.helm.sh/helm-v3.18.4-linux-arm64.tar.gz",
+      "checksum": "C0A45E67EEF0C7416A8A8C9E9D5D2D30D70E4F4D3F7BEA5DE28241FFFA8F3B89",
       "algorithm": "sha256"
     },
     {
