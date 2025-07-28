@@ -171,6 +171,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/junegunn/fzf/v0.63.0/fzf-0.63.0-linux_amd64.tar.gz",
+      "checksum": "36E60FE51FED2F72954B39B9CE1E7EA72C1DC79BC99F4A3C2A7B98BB1A2B49BB",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/junegunn/fzf/v0.63.0/fzf-0.63.0-linux_arm64.tar.gz",
+      "checksum": "BB5DAFDD566E2BCEA4FE7D8BA8D97CAD15D733C6D05FC04E7B6DA8126A0A2F82",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_amd64.tar.gz",
       "checksum": "E471396B0ED4F2BE092B4854CC030DFCBB12B86197972E7BEF0CB89AD9C72477",
       "algorithm": "sha256"
@@ -198,6 +208,16 @@
     {
       "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.6.0/kustomize_v5.6.0_linux_arm64.tar.gz",
       "checksum": "AD8AB62D4F6D59A8AFDA0EEC4BA2E5CD2F86BF1AFEEA4B78D06DAAC945EB0660",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.0/kustomize_v5.7.0_linux_amd64.tar.gz",
+      "checksum": "0D98F06D6D2C2C0FF8923CC136A517AF74AAA187F1B9F3E17FF370D0625EDE84",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.0/kustomize_v5.7.0_linux_arm64.tar.gz",
+      "checksum": "744BB1BC1854B6634DEA9EAF6DB2F401A734ED25D6837BAA6F91157D79C27D5E",
       "algorithm": "sha256"
     },
     {
