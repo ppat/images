@@ -15,13 +15,13 @@ packages:
 - name: dalance/procs@v0.14.10
 - name: fluxcd/flux2@v2.6.4
 - name: helm/helm@v3.18.4
-- name: junegunn/fzf@v0.62.0
+- name: junegunn/fzf@v0.63.0
 - name: kubernetes/kubectl@v1.33.3
 - name: kubernetes-sigs/krew@v0.4.5
   command_aliases:
   - command: krew
     alias: kubectl-krew
-- name: kubernetes-sigs/kustomize@kustomize/v5.6.0
+- name: kubernetes-sigs/kustomize@kustomize/v5.7.0
 - name: mikefarah/yq@v4.45.4
 - name: muesli/duf@v0.8.1
 - name: sharkdp/bat@v0.25.0
