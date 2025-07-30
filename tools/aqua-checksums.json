@@ -221,6 +221,16 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.1/kustomize_v5.7.1_linux_amd64.tar.gz",
+      "checksum": "EA375E7372F9AA029129D4B2D16C66B7750B7F1213C4F66F910D981C895818D8",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.1/kustomize_v5.7.1_linux_arm64.tar.gz",
+      "checksum": "4261A040217DF3BD6896597C3986D1465925726E4F22A945304B5233A4DCDBDA",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/mikefarah/yq/v4.45.1/yq_linux_amd64",
       "checksum": "654D2943CA1D3BE2024089EB4F270F4070F491A0610481D128509B2834870049",
       "algorithm": "sha256"
