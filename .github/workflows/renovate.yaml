@@ -1,0 +1,28 @@
+---
+# yamllint disable rule:line-length
+name: renovate
+
+on:
+  pull_request:
+    paths:
+    - '.github/workflows/renovate.yaml'
+  schedule:
+  - cron: '0 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  renovate:
+    uses: ppat/github-workflows/.github/workflows/renovate.yaml@a80b8b7c502f0db4fc8d81cef2a2d60d3d6cb017 # v2.0.0
+    with:
+      dry_run: "${{ github.event_name	== 'pull_request' }}"
+      git_ref: ${{ github.head_ref || github.ref }}
+      log_level: debug
+    secrets:
+      app_id: ${{ secrets.RENOVATE_APP_ID }}
+      app_private_key: ${{ secrets.RENOVATE_APP_PRIVATE_KEY }}
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}

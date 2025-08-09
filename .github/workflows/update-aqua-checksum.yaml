@@ -13,16 +13,15 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update-aqua-checksums:
-    uses: aquaproj/update-checksum-workflow/.github/workflows/update-checksum.yaml@d248abb88efce715d50eb324100d9b29a20f7d18 # v1.0.4
+    uses: ppat/github-workflows/.github/workflows/update-aqua-checksums.yaml@a80b8b7c502f0db4fc8d81cef2a2d60d3d6cb017 # v2.0.0
     with:
-      # renovate: datasource=github-releases depName=aquaproj/aqua
-      aqua_version: v2.53.9
-      working_directory: tools
-      prune: false
+      git_ref: ${{ github.head_ref || github.ref_name }}
+      aqua_dirs: |
+        tools
     secrets:
-      gh_app_id: ${{ secrets.HOMELAB_BOT_APP_ID }}
-      gh_app_private_key: ${{ secrets.HOMELAB_BOT_APP_PRIVATE_KEY }}
+      app_id: ${{ secrets.HOMELAB_BOT_APP_ID }}
+      app_private_key: ${{ secrets.HOMELAB_BOT_APP_PRIVATE_KEY }}
