@@ -26,5 +26,6 @@
 | Kubernetes & Container Management | [flux](https://fluxcd.io/):<br>GitOps toolkit for Kubernetes<br><br>[helm](https://helm.sh/):<br>Kubernetes package manager<br><br>[kubectl](https://kubernetes.io/docs/reference/kubectl/)<br>Kubernetes command-line tool<br><br>[krew](https://krew.sigs.k8s.io/):<br>kubectl plugin manager<br><br>[kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/cmd/):<br>Kubernetes native configuration management | Tools for managing Kubernetes clusters, applications, and configurations |
 
 Notes:
+
 - All tools listed are modern, often written in languages like Rust or Go.
 - Most offer significant improvements over traditional Unix tools.
