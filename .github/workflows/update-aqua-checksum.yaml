@@ -17,11 +17,12 @@ permissions:
 
 jobs:
   update-aqua-checksums:
-    uses: ppat/github-workflows/.github/workflows/update-aqua-checksums.yaml@a80b8b7c502f0db4fc8d81cef2a2d60d3d6cb017 # v2.0.0
+    uses: ppat/github-workflows/.github/workflows/update-aqua-checksums.yaml@729783ba18d0882b4ee32d5fd5c0079028473207 # v2.0.1
     with:
       git_ref: ${{ github.head_ref || github.ref_name }}
       aqua_dirs: |
         tools
+      prune: true
     secrets:
       app_id: ${{ secrets.HOMELAB_BOT_APP_ID }}
       app_private_key: ${{ secrets.HOMELAB_BOT_APP_PRIVATE_KEY }}
