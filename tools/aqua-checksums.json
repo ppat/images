@@ -11,26 +11,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.0/btop-aarch64-linux-musl.tbz",
-      "checksum": "4872C4D328CD39B535091470D44C91A786B879881DD11053154468C9A73E22B4",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.0/btop-x86_64-linux-musl.tbz",
-      "checksum": "2E49CDE9C0F273E5B1699D2C4F1CE5D1C08CCA5FD90E5E0226DBAC9FD00C82F3",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.3/btop-aarch64-linux-musl.tbz",
-      "checksum": "83137B2CBCB315FA17018A1666FF064DEF27303A3E30F3201F2E91CB20ADC8A8",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.3/btop-x86_64-linux-musl.tbz",
-      "checksum": "98F11024899FEA672490A2D9515F8B8B863C09F33E0E681F4FDBAA37ABFD464A",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-aarch64-linux-musl.tbz",
       "checksum": "E8845D3F69F6A32D00258A1F79C093970666ECE3D05A430C7B24A16C56577BF5",
       "algorithm": "sha256"
@@ -38,26 +18,6 @@
     {
       "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-x86_64-linux-musl.tbz",
       "checksum": "FEC7D1B59C671290A0F80D5A32617EA6D60412485FC04318FD194B9550FF6B49",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/bootandy/dust/v1.1.1/dust-v1.1.1-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "4D0E7F3E39CE85E98CC69260AB6F40E460A455CD8575AF1BA70D14A2940AE553",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/bootandy/dust/v1.1.2/dust-v1.1.2-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "88C1CBCD7629B42462B424F3CC248E4BE226ADFDBF613597235A01F663291B7D",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/bootandy/dust/v1.2.1/dust-v1.2.1-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "15716B5C0DF538F30025D2DB7C509FC6D5540F4ECC1EAF555E0C639C67ED7ABF",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/bootandy/dust/v1.2.2/dust-v1.2.2-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "F170ECC426DD807018FC4155174070387AF16435BE7CABE4EED0B438A7CB7CA0",
       "algorithm": "sha256"
     },
     {
@@ -71,61 +31,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/dalance/procs/v0.14.9/procs-v0.14.9-x86_64-linux.zip",
-      "checksum": "B3D1BAAF8BEADF6E97D0F9FD9847447800F067601C95C64B5456BDDAC72AA558",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.4.0/flux_2.4.0_linux_amd64.tar.gz",
-      "checksum": "7B70B75AF20E28FC30EE66CF5372EC8D51DD466FD2EE21AA42690984DE70B09B",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.4.0/flux_2.4.0_linux_arm64.tar.gz",
-      "checksum": "4B8C95A1E8AD262DD33A67D28E22979CF3E022A9283D4676763B6728247D92A0",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.5.0/flux_2.5.0_linux_amd64.tar.gz",
-      "checksum": "6D9EE65232269A81C765604D88D7AFE347330ACEB1C77F0BC45A2D1F93802FCE",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.5.0/flux_2.5.0_linux_arm64.tar.gz",
-      "checksum": "470F9330C8180498C4F0D5F822D91631A6E63CF03AC7B8648889A6DBA4C626CA",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.5.1/flux_2.5.1_linux_amd64.tar.gz",
-      "checksum": "F64C85DB4B94AEFCDF6E0F2825C32573FC2BD234E5489FF332FEE62776973EC3",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.5.1/flux_2.5.1_linux_arm64.tar.gz",
-      "checksum": "35B6160D6B3C9EC3BBFE3F526927E713D877C274E7DEBFFD13E270E47221A79F",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.6.1/flux_2.6.1_linux_amd64.tar.gz",
-      "checksum": "4BBEB4012629CEDD486ACE367CC1D26A188A6C39BA24B4E761AAE4EAFEF9CF9B",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.6.1/flux_2.6.1_linux_arm64.tar.gz",
-      "checksum": "4802958A315AC80A3ECF58DCCDDCC3C8754045BCDD359040F5559ED0AFB3C1BF",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.6.3/flux_2.6.3_linux_amd64.tar.gz",
-      "checksum": "AC6A3F09329DB3E4645FAEF3BB33A7E6D863CF2E23717C46B9E86849B45EC42C",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/fluxcd/flux2/v2.6.3/flux_2.6.3_linux_arm64.tar.gz",
-      "checksum": "A8901AC1733C622E23EEA6B9C8C0CB2E0F9379B319F6FA92F0D1096F25D4660E",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/fluxcd/flux2/v2.6.4/flux_2.6.4_linux_amd64.tar.gz",
       "checksum": "9D3E21AD53BAA0D5A062E1BD6F1A22D18B95906C682845BCA9FFA272CFF8A590",
       "algorithm": "sha256"
@@ -133,56 +38,6 @@
     {
       "id": "github_release/github.com/fluxcd/flux2/v2.6.4/flux_2.6.4_linux_arm64.tar.gz",
       "checksum": "674E605F527841BB9B50A692B3CE497752CFC81438F85B4D1523D86ACA637353",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz",
-      "checksum": "9B9A8CA8D45A041586323B355F613B94E3301DC6214A43ADCCFAE225A783F0BC",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.58.0/fzf-0.58.0-linux_arm64.tar.gz",
-      "checksum": "A5394047156D09BA6FEC7549B45FC7478A5527A799B4EC52E64950E762597EB3",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.60.0/fzf-0.60.0-linux_amd64.tar.gz",
-      "checksum": "C7AF0376077054767ED88637F72CAB78C563E2B44C4E0101EBFD84FFFDBCD339",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.60.0/fzf-0.60.0-linux_arm64.tar.gz",
-      "checksum": "D96556BA5E2B6595380AEFF0F218F243DBDE56750C26693FE23E54111E6BA624",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.60.3/fzf-0.60.3-linux_amd64.tar.gz",
-      "checksum": "2937A4F10B0F80E0C974D9459DF3BC049B068A97212B0D253C36C9DA5920B521",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.60.3/fzf-0.60.3-linux_arm64.tar.gz",
-      "checksum": "13DF4D556992938A4BEB340AC3B17C51C77E46DB978D3071429EB77A94C581C1",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.62.0/fzf-0.62.0-linux_amd64.tar.gz",
-      "checksum": "64B56DD484A2317D5F04C28AC0791B36807F034ADB419209AD39FB6637255794",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.62.0/fzf-0.62.0-linux_arm64.tar.gz",
-      "checksum": "929FD132705D02F222A52E23C076018EF3E699793DD5E8C3183BB11ED9B7696E",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.63.0/fzf-0.63.0-linux_amd64.tar.gz",
-      "checksum": "36E60FE51FED2F72954B39B9CE1E7EA72C1DC79BC99F4A3C2A7B98BB1A2B49BB",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/junegunn/fzf/v0.63.0/fzf-0.63.0-linux_arm64.tar.gz",
-      "checksum": "BB5DAFDD566E2BCEA4FE7D8BA8D97CAD15D733C6D05FC04E7B6DA8126A0A2F82",
       "algorithm": "sha256"
     },
     {
@@ -196,16 +51,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_amd64.tar.gz",
-      "checksum": "E471396B0ED4F2BE092B4854CC030DFCBB12B86197972E7BEF0CB89AD9C72477",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.4/krew-linux_arm64.tar.gz",
-      "checksum": "F8F0CDBF698ED3E8CB46E7BD213754701341A10E11CCB69C90D4863E0CF5A16A",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-linux_amd64.tar.gz",
       "checksum": "BACC06800BDA14EC063CD0B6F377A961FDF4661C00366BF9834723CD28BFABC7",
       "algorithm": "sha256"
@@ -216,26 +61,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.6.0/kustomize_v5.6.0_linux_amd64.tar.gz",
-      "checksum": "54E4031DDC4E7FC59E408DA29E7C646E8E57B8088C51B84B3DF0864F47B5148F",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.6.0/kustomize_v5.6.0_linux_arm64.tar.gz",
-      "checksum": "AD8AB62D4F6D59A8AFDA0EEC4BA2E5CD2F86BF1AFEEA4B78D06DAAC945EB0660",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.0/kustomize_v5.7.0_linux_amd64.tar.gz",
-      "checksum": "0D98F06D6D2C2C0FF8923CC136A517AF74AAA187F1B9F3E17FF370D0625EDE84",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.0/kustomize_v5.7.0_linux_arm64.tar.gz",
-      "checksum": "744BB1BC1854B6634DEA9EAF6DB2F401A734ED25D6837BAA6F91157D79C27D5E",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.1/kustomize_v5.7.1_linux_amd64.tar.gz",
       "checksum": "EA375E7372F9AA029129D4B2D16C66B7750B7F1213C4F66F910D981C895818D8",
       "algorithm": "sha256"
@@ -243,26 +68,6 @@
     {
       "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.7.1/kustomize_v5.7.1_linux_arm64.tar.gz",
       "checksum": "4261A040217DF3BD6896597C3986D1465925726E4F22A945304B5233A4DCDBDA",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/mikefarah/yq/v4.45.1/yq_linux_amd64",
-      "checksum": "654D2943CA1D3BE2024089EB4F270F4070F491A0610481D128509B2834870049",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/mikefarah/yq/v4.45.1/yq_linux_arm64",
-      "checksum": "CEEA73D4C86F2E5C91926EE0639157121F5360DA42BEEB8357783D79C2CC6A1D",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/mikefarah/yq/v4.45.4/yq_linux_amd64",
-      "checksum": "B96DE04645707E14A12F52C37E6266832E03C29E95B9B139CDDCAE7314466E69",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/mikefarah/yq/v4.45.4/yq_linux_arm64",
-      "checksum": "A02CC637409DB44A9F9CB55EA92C40019582BA88083C4D930A727EC4B59ED439",
       "algorithm": "sha256"
     },
     {
@@ -316,66 +121,6 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.31.5/bin/linux/amd64/kubectl",
-      "checksum": "FBECBFD375B3686002C2E81D51C390172F5FFBA3D6B47920D55342CB03F557AF",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.31.5/bin/linux/arm64/kubectl",
-      "checksum": "697C8B4239F9E53CBA46296E114BCC02C726B5C7A45E1C464804AAD56E5C7A86",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.1/bin/linux/amd64/kubectl",
-      "checksum": "E16C80F1A9F94DB31063477EB9E61A2E24C1A4EEE09BA776B029048F5369DB0C",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.1/bin/linux/arm64/kubectl",
-      "checksum": "98206FD83A4FD17F013F8C61C33D0AE8EC3A7C53EC59EF3D6A0A9400862DC5B2",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.2/bin/linux/amd64/kubectl",
-      "checksum": "4F6A959DCC5B702135F8354CC7109B542A2933C46B808B248A214C1F69F817EA",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.2/bin/linux/arm64/kubectl",
-      "checksum": "7381BEA99C83C264100F324C2CA6E7E13738A73B8928477AC805991440A065CD",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.3/bin/linux/amd64/kubectl",
-      "checksum": "AB209D0C5134B61486A0486585604A616A5BB2FC07DF46D304B3C95817B2D79F",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.32.3/bin/linux/arm64/kubectl",
-      "checksum": "6C2C91E760EFBF3FA111A5F0B99BA8975FB1C58BB3974ECA88B6134BCF3717E2",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.33.1/bin/linux/amd64/kubectl",
-      "checksum": "5DE4E9F2266738FD112B721265A0C1CD7F4E5208B670F811861F699474A100A3",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.33.1/bin/linux/arm64/kubectl",
-      "checksum": "D595D1A26B7444E0BEB122E25750EE4524E74414BBDE070B672B423139295CE6",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.33.2/bin/linux/amd64/kubectl",
-      "checksum": "33D0CDEC6967817468F0A4A90F537DFEF394DCF815D91966CA651CC118393EEA",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/dl.k8s.io/v1.33.2/bin/linux/arm64/kubectl",
-      "checksum": "54DC02C8365596EAA2B576FAE4E3AC521DB9130E26912385E1E431D156F8344D",
-      "algorithm": "sha256"
-    },
-    {
       "id": "http/dl.k8s.io/v1.33.3/bin/linux/amd64/kubectl",
       "checksum": "2FCF65C64F352742DC253A25A7C95617C2ABA79843D1B74E585C69FE4884AFB0",
       "algorithm": "sha256"
@@ -383,66 +128,6 @@
     {
       "id": "http/dl.k8s.io/v1.33.3/bin/linux/arm64/kubectl",
       "checksum": "3D514DBAE5DC8C09F773DF0EF0F5D449DFAD05B3ACA5C96B13565F886DF345FD",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz",
-      "checksum": "FB5D12662FDE6EEFF36AC4CCACBF3ABED96B0EE2DE07AFDDE4EDB14E613AEE24",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.0-linux-arm64.tar.gz",
-      "checksum": "C4D4BE8E80082B7EAA411E3E231D62CF05D01CDDFEF59B0D01006A7901E11EE4",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.1-linux-amd64.tar.gz",
-      "checksum": "3B66F3CD28409F29832B1B35B43D9922959A32D795003149707FEA84CBCD4469",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.1-linux-arm64.tar.gz",
-      "checksum": "C86C9B23602D4ABBFAE39D9634E25AB1D0EA6C4C16C5B154113EFE316A402547",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.2-linux-amd64.tar.gz",
-      "checksum": "90C28792A1EB5FB0B50028E39EBF826531EBFCF73F599050DBD79BAB2F277241",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.2-linux-arm64.tar.gz",
-      "checksum": "D78D76EC7625A94991E887AC049D93F44BD70E4876200B945F813C9E1ED1DF7C",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.3-linux-amd64.tar.gz",
-      "checksum": "EE88B3C851AE6466A3DE507F7BE73FE94D54CBF2987CBAA3D1A3832EA331F2CD",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.17.3-linux-arm64.tar.gz",
-      "checksum": "7944E3DEFD386C76FD92D9E6FEC5C2D65A323F6FADC19BFB5E704E3EEE10348E",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz",
-      "checksum": "C5DEADA86FE609DEEFDF40E9CBBE3DA2F8CF3F6A4551A0EBE7886DC8FCF98BCE",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.18.2-linux-arm64.tar.gz",
-      "checksum": "03181A494A0916B370A100A5B2536104963B095BE53FB23D1E29B2AFB1C7DE8D",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.18.3-linux-amd64.tar.gz",
-      "checksum": "6EC85F306DD8FE9EB05C61BA4593182B2AFCFEFB52F21ADD3FE043EBBDC48E39",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "http/get.helm.sh/helm-v3.18.3-linux-arm64.tar.gz",
-      "checksum": "3382EBDC6D6E027371551A63FC6E0A3073A1AEC1061E346692932DA61CFD8D24",
       "algorithm": "sha256"
     },
     {
@@ -456,133 +141,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.313.0/registry.yaml",
-      "checksum": "444EBCA83F3FC728F6DEB66E56FCB72D7820901A1FDB8A31276A3D3329D847F4",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.314.0/registry.yaml",
-      "checksum": "03DCD1F2CCE5509AF01F997387857B257FF935085B6993FF41D9515B2EA5398709D6EF0533AEEF3196A6E7EDCB00F4CB68582B628D2AB05185170F0646071EB7",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.315.0/registry.yaml",
-      "checksum": "999AC9C6176EA3B69ED340053AA91D2AE99F28A2CE157C0579BBD4259EC00D06A2B586CA2F5A266AD0742C8E1E901FFEB16084517DC0CD585CEA65FC8FDD1C45",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.316.0/registry.yaml",
-      "checksum": "0A6859BD65207F041725E945481F4E7C649AFD8C22EBCA698535B0321C81127A1732246BE7C7F9630EF520B060248495A709CE7DFD01FA81CB3FA4D4D3E9A730",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.318.1/registry.yaml",
-      "checksum": "9DB3A693F12638B62765B62F293041B7BD99F74F521EAE75ADB669872BE4B168E9CB3C18D9680F584B38B71780AB0735D7AEF1AF14188070923235A2971E5974",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.319.0/registry.yaml",
-      "checksum": "10C4C07EA462C999C98346807BA6A62E9D5F11A376F4E77DFD19FC9A70C72F0522621C6F79A54B7F6DC9676EE7D1BBC74B76ABABB561AAA76D728068C5E97A5A",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.319.2/registry.yaml",
-      "checksum": "F0EF3B96838AD4B66CF5A7DF337B3FC49981F917F81F56F58203EFE3D2C1FF7B43E7A42BB1B68B1F8BA85FB6C5C5DE920CB26A134F6E3725B0F4A82DEB3CEEBF",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.320.0/registry.yaml",
-      "checksum": "572C25FFD4EA37E782949EAC671FD568618D5F87183C7A0065E499B669052DC60166845AE26376038AE5FB080715B867081E280BF6D2B2BDF120B53AA3945264",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.321.0/registry.yaml",
-      "checksum": "35DB52C79AC4A67B080884E009199A961E1823DEBAC747EBCECDD1D052023972245BA8419481D7D5BC9140AF5F2AA3084047141FA60A0E35D33291BAE948DA64",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.322.0/registry.yaml",
-      "checksum": "D3EFF9E0EA36B955AF514C195C6BE7B38207CC2B73324308BB4F773798BBCC9CC237A1931AD00C3B7F36BD92211AEA9875A0FE345C03FA58699E849CA05F4E7B",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.323.0/registry.yaml",
-      "checksum": "901A3664818CA5A3E11B51184E016D8A0A78AD01067124ADA49BAF3461C95E21F6197964BF09CBD336A125580318B2D2D0B425455323448EF6B6E33FE27330F4",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.324.0/registry.yaml",
-      "checksum": "3EA7D5F8690028CB1CEABC8267182E16F663FF8ECA0ADB5451721560F2455826195BE678E29436BABF22EA839F50AF075EC3C5E46478B7573A50BF7E5913BBD1",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.324.3/registry.yaml",
-      "checksum": "6D5C2FA4579D864A7E6AD315C778E77EF0BBBA859F6782ACB58DF63B88C4A07A0F790F30E376D6CD239D8008FBDE8FC6C1DF54BFD4CF7BAFE6528E7C87A709DE",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.326.0/registry.yaml",
-      "checksum": "D6B374996B6EE2946F7D21C3837ADED31D9645F339C47B5D6868C51AE41513517EF78B1FE3D085E42233136F6B2C71CD4711F0670694AD4C17BC625C822C87B6",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.326.1/registry.yaml",
-      "checksum": "5F51EFFD6CD7DDBDCD9AE719AD2B3A6A2C6F756A160C093409302B9048E067830D632D0DBE90DE15A6DE60AC04EEB3E2E7C5A0D31A46FA05817467BF1C1B28C8",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.327.0/registry.yaml",
-      "checksum": "1A575D15888B469B30A159BFBEABB4B43FBA0D8DAA981A7812685A0BAE97894D965AB14078F41736B369ABFFB8D91C1FACC40F307A9BD35988823FFF4A908F6C",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.328.0/registry.yaml",
-      "checksum": "372E67D00BE1AE052F48EFBC193A2423E2198D2985D90437392B19784A5CC05A9A640D2E82404A83BB9B476376E7141407D549A2C8609A90D1C88DDA8513751F",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.329.0/registry.yaml",
-      "checksum": "F5349E38DD34232D9E906242F3B2C61E2DA046EE3BAB53A658485D0C9E8A7FF395E279ACDC5E72F3D67DECA44DE557D2E46ED61943D03BF12547CA534ECC2722",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.330.0/registry.yaml",
-      "checksum": "E72E10625365F870204131D35BB351F931708ED793C9405B83C3CB853C1C11BD3D7C2CD997DA7E861AD2F5651B95ED7C852920A6A4805A650FBA706E82071F9B",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.375.0/registry.yaml",
-      "checksum": "A74D64E68D2ED8328080DE582F8B563DE248143AB7B9EF5DDD671C5B2A626E256D650B7C787ED1D5ACB99634A63D2B0742817FF2EC9FFB430206D871212AEE7E",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.376.0/registry.yaml",
-      "checksum": "4926416A880A4B472E41A30C34539133A3E393F2B27FBA408DA1126BB7898859F8315725777F46EBB7D38709B789AE9BAD78746C2FEF2267255425C6A2F39067",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.376.1/registry.yaml",
-      "checksum": "B6B3342FDC309D052EF442263EFD3270BF3976D9811656427FA59DC71D192509F9213039B57A5274D2C405B0B4CE08B1068F2BFB4A210CD16768751C47515C85",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.379.0/registry.yaml",
-      "checksum": "E244E31650EE3A27997D11E8F9ED7461BEE14E42CE3A2313300CC5FC31CC5FC775A9118A669A3A0DCEDA07FBA90B52C98E73B872ECC457A40D17D6E32731DA74",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.379.2/registry.yaml",
-      "checksum": "7F98705A8CABEA95CAA840B91BE5E97CF1F344B75CAF41E864545B987246C1C5FE0FEF3BDBFE6DF0293BB2547CE2600AEBFFDCA38DC2A767B106EE8D9C34371D",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.385.0/registry.yaml",
-      "checksum": "D6B641145B349E4892D626216527C86A408FE8E64748D602F400EFC32A9124BCD2F943775E811319EA9FF69B4CE5BA9ACA13CB311E29886E79339832AD188107",
-      "algorithm": "sha512"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.386.0/registry.yaml",
-      "checksum": "297DCBFBAC90D85B1C44F1C0E1EC9622A666B2FAEF5979BB553A761A28AA3E87C631E83E623B77EBF64B18D864DEDC7B90D7E646146AA91CBCE59509A0447386",
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.399.0/registry.yaml",
+      "checksum": "DFBC63D519DB05196B401F933FDE8BF71722BACEDA3647601C0E0418DF6D7E6C12F49608D0ACBE53D2F50DA34CC68F2E1D722D8BA2257F72FECB6D0D53FECFDC",
       "algorithm": "sha512"
     }
   ]
