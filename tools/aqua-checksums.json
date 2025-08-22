@@ -121,23 +121,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.3/bin/linux/amd64/kubectl",
-      "checksum": "2FCF65C64F352742DC253A25A7C95617C2ABA79843D1B74E585C69FE4884AFB0",
+      "id": "http/dl.k8s.io/v1.33.4/bin/linux/amd64/kubectl",
+      "checksum": "C2BA72C115D524B72AAEE9AAB8DF8B876E1596889D2F3F27D68405262CE86CA1",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.3/bin/linux/arm64/kubectl",
-      "checksum": "3D514DBAE5DC8C09F773DF0EF0F5D449DFAD05B3ACA5C96B13565F886DF345FD",
+      "id": "http/dl.k8s.io/v1.33.4/bin/linux/arm64/kubectl",
+      "checksum": "76CD7A2AA59571519B68C3943521404CBCE55DAFB7D8866F8D0EA2995B396EEF",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.18.4-linux-amd64.tar.gz",
-      "checksum": "F8180838C23D7C7D797B208861FECB591D9CE1690D8704ED1E4CB8E2ADD966C1",
+      "id": "http/get.helm.sh/helm-v3.18.5-linux-amd64.tar.gz",
+      "checksum": "9879BF9C471CDECBBEE5EE17CF1DE1849B0FFD12871EA01F17EDE6861D7134F5",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.18.4-linux-arm64.tar.gz",
-      "checksum": "C0A45E67EEF0C7416A8A8C9E9D5D2D30D70E4F4D3F7BEA5DE28241FFFA8F3B89",
+      "id": "http/get.helm.sh/helm-v3.18.5-linux-arm64.tar.gz",
+      "checksum": "D25D2C1B1C5A9844755AB5C66E6DF4D6B31C25E6D92DD2CE66C137A63DDF9F2C",
       "algorithm": "sha256"
     },
     {
