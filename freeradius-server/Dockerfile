@@ -18,7 +18,7 @@ RUN apt-get update && \
         gcc
 
 # renovate: datasource=docker depName=freeradius/freeradius-server
-ARG FREERADIUS_VERSION="3.2.7"
+ARG FREERADIUS_VERSION="3.2.8"
 # Shallow clone the FreeRADIUS source
 WORKDIR /usr/local/src/repositories
 RUN export RELEASE_TAG="$(echo "release_${FREERADIUS_VERSION}" | sed -E 's/\./_/g')" && \
