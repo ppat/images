@@ -41,13 +41,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.64.0/fzf-0.64.0-linux_amd64.tar.gz",
-      "checksum": "E61BDBB4356EE243D2247C2E0BF990B23EB8B8346557D0F496898C61BC835880",
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-linux_amd64.tar.gz",
+      "checksum": "EEB492AE609E437A648BEC0D0B09647D97C648BFD910B95987FFA64577A5A665",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.64.0/fzf-0.64.0-linux_arm64.tar.gz",
-      "checksum": "19EC0C63A0612DBF2B2B2BF3D9B76B40E65B79A8475E7566D2C8569EB5254149",
+      "id": "github_release/github.com/junegunn/fzf/v0.65.0/fzf-0.65.0-linux_arm64.tar.gz",
+      "checksum": "10FA2AA653FE031FBCB008A7737BA4C2D5F519BB8A2702726B13696D959A7891",
       "algorithm": "sha256"
     },
     {
@@ -131,13 +131,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.18.5-linux-amd64.tar.gz",
-      "checksum": "9879BF9C471CDECBBEE5EE17CF1DE1849B0FFD12871EA01F17EDE6861D7134F5",
+      "id": "http/get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz",
+      "checksum": "3F43C0AA57243852DD542493A0F54F1396C0BC8EC7296BBB2C01E802010819CE",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.18.5-linux-arm64.tar.gz",
-      "checksum": "D25D2C1B1C5A9844755AB5C66E6DF4D6B31C25E6D92DD2CE66C137A63DDF9F2C",
+      "id": "http/get.helm.sh/helm-v3.18.6-linux-arm64.tar.gz",
+      "checksum": "5B8E00B6709CAAB466CBBB0BC29EE09059B8DC9417991DD04B497530E49B1737",
       "algorithm": "sha256"
     },
     {
