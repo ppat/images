@@ -71,13 +71,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.47.1/yq_linux_amd64",
-      "checksum": "0FB28C6680193C41B364193D0C0FC4A03177AECDE51CFC04D506B1517158C2FB",
+      "id": "github_release/github.com/mikefarah/yq/v4.47.2/yq_linux_amd64",
+      "checksum": "1BB99E1019E23DE33C7E6AFC23E93DAD72AAD6CF2CB03C797F068EA79814DDB0",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.47.1/yq_linux_arm64",
-      "checksum": "B7F7C991ABE262B0C6F96BBCB362F8B35429CEFD59C8B4C2DAA4811F1E9DF599",
+      "id": "github_release/github.com/mikefarah/yq/v4.47.2/yq_linux_arm64",
+      "checksum": "05DF1F6AED334F223BB3E6A967DB259F7185E33650C3B6447625E16FEA0ED31F",
       "algorithm": "sha256"
     },
     {
@@ -121,13 +121,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.4/bin/linux/amd64/kubectl",
-      "checksum": "C2BA72C115D524B72AAEE9AAB8DF8B876E1596889D2F3F27D68405262CE86CA1",
+      "id": "http/dl.k8s.io/v1.33.5/bin/linux/amd64/kubectl",
+      "checksum": "6A12D6C39E4A611A3687EE24D8C733961BB4BAE1AE975F5204400C0A6930C6FC",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.4/bin/linux/arm64/kubectl",
-      "checksum": "76CD7A2AA59571519B68C3943521404CBCE55DAFB7D8866F8D0EA2995B396EEF",
+      "id": "http/dl.k8s.io/v1.33.5/bin/linux/arm64/kubectl",
+      "checksum": "6DB7C5D846C3B3DDFD39F3137A93FE96AF3938860EEFDBF2429805EE1656E381",
       "algorithm": "sha256"
     },
     {
