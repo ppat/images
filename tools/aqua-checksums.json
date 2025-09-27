@@ -11,13 +11,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-aarch64-linux-musl.tbz",
-      "checksum": "E8845D3F69F6A32D00258A1F79C093970666ECE3D05A430C7B24A16C56577BF5",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.5/btop-aarch64-linux-musl.tbz",
+      "checksum": "9A4167DA2DB7AA550867EA822CE9E6AD5B871C75D5B9FD1CC05FC88B03E0414A",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.4/btop-x86_64-linux-musl.tbz",
-      "checksum": "FEC7D1B59C671290A0F80D5A32617EA6D60412485FC04318FD194B9550FF6B49",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.5/btop-x86_64-linux-musl.tbz",
+      "checksum": "206B0F9334E93C06DE9025EAF90676C374CA79815B41DADFF1B36EF4E4E6D1D4",
       "algorithm": "sha256"
     },
     {
@@ -101,13 +101,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "4E8E596646D047D904F2C5CA74B39DCCC69978B6E1FB101094E534B0B59C1BB0",
+      "id": "github_release/github.com/sharkdp/fd/v10.3.0/fd-v10.3.0-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "996B9B1366433B211CB3BBEDBA91C9DBCE2431842144D925428EAD0ADF32020B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "D9BFA25EC28624545C222992E1B00673B7C9CA5EB15393C40369F10B28F9C932",
+      "id": "github_release/github.com/sharkdp/fd/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "2B6BFAAE8C48F12050813C2FFE1884C61EA26E750D803DF9C9114550A314CD14",
       "algorithm": "sha256"
     },
     {
@@ -121,13 +121,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.5/bin/linux/amd64/kubectl",
-      "checksum": "6A12D6C39E4A611A3687EE24D8C733961BB4BAE1AE975F5204400C0A6930C6FC",
+      "id": "http/dl.k8s.io/v1.34.0/bin/linux/amd64/kubectl",
+      "checksum": "CFDA68CBA5848BC3B6C6135AE2F20BA2C78DE20059F68789C090166D6ABC3E2C",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.33.5/bin/linux/arm64/kubectl",
-      "checksum": "6DB7C5D846C3B3DDFD39F3137A93FE96AF3938860EEFDBF2429805EE1656E381",
+      "id": "http/dl.k8s.io/v1.34.0/bin/linux/arm64/kubectl",
+      "checksum": "00B182D103A8A73DA7A4D11E7526D0543DCF352F06CC63A1FDE25CE9243F49A0",
       "algorithm": "sha256"
     },
     {
