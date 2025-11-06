@@ -23,7 +23,7 @@ RUN --mount=type=tmpfs,target=/tmp \
     tar xvf upx.tar -C /usr/local/sbin --strip-components 1 "upx-${UPX_VERSION}-${TARGETARCH}_linux/upx"
 
 # renovate: datasource=github-releases depName=aquaproj/aqua-installer
-ARG AQUA_INSTALLER_VERSION="4.0.3"
+ARG AQUA_INSTALLER_VERSION="4.0.4"
 RUN curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v${AQUA_INSTALLER_VERSION}/aqua-installer && \
     chmod +x aqua-installer
 
