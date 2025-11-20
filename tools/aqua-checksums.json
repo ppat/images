@@ -41,13 +41,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.65.2/fzf-0.65.2-linux_amd64.tar.gz",
-      "checksum": "5EB8EFC0E94AA559F84EA83EEBA99BEA7DCE818E63F92B4B62E60663220F1C14",
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz",
+      "checksum": "362D5F92187560A87338B427DBE573D1E1BF8B4FB4BAB1F44ACA6A8F7FE8070F",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.65.2/fzf-0.65.2-linux_arm64.tar.gz",
-      "checksum": "097347160595BF03A426D2ABE0A17E14CA060540DDFC0EA45C0A9BE62BB29A2B",
+      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_arm64.tar.gz",
+      "checksum": "E0EBB2E4D2549CC4C693D80CB6CD16467652AB2385B2EBBB5CBAEE3B63FD2904",
       "algorithm": "sha256"
     },
     {
@@ -71,13 +71,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.47.2/yq_linux_amd64",
-      "checksum": "1BB99E1019E23DE33C7E6AFC23E93DAD72AAD6CF2CB03C797F068EA79814DDB0",
+      "id": "github_release/github.com/mikefarah/yq/v4.48.1/yq_linux_amd64",
+      "checksum": "99DF6047F5B577A9D25F969F7C3823ADA3488DE2E2115B30A0ABB10D9324FD9F",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.47.2/yq_linux_arm64",
-      "checksum": "05DF1F6AED334F223BB3E6A967DB259F7185E33650C3B6447625E16FEA0ED31F",
+      "id": "github_release/github.com/mikefarah/yq/v4.48.1/yq_linux_arm64",
+      "checksum": "0E46B5B926A9E57C526FA2BD8F8E38B7E17FBF6E2403FF1741F3B268E3363A9E",
       "algorithm": "sha256"
     },
     {
@@ -91,13 +91,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/bat/v0.25.0/bat-v0.25.0-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "EE0F12CF6006A79CF4CCF75D2DDCF9F6BA124644503244B1AF909C2F72A2A9F7",
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "6EE11BD8A520C514E230669156D9298F0DD2B5AFC788C0952A4B14FCEC51EAEE",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/bat/v0.25.0/bat-v0.25.0-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "93F47D76ABE328C402EF712E9AC92AA6D5BC84D5ADCBCAF0BBC5665E5275A941",
+      "id": "github_release/github.com/sharkdp/bat/v0.26.0/bat-v0.26.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "26A683B038FBC526C6DF4166DB693DDC9E431E5BDC285D45CCD6B72F3CFF5FFD",
       "algorithm": "sha256"
     },
     {
@@ -121,23 +121,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.34.1/bin/linux/amd64/kubectl",
-      "checksum": "7721F265E18709862655AFFBA5343E85E1980639395D5754473DAFAADCAA69E3",
+      "id": "http/dl.k8s.io/v1.34.2/bin/linux/amd64/kubectl",
+      "checksum": "9591F3D75E1581F3F7392E6AD119AAB2F28AE7D6C6E083DC5D22469667F27253",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.34.1/bin/linux/arm64/kubectl",
-      "checksum": "420E6110E3BA7EE5A3927B5AF868D18DF17AAE36B720529FFA4E9E945AA95450",
+      "id": "http/dl.k8s.io/v1.34.2/bin/linux/arm64/kubectl",
+      "checksum": "95DF604E914941F3172A93FA8FEEB1A1A50F4011DFBE0C01E01B660AFC8F9B85",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.19.0-linux-amd64.tar.gz",
-      "checksum": "A7F81CE08007091B86D8BD696EB4D86B8D0F2E1B9F6C714BE62F82F96A594496",
+      "id": "http/get.helm.sh/helm-v3.19.2-linux-amd64.tar.gz",
+      "checksum": "2114C9DEA2844DCE6D0EE2D792A9AAE846BE8CF53D5B19DC2988B5A0E8FEC26E",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.19.0-linux-arm64.tar.gz",
-      "checksum": "440CF7ADD0AEE27EBC93FADA965523C1DC2E0AB340D4348DA2215737FC0D76AD",
+      "id": "http/get.helm.sh/helm-v3.19.2-linux-arm64.tar.gz",
+      "checksum": "566E9F3A5A83A81E4B03503AE37E368EDD52D699619E8A9BB1FDF21561AE0E88",
       "algorithm": "sha256"
     },
     {
