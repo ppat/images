@@ -41,13 +41,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz",
-      "checksum": "362D5F92187560A87338B427DBE573D1E1BF8B4FB4BAB1F44ACA6A8F7FE8070F",
+      "id": "github_release/github.com/junegunn/fzf/v0.66.1/fzf-0.66.1-linux_amd64.tar.gz",
+      "checksum": "ECA8D793061283122D79FF81BAF996535C0BFBF7058253142AAF2578E56943EF",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.66.0/fzf-0.66.0-linux_arm64.tar.gz",
-      "checksum": "E0EBB2E4D2549CC4C693D80CB6CD16467652AB2385B2EBBB5CBAEE3B63FD2904",
+      "id": "github_release/github.com/junegunn/fzf/v0.66.1/fzf-0.66.1-linux_arm64.tar.gz",
+      "checksum": "B099EE8468D91D12C0FEEF1801409D441D0E0CD44EC47E0C265952AA14E4FC0F",
       "algorithm": "sha256"
     },
     {
@@ -71,13 +71,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.48.1/yq_linux_amd64",
-      "checksum": "99DF6047F5B577A9D25F969F7C3823ADA3488DE2E2115B30A0ABB10D9324FD9F",
+      "id": "github_release/github.com/mikefarah/yq/v4.48.2/yq_linux_amd64",
+      "checksum": "0FFC35320180D4911BC3A772934DA508715E08AF444CB33D4D43660065E25BCC",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.48.1/yq_linux_arm64",
-      "checksum": "0E46B5B926A9E57C526FA2BD8F8E38B7E17FBF6E2403FF1741F3B268E3363A9E",
+      "id": "github_release/github.com/mikefarah/yq/v4.48.2/yq_linux_arm64",
+      "checksum": "3C21630FDA217239A5B7D718D08F08E02503098230B3ABD49195D315A6DCFE45",
       "algorithm": "sha256"
     },
     {
