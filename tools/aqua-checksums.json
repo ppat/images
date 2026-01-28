@@ -21,6 +21,11 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/bootandy/dust/v1.2.3/dust-v1.2.3-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "02B6DB1FCA7FBB2137F961619F2B1498B26CB3B3CBD3EC3CC3CF23907A354C18",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/bootandy/dust/v1.2.3/dust-v1.2.3-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "2767E53A07A6F887C95D80DC7B976FBB0F85C24FA19E83704639FF5D67EBFBF4",
       "algorithm": "sha256"
@@ -141,8 +146,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.447.1/registry.yaml",
-      "checksum": "324ED65ED60627EBE90CFD5A63985ECFDA545954EFC0B9208A9B054FAD86ED4226AAD93D7314666F170A53DF89EE90769FF74D8A71AE90B47C5D2F00F3C01CF5",
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.449.0/registry.yaml",
+      "checksum": "54852C061360F8B7CE71D70714B1994679D0874D5894651DCED8E23CED8685A1A2CD016599DBEA889F188B768181E25B94744312DB564DC9C3EA072EC7279734",
       "algorithm": "sha512"
     }
   ]
