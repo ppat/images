@@ -11,7 +11,7 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 
 # upx
 # renovate: datasource=github-releases depName=upx/upx
-ARG UPX_VERSION="5.0.2"
+ARG UPX_VERSION="5.1.0"
 ARG TARGETARCH="amd64"
 WORKDIR /tmp
 RUN --mount=type=tmpfs,target=/tmp \
