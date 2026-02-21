@@ -11,23 +11,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.5/btop-aarch64-linux-musl.tbz",
-      "checksum": "9A4167DA2DB7AA550867EA822CE9E6AD5B871C75D5B9FD1CC05FC88B03E0414A",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.6/btop-aarch64-unknown-linux-musl.tbz",
+      "checksum": "7902578C0439332573148CAF6B3515DF2B158D163BAEEFF046028E428EC3295A",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.5/btop-x86_64-linux-musl.tbz",
-      "checksum": "206B0F9334E93C06DE9025EAF90676C374CA79815B41DADFF1B36EF4E4E6D1D4",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.6/btop-x86_64-unknown-linux-musl.tbz",
+      "checksum": "9BF7ED170423BB3709A8020767BD2CA529C5632AF478F229DCE7CDFD32B25691",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.3/dust-v1.2.3-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "02B6DB1FCA7FBB2137F961619F2B1498B26CB3B3CBD3EC3CC3CF23907A354C18",
+      "id": "github_release/github.com/bootandy/dust/v1.2.4/dust-v1.2.4-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "E09B0D24B5DA0FA06AECF1561849C13AE41EF055C1CE7077E35E9A46744B16AF",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.3/dust-v1.2.3-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "2767E53A07A6F887C95D80DC7B976FBB0F85C24FA19E83704639FF5D67EBFBF4",
+      "id": "github_release/github.com/bootandy/dust/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "4E313F9F854017E58A2ADA4C0D1774677B8CF53D63AB55A991D5871D5F504452",
       "algorithm": "sha256"
     },
     {
@@ -66,23 +66,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.0/kustomize_v5.8.0_linux_amd64.tar.gz",
-      "checksum": "4DFA8307358DD9284AA4D2B1D5596766A65B93433E8FA3F9F74498941F01C5EF",
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz",
+      "checksum": "029A7F0F4E1932C52A0476CF02A0FD855C0BB85694B82C338FC648DCB53A819D",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.0/kustomize_v5.8.0_linux_arm64.tar.gz",
-      "checksum": "A4F48B4C3D4CA97D748943E19169DE85A2E86E80BCC09558603E2AA66FB15CE1",
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.1/kustomize_v5.8.1_linux_arm64.tar.gz",
+      "checksum": "0953EA3E476F66D6DDFCD911D750F5167B9365AA9491B2326398E289FEF2C142",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.49.2/yq_linux_amd64",
-      "checksum": "BE2C0DDCF426B6A231648610EC5D1666AE50E9F6473E82F6486F9F4CB6E3E2F7",
+      "id": "github_release/github.com/mikefarah/yq/v4.50.1/yq_linux_amd64",
+      "checksum": "C7A1278E6BBC4924F41B56DB838086C39D13EE25DCB22089E7FBF16AC901F0D4",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.49.2/yq_linux_arm64",
-      "checksum": "783AA3C3BEEDCF2BF4AAF6262ECA38B92A16D3EA31E2218CA80BA8EC7226B248",
+      "id": "github_release/github.com/mikefarah/yq/v4.50.1/yq_linux_arm64",
+      "checksum": "CF0A663D8E4E00BB61507C5237B95B45A6AAA1FBEDAC77F4DC8ABDADD5E2B745",
       "algorithm": "sha256"
     },
     {
@@ -126,23 +126,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.34.3/bin/linux/amd64/kubectl",
-      "checksum": "AB60CA5F0FD60C1EB81B52909E67060E3BA0BD27E55A8AC147CBC2172FF14212",
+      "id": "http/dl.k8s.io/v1.35.0/bin/linux/amd64/kubectl",
+      "checksum": "A2E984A18A0C063279D692533031C1EFF93A262AFCC0AFDC517375432D060989",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.34.3/bin/linux/arm64/kubectl",
-      "checksum": "46913A7AA0327F6CC2E1CC2775D53C4A2AF5E52F7FD8DACBFBFD098E757F19E9",
+      "id": "http/dl.k8s.io/v1.35.0/bin/linux/arm64/kubectl",
+      "checksum": "58F82F9FE796C375C5C4B8439850B0F3F4D401A52434052F2DF46035A8789E25",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.19.4-linux-amd64.tar.gz",
-      "checksum": "759C656FBD9C11E6A47784ECBEAC6AD1EB16A9E76D202E51163AB78504848862",
+      "id": "http/get.helm.sh/helm-v3.20.0-linux-amd64.tar.gz",
+      "checksum": "DBB4C8FC8E19D159D1A63DDA8DB655F9FFA4AAC1B9A6B188B34A40957119B286",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.19.4-linux-arm64.tar.gz",
-      "checksum": "9E1064F5DE43745BDEDBFF2722A1674D0397BC4B4D8D8196D52A2B730909FE62",
+      "id": "http/get.helm.sh/helm-v3.20.0-linux-arm64.tar.gz",
+      "checksum": "BFB14953295D5324D47AB55F3DFBA6DA28D46C848978C8FBF412D4271BDC29F1",
       "algorithm": "sha256"
     },
     {
