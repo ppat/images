@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.56.5/json-schema/aqua-yaml.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.56.6/json-schema/aqua-yaml.json
 checksum:
   enabled: true
   require_checksum: true
@@ -16,7 +16,7 @@ packages:
 - name: fluxcd/flux2@v2.7.5
 - name: helm/helm@v3.20.0
 - name: junegunn/fzf@v0.67.0
-- name: kubernetes/kubectl@v1.35.0
+- name: kubernetes/kubectl@v1.35.1
 - name: kubernetes-sigs/krew@v0.4.5
   command_aliases:
   - command: krew
