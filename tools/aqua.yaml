@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.55.3/json-schema/aqua-yaml.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.56.5/json-schema/aqua-yaml.json
 checksum:
   enabled: true
   require_checksum: true
@@ -10,19 +10,19 @@ registries:
 - type: standard
   ref: v4.458.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-- name: aristocratos/btop@v1.4.5
-- name: bootandy/dust@v1.2.3
+- name: aristocratos/btop@v1.4.6
+- name: bootandy/dust@v1.2.4
 - name: dalance/procs@v0.14.10
 - name: fluxcd/flux2@v2.7.5
-- name: helm/helm@v3.19.4
+- name: helm/helm@v3.20.0
 - name: junegunn/fzf@v0.67.0
-- name: kubernetes/kubectl@v1.34.3
+- name: kubernetes/kubectl@v1.35.0
 - name: kubernetes-sigs/krew@v0.4.5
   command_aliases:
   - command: krew
     alias: kubectl-krew
-- name: kubernetes-sigs/kustomize@kustomize/v5.8.0
-- name: mikefarah/yq@v4.49.2
+- name: kubernetes-sigs/kustomize@kustomize/v5.8.1
+- name: mikefarah/yq@v4.50.1
 - name: muesli/duf@v0.9.1
 - name: sharkdp/bat@v0.26.1
 - name: sharkdp/fd@v10.3.0
