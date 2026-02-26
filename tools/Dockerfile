@@ -28,7 +28,7 @@ RUN curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v${A
     chmod +x aqua-installer
 
 # renovate: datasource=github-releases depName=aquaproj/aqua
-ARG AQUA_VERSION="2.56.5"
+ARG AQUA_VERSION="2.56.7"
 RUN ./aqua-installer -v v${AQUA_VERSION}
 
 ENV PATH=/root/.local/share/aquaproj-aqua/bin:$PATH
