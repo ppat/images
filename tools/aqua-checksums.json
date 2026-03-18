@@ -31,8 +31,8 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/dalance/procs/v0.14.10/procs-v0.14.10-x86_64-linux.zip",
-      "checksum": "AD84B948703E74379EDC32D80FE9B862F6F1E95FC1E305FF0A8A3B4CB7B05EE4",
+      "id": "github_release/github.com/dalance/procs/v0.14.11/procs-v0.14.11-x86_64-linux.zip",
+      "checksum": "9C4FAECF85A3AF4D3D39AAE47D04FA31D0A6EB0A239039F68D3F55043F04F974",
       "algorithm": "sha256"
     },
     {
@@ -76,13 +76,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.50.1/yq_linux_amd64",
-      "checksum": "C7A1278E6BBC4924F41B56DB838086C39D13EE25DCB22089E7FBF16AC901F0D4",
+      "id": "github_release/github.com/mikefarah/yq/v4.52.4/yq_linux_amd64",
+      "checksum": "0C4D965EA944B64B8FDDAF7F27779EE3034E5693263786506CCD1C120F184E8C",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.50.1/yq_linux_arm64",
-      "checksum": "CF0A663D8E4E00BB61507C5237B95B45A6AAA1FBEDAC77F4DC8ABDADD5E2B745",
+      "id": "github_release/github.com/mikefarah/yq/v4.52.4/yq_linux_arm64",
+      "checksum": "4C2CC022A129BE5CC1187959BB4B09BEBC7FB543C5837B93001C68F97CE39A5D",
       "algorithm": "sha256"
     },
     {
@@ -126,13 +126,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.0/bin/linux/amd64/kubectl",
-      "checksum": "A2E984A18A0C063279D692533031C1EFF93A262AFCC0AFDC517375432D060989",
+      "id": "http/dl.k8s.io/v1.35.2/bin/linux/amd64/kubectl",
+      "checksum": "924EB50779153F20CB668117D141440B95DF2F325A64452D78DFF9469145E277",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.0/bin/linux/arm64/kubectl",
-      "checksum": "58F82F9FE796C375C5C4B8439850B0F3F4D401A52434052F2DF46035A8789E25",
+      "id": "http/dl.k8s.io/v1.35.2/bin/linux/arm64/kubectl",
+      "checksum": "CD859449F54AD2CB05B491C490C13BB836CDD0886AE013C0AED3DD67FF747467",
       "algorithm": "sha256"
     },
     {
