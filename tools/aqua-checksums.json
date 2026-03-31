@@ -36,13 +36,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.7.5/flux_2.7.5_linux_amd64.tar.gz",
-      "checksum": "1E92141E8498289E4B27411385AEB18396053176CF297B0CB99ABD6CA8293E75",
+      "id": "github_release/github.com/fluxcd/flux2/v2.8.1/flux_2.8.1_linux_amd64.tar.gz",
+      "checksum": "15D96C2246E129903C7BDAEB9A5CD3074C774763523601526E1C31F7B1513F08",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.7.5/flux_2.7.5_linux_arm64.tar.gz",
-      "checksum": "89D3EBB47EE5F7A0DEF33217E8DCB885E0BEC41D01D0E23FC84E9ABA0416C24E",
+      "id": "github_release/github.com/fluxcd/flux2/v2.8.1/flux_2.8.1_linux_arm64.tar.gz",
+      "checksum": "0CF9F567939C38E9735F1DAD525C2118D1E0892ABDB6FF0A03134551F61F0804",
       "algorithm": "sha256"
     },
     {
@@ -56,13 +56,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-linux_amd64.tar.gz",
-      "checksum": "BACC06800BDA14EC063CD0B6F377A961FDF4661C00366BF9834723CD28BFABC7",
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.5.0/krew-linux_amd64.tar.gz",
+      "checksum": "5D5A221FFFDF331D1C5C68D9917530ECD102E0DEF5B5A6D62EEED1C404EFB28A",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/krew/v0.4.5/krew-linux_arm64.tar.gz",
-      "checksum": "E02BDB8FE67CD6641B9ED6B45C6D084F7AA5B161FE49191CAF5B1D5E83B0C0F9",
+      "id": "github_release/github.com/kubernetes-sigs/krew/v0.5.0/krew-linux_arm64.tar.gz",
+      "checksum": "AB7A98B992424E76B6C162F8B67FB76C4B1E243598AA2807BDF226752F964548",
       "algorithm": "sha256"
     },
     {
@@ -126,13 +126,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.2/bin/linux/amd64/kubectl",
-      "checksum": "924EB50779153F20CB668117D141440B95DF2F325A64452D78DFF9469145E277",
+      "id": "http/dl.k8s.io/v1.35.3/bin/linux/amd64/kubectl",
+      "checksum": "FD31C7D7129260E608F6FAF92D5984C3267AD0B5EAD3BCED2FE125686E286AD6",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.2/bin/linux/arm64/kubectl",
-      "checksum": "CD859449F54AD2CB05B491C490C13BB836CDD0886AE013C0AED3DD67FF747467",
+      "id": "http/dl.k8s.io/v1.35.3/bin/linux/arm64/kubectl",
+      "checksum": "6F0CD088A82DDE5D5807122056069E2FAC4ED447CC518EFC055547AE46525F14",
       "algorithm": "sha256"
     },
     {
