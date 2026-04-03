@@ -13,16 +13,16 @@ packages:
 - name: aristocratos/btop@v1.4.6
 - name: bootandy/dust@v1.2.4
 - name: dalance/procs@v0.14.11
-- name: fluxcd/flux2@v2.8.1
+- name: fluxcd/flux2@v2.8.3
 - name: helm/helm@v3.20.1
-- name: junegunn/fzf@v0.68.0
+- name: junegunn/fzf@v0.70.0
 - name: kubernetes/kubectl@v1.35.3
 - name: kubernetes-sigs/krew@v0.5.0
   command_aliases:
   - command: krew
     alias: kubectl-krew
 - name: kubernetes-sigs/kustomize@kustomize/v5.8.1
-- name: mikefarah/yq@v4.52.4
+- name: mikefarah/yq@v4.52.5
 - name: muesli/duf@v0.9.1
 - name: sharkdp/bat@v0.26.1
 - name: sharkdp/fd@v10.3.0
