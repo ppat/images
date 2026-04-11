@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.56.7/json-schema/aqua-yaml.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/v2.57.0/json-schema/aqua-yaml.json
 checksum:
   enabled: true
   require_checksum: true
@@ -25,6 +25,6 @@ packages:
 - name: mikefarah/yq@v4.52.5
 - name: muesli/duf@v0.9.1
 - name: sharkdp/bat@v0.26.1
-- name: sharkdp/fd@v10.3.0
+- name: sharkdp/fd@v10.4.2
 - name: sharkdp/hyperfine@v1.20.0
 - name: BurntSushi/ripgrep@15.1.0
