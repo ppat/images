@@ -136,13 +136,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.20.2-linux-amd64.tar.gz",
-      "checksum": "258E830A9E613C8A7A302D6059B4BB3B9758F2F3E1BB8EA0D707CE10A9A72FEA",
+      "id": "http/get.helm.sh/helm-v4.0.5-linux-amd64.tar.gz",
+      "checksum": "730E4E9FBFF94168249DDD0B9B1B8C357B7F64815462DD88C6B39F09BF18B814",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v3.20.2-linux-arm64.tar.gz",
-      "checksum": "5EA2D6BC2CDA3F8EDF985E028809F5A9278F404FB8AB24044DE9B7CB9B79A691",
+      "id": "http/get.helm.sh/helm-v4.0.5-linux-arm64.tar.gz",
+      "checksum": "206A7747702D13994A93629EAED4259BD9D0AEC6E23CA52D640F47F7EDFDC863",
       "algorithm": "sha256"
     },
     {
