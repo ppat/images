@@ -16,7 +16,7 @@ packages:
 - name: fluxcd/flux2@v2.8.5
 - name: helm/helm@v4.1.4
 - name: junegunn/fzf@v0.70.0
-- name: kubernetes/kubectl@v1.35.3
+- name: kubernetes/kubectl@v1.35.4
 - name: kubernetes-sigs/krew@v0.5.0
   command_aliases:
   - command: krew
