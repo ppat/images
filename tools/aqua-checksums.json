@@ -11,13 +11,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.6/btop-aarch64-unknown-linux-musl.tbz",
-      "checksum": "7902578C0439332573148CAF6B3515DF2B158D163BAEEFF046028E428EC3295A",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.7/btop-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "6270DE0EF4C84CF0EEA61CB148B3AD9AE91A11E9C3309867FFC6B3751024C252",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/aristocratos/btop/v1.4.6/btop-x86_64-unknown-linux-musl.tbz",
-      "checksum": "9BF7ED170423BB3709A8020767BD2CA529C5632AF478F229DCE7CDFD32B25691",
+      "id": "github_release/github.com/aristocratos/btop/v1.4.7/btop-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "5099054DD6A101BD12EB6FF3702A9A6A3F57AAA27923A0DA478AE5B517FAF335",
       "algorithm": "sha256"
     },
     {
@@ -36,23 +36,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.8.6/flux_2.8.6_linux_amd64.tar.gz",
-      "checksum": "C53CC990AE266F7840F64C81515D701D8821D558A9062AA4211D71B38CF044BE",
+      "id": "github_release/github.com/fluxcd/flux2/v2.8.8/flux_2.8.8_linux_amd64.tar.gz",
+      "checksum": "3791D8FBB73B967ADA021186F7B46686A2B180CE206D3C279C3F2AD183877A7F",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.8.6/flux_2.8.6_linux_arm64.tar.gz",
-      "checksum": "BC460320C2D33AD833791277896DD1AAF1CFF6B3E64BA397C44238F00D4AE5BC",
+      "id": "github_release/github.com/fluxcd/flux2/v2.8.8/flux_2.8.8_linux_arm64.tar.gz",
+      "checksum": "738604AB040055ACE69777988A24DEF98ADA1AFF14AE4726E733089DC8CC5E12",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.71.0/fzf-0.71.0-linux_amd64.tar.gz",
-      "checksum": "22639BB38489DBCA8ACEF57850CBB50231AB714D0E8E855AC52FAE8B41233DF4",
+      "id": "github_release/github.com/junegunn/fzf/v0.72.0/fzf-0.72.0-linux_amd64.tar.gz",
+      "checksum": "0E58E4BD0B3C5D68C56B54C460A6863D0DE79633ED18D388575A960AB447B006",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.71.0/fzf-0.71.0-linux_arm64.tar.gz",
-      "checksum": "98B7D322EFAE9C37E4BFBBAB1CBCD8722EB742D9399511F96375FEB40CC35D1D",
+      "id": "github_release/github.com/junegunn/fzf/v0.72.0/fzf-0.72.0-linux_arm64.tar.gz",
+      "checksum": "A0A5B50730F568C5F08B8DBBA1E6E598DB253E1856D371290086786B889B996B",
       "algorithm": "sha256"
     },
     {
@@ -76,13 +76,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.52.5/yq_linux_amd64",
-      "checksum": "75D893A0D5940D1019CB7CDC60001D9E876623852C31CFC6267047BC31149FA9",
+      "id": "github_release/github.com/mikefarah/yq/v4.53.2/yq_linux_amd64",
+      "checksum": "D56BF5C6819E8E696340C312BD70F849DC1678A7CDA9C2AD63EEBD906371D56B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/mikefarah/yq/v4.52.5/yq_linux_arm64",
-      "checksum": "90FA510C50EE8CA75544DBFFFED10C88ED59B36834DF35916520CDDC623D9AAA",
+      "id": "github_release/github.com/mikefarah/yq/v4.53.2/yq_linux_arm64",
+      "checksum": "03061B2A50C7A498DE2BBB92D7CB078CE433011F085A4994117C2726BE4106EA",
       "algorithm": "sha256"
     },
     {
@@ -126,13 +126,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.4/bin/linux/amd64/kubectl",
-      "checksum": "B529430DF69A688FD61B64AD2299EDB5FD71CB58BE2A4779DBA624C7D3510EFD",
+      "id": "http/dl.k8s.io/v1.36.0/bin/linux/amd64/kubectl",
+      "checksum": "123D8C8844F46B1244C547FFFB3C17180C0C26DAC9890589FE7E67763298748E",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.35.4/bin/linux/arm64/kubectl",
-      "checksum": "6A5A4CC4E396D7626A7A693A3044B51C75520F81DB30FE6816C2554E53BE336F",
+      "id": "http/dl.k8s.io/v1.36.0/bin/linux/arm64/kubectl",
+      "checksum": "9F9D9C44A7B5264515AC9DA5991584E2395BD50662E651132337E7B4D0C56F8F",
       "algorithm": "sha256"
     },
     {
