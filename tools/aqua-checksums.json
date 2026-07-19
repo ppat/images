@@ -1,13 +1,13 @@
 {
   "checksums": [
     {
-      "id": "github_release/github.com/BurntSushi/ripgrep/15.1.0/ripgrep-15.1.0-aarch64-unknown-linux-gnu.tar.gz",
-      "checksum": "2B661C6EF508E902F388E9098D9C4C5ACA72C87B55922D94ABDBA830B4DC885E",
+      "id": "github_release/github.com/BurntSushi/ripgrep/15.2.0/ripgrep-15.2.0-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "A740B91C82EAF9914CFEDD353572F2791CBE0162C84101EE0951058F4DCBC90D",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/BurntSushi/ripgrep/15.1.0/ripgrep-15.1.0-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "1C9297BE4A084EEA7ECAEDF93EB03D058D6FAAE29BBC57ECDAF5063921491599",
+      "id": "github_release/github.com/BurntSushi/ripgrep/15.2.0/ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "33E15BCF1624B25CDD2A55813A47A2F95DBE126268203E76AA6A585D1E7B149C",
       "algorithm": "sha256"
     },
     {
@@ -36,23 +36,23 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.8.8/flux_2.8.8_linux_amd64.tar.gz",
-      "checksum": "3791D8FBB73B967ADA021186F7B46686A2B180CE206D3C279C3F2AD183877A7F",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_amd64.tar.gz",
+      "checksum": "4092B367FD060097976FB7261601F79420ECF7266328417DFD8DFEE27DE0E6A3",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.8.8/flux_2.8.8_linux_arm64.tar.gz",
-      "checksum": "738604AB040055ACE69777988A24DEF98ADA1AFF14AE4726E733089DC8CC5E12",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_arm64.tar.gz",
+      "checksum": "665BFE5AEB843FAF907E7F77250C31840499FF2DC65A64C2479409E3728748D1",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.73.1/fzf-0.73.1-linux_amd64.tar.gz",
-      "checksum": "F3252C2C366BC1700D3C85781EC8C9695998927AC127870EB049CEEA2D540F8A",
+      "id": "github_release/github.com/junegunn/fzf/v0.74.1/fzf-0.74.1-linux_amd64.tar.gz",
+      "checksum": "DF53438BE5F51E151BB4044D78FDA72BDFE209E3ECD2BAECAE48E8DEA370C81B",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/junegunn/fzf/v0.73.1/fzf-0.73.1-linux_arm64.tar.gz",
-      "checksum": "A408B0B6C08D486307B8F1554F967B8B50EE1B3EA8B4035E3161BAB31FDFC28D",
+      "id": "github_release/github.com/junegunn/fzf/v0.74.1/fzf-0.74.1-linux_arm64.tar.gz",
+      "checksum": "F22204DD1A091D43E102268D062FD53B47133C8D8581671EE5EB225B75E31183",
       "algorithm": "sha256"
     },
     {
