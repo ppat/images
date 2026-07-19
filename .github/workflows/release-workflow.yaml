@@ -96,7 +96,7 @@ jobs:
 
   publish:
     needs: [load-image-metadata, create-release]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@5a5a6e1b9ef08895f7a814de0eb0a8322a0bc3a0 # v3.3.1
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@d8be434313cb0ee0a3b27777b969760cb48b1aa7 # v4.0.0
     with:
       image_context_path: ${{ inputs.image_name }}
       dockerhub_repository: ppatlabs/${{ inputs.image_name }}
