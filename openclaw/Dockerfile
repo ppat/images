@@ -14,12 +14,12 @@ FROM --platform=$TARGETPLATFORM ghcr.io/openclaw/openclaw:2026.7.1-slim@sha256:6
 RUN openclaw plugins install npm:@openclaw/whatsapp@2026.7.1 --pin --force && \
     openclaw plugins install npm:@openclaw/diagnostics-prometheus@2026.7.1 --pin --force
 
-# `openclaw plugins install` lands packages under $OPENCLAW_DATA_DIR/extensions (the managed
-# plugin root, defaults to ~/.openclaw/extensions) -- the same path operators typically mount
-# a persistent volume over for gateway state. A freshly-mounted volume starts empty and would
-# hide what was just installed above, so keep an immutable copy for docker-entrypoint.sh to
-# reseed from at container start.
-RUN cp -a /home/node/.openclaw/extensions /home/node/.openclaw-extensions.baked
+# npm-source installs land plugin package state (npm/projects/*) and the pinned install records
+# under $OPENCLAW_DATA_DIR (defaults to /home/node/.openclaw) -- exactly the path a deployment
+# mounts an (initially empty) PVC over for gateway state, which shadows everything installed
+# above. Keep an immutable seed copy of the whole data dir for docker-entrypoint.sh to restore
+# missing entries into the mounted data dir at container start.
+RUN cp -a /home/node/.openclaw /home/node/.openclaw-seed
 
 COPY --chown=node:node --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
