@@ -6,8 +6,13 @@ FROM --platform=$TARGETPLATFORM ghcr.io/openclaw/openclaw:2026.7.1-slim@sha256:6
 # gateway startup, which fails under a locked-down deployment (read-only rootfs, no ClawHub/
 # npm egress) and is treated as a fatal startup migration for a *configured* channel plugin.
 # Installing them here, where registry egress exists, removes that runtime dependency.
-RUN openclaw plugins install clawhub:@openclaw/whatsapp --force && \
-    openclaw plugins install clawhub:@openclaw/diagnostics-prometheus --force
+# Pin exact plugin versions for reproducibility/supply-chain. `npm:<scoped>@<version>` is the
+# doc-confirmed form for scoped packages with an explicit version; `--pin` records the resolved
+# exact version, and `--force` confirms the non-ClawHub (npm) source non-interactively during
+# the build. Pinned to 2026.7.1 to match the base image + the deployed app version. (These are
+# the same @openclaw/* artifacts ClawHub serves -- ClawHub installs fall back to npm anyway.)
+RUN openclaw plugins install npm:@openclaw/whatsapp@2026.7.1 --pin --force && \
+    openclaw plugins install npm:@openclaw/diagnostics-prometheus@2026.7.1 --pin --force
 
 # `openclaw plugins install` lands packages under $OPENCLAW_DATA_DIR/extensions (the managed
 # plugin root, defaults to ~/.openclaw/extensions) -- the same path operators typically mount
