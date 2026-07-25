@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "image-updates | all | openclaw | configure labels and semantic commit scope",
+      "addLabels": [
+        "image:openclaw"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/openclaw/openclaw"
+      ],
+      "semanticCommitScope": "openclaw"
+    }
+  ]
+}

@@ -40,6 +40,7 @@ module.exports = {
         'dev-tools',
         'freeradius-server',
         'github-actions',
+        'openclaw',
         'release',
         'renovate',
         'tools'

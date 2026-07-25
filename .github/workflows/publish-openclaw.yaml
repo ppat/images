@@ -1,0 +1,27 @@
+---
+# yamllint disable rule:line-length
+name: publish-openclaw
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - openclaw/**
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/release-workflow.yaml
+    secrets: inherit
+    with:
+      image_name: openclaw
+      platforms: linux/amd64,linux/arm64
+      source_git_ref: ${{ github.ref }}
