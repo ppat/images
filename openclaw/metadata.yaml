@@ -1,0 +1,9 @@
+---
+# yamllint disable-line rule:line-length
+# renovate: datasource=docker depName=ghcr.io/openclaw/openclaw
+image_version: "2026.7.1"
+
+label_title: "openclaw"
+label_description: "OpenClaw with WhatsApp + diagnostics-prometheus plugins baked in for locked-down deploys."
+
+build_timeout: 20
