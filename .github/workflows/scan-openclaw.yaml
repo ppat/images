@@ -1,0 +1,101 @@
+---
+# yamllint disable rule:line-length
+#
+# Report-only security scan for the openclaw image (soft launch). Every scan/upload step below
+# carries `continue-on-error: true` (and Trivy/Dockle are told to always exit 0), so findings are
+# surfaced in PR logs, the weekly scheduled run, and the Security tab without ever failing a build.
+# To flip this to a gating check once the plugin/base image findings have been triaged (see
+# .trivyignore): drop `continue-on-error: true` from the steps below and change Trivy's
+# `exit-code: '0'` / Dockle's `-c` `exit-code: '0'` to `'1'`.
+name: scan-openclaw
+
+on:
+  pull_request:
+    paths:
+    - 'openclaw/**'
+    - '.github/workflows/scan-openclaw.yaml'
+  schedule:
+  - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+    - name: Build openclaw image
+      uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+      with:
+        context: openclaw
+        platforms: linux/amd64
+        load: true
+        push: false
+        tags: openclaw:scan
+
+    - name: Trivy scan (SARIF)
+      id: trivy-sarif
+      continue-on-error: true
+      uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+      with:
+        image-ref: openclaw:scan
+        scanners: 'vuln,secret,misconfig'
+        severity: 'HIGH,CRITICAL'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        exit-code: '0'
+
+    - name: Trivy scan (table, human-readable log)
+      continue-on-error: true
+      uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+      with:
+        image-ref: openclaw:scan
+        scanners: 'vuln,secret,misconfig'
+        severity: 'HIGH,CRITICAL'
+        format: 'table'
+        exit-code: '0'
+
+    - name: Upload Trivy SARIF to Security tab
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
+      with:
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy'
+
+    - name: Dockle scan (CIS/best-practices)
+      continue-on-error: true
+      uses: goodwithtech/dockle-action@e30e6af832aad6ea7dca2a248d31a85eab6dbd68 # v0.4.15
+      with:
+        image: 'openclaw:scan'
+        exit-code: '0'
+        format: 'list'
+
+    - name: Generate SBOM
+      id: sbom
+      continue-on-error: true
+      uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+      with:
+        image: 'openclaw:scan'
+        format: 'spdx-json'
+        output-file: 'openclaw-sbom.spdx.json'
+        upload-artifact: false
+
+    - name: Upload SBOM artifact
+      continue-on-error: true
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: openclaw-sbom
+        path: openclaw-sbom.spdx.json
