@@ -6,7 +6,7 @@
 # surfaced in PR logs, the weekly scheduled run, and the Security tab without ever failing a build.
 # To flip this to a gating check once the plugin/base image findings have been triaged (see
 # .trivyignore): drop `continue-on-error: true` from the steps below and change Trivy's
-# `exit-code: '0'` / Dockle's `-c` `exit-code: '0'` to `'1'`.
+# `exit-code: '0'` / Dockle's `--exit-code 0` to `1`.
 name: scan-openclaw
 
 on:
@@ -75,13 +75,16 @@ jobs:
         sarif_file: 'trivy-results.sarif'
         category: 'trivy'
 
+    # goodwithtech's org isn't a GitHub-verified creator, so goodwithtech/dockle-action is
+    # rejected by this repo's actions/permissions allow-list (github-owned + verified-creator +
+    # an explicit pattern list). Run the official dockle image directly instead -- a `run:` step
+    # invoking a container isn't subject to that allow-list, only `uses:` steps are.
     - name: Dockle scan (CIS/best-practices)
       continue-on-error: true
-      uses: goodwithtech/dockle-action@e30e6af832aad6ea7dca2a248d31a85eab6dbd68 # v0.4.15
-      with:
-        image: 'openclaw:scan'
-        exit-code: '0'
-        format: 'list'
+      run: >-
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock
+        goodwithtech/dockle:v0.4.15@sha256:eade932f793742de0aa8755406c7677cd7696f8675b6180926f7eeffa7abe6b9
+        --exit-code 0 --format list openclaw:scan
 
     - name: Generate SBOM
       id: sbom
