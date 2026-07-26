@@ -29,7 +29,12 @@ jobs:
       image_context_path: openclaw
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
-      platforms: linux/amd64,linux/arm64
+      # amd64-only (diverges from the repo's multi-arch norm): baking in memory-lancedb pushes
+      # the emulated (QEMU) arm64 build past this image's build timeout -- its large native lib
+      # makes the plugin install + `cp -a` seed + SBOM step under emulation too slow (amd64
+      # finishes in <2m; arm64 blew the 20m cap). The target homelab node is x64/amd64, so arm64
+      # isn't needed here. Restore linux/amd64,linux/arm64 if a native arm64 builder is available.
+      platforms: linux/amd64
       private_registry_repository: ${{ vars.CONTAINER_REGISTRY_PATH }}/openclaw
       private_registry_build_cache: ${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/openclaw
       source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}

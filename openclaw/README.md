@@ -33,3 +33,11 @@ not enabled unless a deployment's config turns them on.
 - **`umask 077`**: everything the gateway creates under the state dir lands owner-only
   (600/700), satisfying OpenClaw's `fs.credentials_dir.perms_writable` /
   `fs.sessions_store.perms_readable` / `fs.config.perms_world_readable` audit checks.
+
+## Architectures
+
+`linux/amd64` only, unlike the repo's other (multi-arch) images. `@openclaw/memory-lancedb`
+carries a large native library that makes the emulated (QEMU) `arm64` build exceed this image's
+build timeout; the target homelab node is x64/amd64, so `arm64` isn't built. Restore
+`linux/amd64,linux/arm64` in `test-build-openclaw.yaml`/`publish-openclaw.yaml` if a native
+`arm64` builder becomes available.
