@@ -1,10 +1,13 @@
 #!/bin/bash
 set -eo pipefail
 
-# All gateway-created state files/dirs land 600/700 so they don't trip OpenClaw's
-# fs.credentials_dir.perms_writable / fs.sessions_store.perms_readable audit checks on a
-# group-writable fsGroup-mounted PVC. (The state-dir *root* is the kubelet-owned fsGroup mount
-# point -- umask can't affect it, so fs.state_dir.perms_group_writable stays config-suppressed.)
+# Files this process creates land 600/700 (dirs) so they don't trip OpenClaw's fs-perms audit
+# checks. umask alone isn't enough on a Kubernetes fsGroup-mounted PVC: the kubelet re-applies
+# group rw to every EXISTING file on the volume at each mount (before this container starts), so
+# state persisted from a prior boot comes back group-writable -- the chmod re-tighten step below
+# fixes that on every start. The state-dir ROOT stays group-writable regardless (it's the
+# kubelet-owned fsGroup mount point, chmod EPERM for uid 1000) and remains audit-suppressed
+# (fs.state_dir.perms_group_writable).
 umask 077
 
 STATE_DIR="${OPENCLAW_STATE_DIR:-${OPENCLAW_DATA_DIR:-/home/node/.openclaw}}"
@@ -37,6 +40,22 @@ if [[ -n "${CONFIG_SEED}" && -f "${CONFIG_SEED}" && -n "${CONFIG_PATH}" && ! -e 
     echo "docker-entrypoint: could not seed config ${CONFIG_PATH} from ${CONFIG_SEED}" >&2
   fi
 fi
+
+# Re-tighten the uid-1000-owned sensitive state trees AFTER the kubelet's fsGroup mount (which
+# ran before this container started and re-added group rw to everything on the PVC, defeating
+# umask on files persisted from a prior boot). This is what makes the fixes stick across restarts
+# -- a manual chmod would be undone by the next mount. Covers, per OpenClaw's security audit:
+#   fs.credentials_dir.perms_writable   -> <state>/credentials             (dir 700)
+#   fs.auth_profiles.perms_writable     -> <state>/agents/*/agent/*.sqlite* (files 600)
+#   fs.sessions_store.perms_readable    -> <state>/agents/*/sessions/*.json (files 600)
+# `go-rwx` recursively strips group/other on these trees; uid 1000 owns them so it keeps access
+# via owner bits, and it doesn't touch the (kubelet-owned, un-chmod-able) state-dir root. The
+# large npm/plugin trees are left alone -- they aren't audited and don't need tightening.
+for tree in "${STATE_DIR}/credentials" "${STATE_DIR}/agents"; do
+  if [[ -d "${tree}" ]]; then
+    chmod -R go-rwx "${tree}" 2>/dev/null || true
+  fi
+done
 
 # Exec the upstream gateway command supplied via CMD (kept in CMD, not hardcoded here, so it stays
 # explicit/overridable). The base image ENTRYPOINT (tini -s --) remains PID 1 for signal handling.

@@ -16,7 +16,7 @@ not enabled unless a deployment's config turns them on.
 ## Entrypoint wrapper
 
 `docker-entrypoint.sh` (invoked via `CMD`, with the base image's `tini -s --` staying PID 1 as
-`ENTRYPOINT`) does three things before `exec`-ing the upstream gateway command:
+`ENTRYPOINT`) does four things before `exec`-ing the upstream gateway command:
 
 - **State seeding**: restores the build-time plugin/state seed (`/home/node/.openclaw-seed`)
   into the mounted state dir (`OPENCLAW_STATE_DIR`/`OPENCLAW_DATA_DIR`, default
@@ -30,9 +30,18 @@ not enabled unless a deployment's config turns them on.
   `OPENCLAW_CONFIG_SEED` is unset, so it's backwards-compatible with deployments that seed
   config another way (e.g. a separate init container). Copy-if-absent means an in-place edit in
   a writable volume always wins.
-- **`umask 077`**: everything the gateway creates under the state dir lands owner-only
-  (600/700), satisfying OpenClaw's `fs.credentials_dir.perms_writable` /
-  `fs.sessions_store.perms_readable` / `fs.config.perms_world_readable` audit checks.
+- **`umask 077`**: everything the gateway *creates* this boot lands owner-only (files 600, dirs
+  700), satisfying OpenClaw's `fs.config.perms_world_readable` audit check and keeping fresh
+  state tight.
+- **State perms re-tighten**: on a Kubernetes `fsGroup`-mounted PVC the kubelet re-adds group
+  `rw` to every existing file at each mount (before this container starts), which `umask` can't
+  prevent for state persisted from a prior boot — so the entrypoint recursively `chmod go-rwx`s
+  the sensitive `<state>/credentials` and `<state>/agents` trees on every start (uid 1000 owns
+  them, so it keeps owner access). This is what makes the fix stick across restarts and clears
+  `fs.credentials_dir.perms_writable` / `fs.auth_profiles.perms_writable` /
+  `fs.sessions_store.perms_readable`. The state-dir root stays group-writable (kubelet-owned
+  mount point, not chmod-able by uid 1000) and remains audit-suppressed by the deployment's
+  config.
 
 ## Architectures
 
