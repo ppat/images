@@ -12,3 +12,24 @@ requires a writable home directory and network access to ClawHub/npm at startup.
 installs them ahead of time so a gateway with a read-only root filesystem and no outbound
 network access can still use them. memory-lancedb and lobster are baked in and available but
 not enabled unless a deployment's config turns them on.
+
+## Entrypoint wrapper
+
+`docker-entrypoint.sh` (invoked via `CMD`, with the base image's `tini -s --` staying PID 1 as
+`ENTRYPOINT`) does three things before `exec`-ing the upstream gateway command:
+
+- **State seeding**: restores the build-time plugin/state seed (`/home/node/.openclaw-seed`)
+  into the mounted state dir (`OPENCLAW_STATE_DIR`/`OPENCLAW_DATA_DIR`, default
+  `/home/node/.openclaw`) via `cp -n`, so a deployment mounting external storage (PVC, bind
+  mount) over that dir doesn't shadow what's baked into the image, while anything an operator
+  already persisted there wins.
+- **Config seeding**: if both `OPENCLAW_CONFIG_SEED` (e.g. a read-only ConfigMap mount) and
+  `OPENCLAW_CONFIG_PATH` are set and the target doesn't already exist, copies the seed to the
+  config path and `chmod 600`s it, so the gateway's own CLI can write the file back (channels
+  login, doctor) without hitting `EBUSY` against a read-only mount. This is a no-op when
+  `OPENCLAW_CONFIG_SEED` is unset, so it's backwards-compatible with deployments that seed
+  config another way (e.g. a separate init container). Copy-if-absent means an in-place edit in
+  a writable volume always wins.
+- **`umask 077`**: everything the gateway creates under the state dir lands owner-only
+  (600/700), satisfying OpenClaw's `fs.credentials_dir.perms_writable` /
+  `fs.sessions_store.perms_readable` / `fs.config.perms_world_readable` audit checks.

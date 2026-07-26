@@ -28,6 +28,7 @@ RUN cp -a /home/node/.openclaw /home/node/.openclaw-seed
 
 COPY --chown=node:node --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-# Base image ENTRYPOINT (tini -s --) is left untouched for correct PID 1 signal handling;
-# only CMD changes, to seed extensions before exec'ing the same upstream gateway command.
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
+# Base image ENTRYPOINT (tini -s --) is left untouched for correct PID 1 signal handling and
+# stays PID 1. The upstream gateway command now lives in CMD (explicit/overridable) instead of
+# being hardcoded in the entrypoint script, which seeds state/config then `exec "$@"`s it.
+CMD ["/usr/local/bin/docker-entrypoint.sh", "node", "openclaw.mjs", "gateway"]
