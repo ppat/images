@@ -1,0 +1,8 @@
+---
+# renovate: datasource=github-releases depName=obsidianmd/obsidian-releases
+image_version: "1.12.7"
+
+label_title: "obsidian"
+label_description: "Headless Obsidian with the Local REST API plugin baked in and auto-trusted."
+
+build_timeout: 30

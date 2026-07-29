@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "image-updates | all | obsidian | configure labels and semantic commit scope",
+      "addLabels": [
+        "image:obsidian"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "coddingtonbear/obsidian-local-rest-api",
+        "obsidianmd/obsidian-releases"
+      ],
+      "semanticCommitScope": "obsidian"
+    }
+  ]
+}
