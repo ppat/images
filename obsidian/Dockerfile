@@ -15,14 +15,27 @@ WORKDIR /tmp
 RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
-RUN --mount=type=cache,target=/var/cache/apt,id=obsidian-cache-apt-builder \
-    --mount=type=cache,target=/var/cache/debconf,id=obsidian-cache-debconf-builder \
-    --mount=type=cache,target=/var/lib/apt,id=obsidian-lib-apt-builder \
+# Cache mount ids carry ${TARGETARCH}: buildx instantiates this stage once per target platform
+# and cache mounts default to sharing=shared, so a single id would put two concurrent apt runs on
+# the same /var/lib/apt and one of them would die on the lock.
+RUN --mount=type=cache,target=/var/cache/apt,id=obsidian-cache-apt-builder-${TARGETARCH} \
+    --mount=type=cache,target=/var/cache/debconf,id=obsidian-cache-debconf-builder-${TARGETARCH} \
+    --mount=type=cache,target=/var/lib/apt,id=obsidian-lib-apt-builder-${TARGETARCH} \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -yq --no-install-recommends \
         ca-certificates \
         curl
 
+# STABLE channel, deliberately. Obsidian also has a beta/insider channel (1.13.x at time of
+# writing) and some community plugins already declare minAppVersion 1.13.0 -- Templater and
+# QuickAdd among them -- so a future maintainer will eventually be tempted to bump this to beta to
+# make a plugin load. Don't, without re-taking the decision: this container is the single writer
+# of the authoritative vault and the component everything else in the system stands on, and
+# tracking a pre-release channel there trades that stability for plugins whose value is to a human
+# sitting at the GUI. The REST API plugin this image exists to serve declares minAppVersion 1.8.7,
+# so the critical path has room to spare on stable.
+# Renovate can't drift this onto beta on its own: insider builds are not published as GitHub
+# releases in obsidianmd/obsidian-releases at all, so the datasource below only ever sees stable.
 # renovate: datasource=github-releases depName=obsidianmd/obsidian-releases
 ARG OBSIDIAN_VERSION="1.12.7"
 RUN --mount=type=tmpfs,target=/tmp \
