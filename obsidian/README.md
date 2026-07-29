@@ -3,7 +3,10 @@
 A headless [Obsidian](https://obsidian.md/) image: the stock Electron desktop app running against
 a virtual display, with [`obsidian-local-rest-api`](https://github.com/coddingtonbear/obsidian-local-rest-api)
 baked in and turned on automatically, so a vault can be read and written over HTTP by something
-outside the container while exactly one process (this one) ever touches the vault's files.
+outside the container while exactly one process (this one) ever touches the vault's files. The
+ratified community plugin set — [Tasks](https://github.com/obsidian-tasks-group/obsidian-tasks)
+and [Dataview](https://github.com/blacksmithgu/obsidian-dataview), and nothing else — is baked in
+alongside it; see "Baked-in community plugins" below.
 
 A VNC server is installed but never started, so an operator can attach to the *same* running
 Obsidian instance on demand for the settings that are only reachable through the GUI.
@@ -36,9 +39,13 @@ enabled on paper and never loads, and the REST API never binds.
 So the entrypoint starts Obsidian with `--remote-debugging-port=9222 --remote-allow-origins=*`
 (Chromium binds that port to `127.0.0.1` only, and it is not `EXPOSE`d), and `auto-trust.py`
 attaches over the Chrome DevTools Protocol and calls the same runtime API the GUI's trust toggle
-calls — `app.plugins.setEnable(true)` — then enables the plugin if it isn't already. It runs on
-every start and is idempotent, which also means it self-heals a container whose `/config` volume
-was lost or replaced. The technique is the one demonstrated by
+calls — `app.plugins.setEnable(true)`, which turns Restricted Mode off *vault-wide* and is what
+lets any plugin already listed in `.obsidian/community-plugins.json` load, Tasks and Dataview
+included. `auto-trust.py` additionally calls `enablePluginAndSave` for the Local REST API plugin
+specifically and then polls its HTTPS listener, because that plugin is the one thing this design
+needs a positive, verified-working guarantee for — it's the only path in from outside the
+container. It runs on every start and is idempotent, which also means it self-heals a container
+whose `/config` volume was lost or replaced. The technique is the one demonstrated by
 [`shanehull/obsidian-remote`](https://github.com/shanehull/obsidian-remote)'s `auto-trust.sh`
 (GPL-3.0; referenced for the approach, implemented independently here).
 
@@ -47,19 +54,56 @@ Obsidian after trust is established, which would mean a second Obsidian launch a
 to sequence it — against the one-process design. It is loopback-only inside a single-purpose
 container, so the only things that can reach it are the other processes this image starts.
 
+## Baked-in community plugins
+
+The ratified set ([`ppat/images#538`](https://github.com/ppat/images/issues/538)) is **Tasks and
+Dataview**, and nothing else:
+
+- **[Tasks](https://github.com/obsidian-tasks-group/obsidian-tasks)** (plugin id
+  `obsidian-tasks-plugin`) — inline task tracking: due dates, recurring tasks, done dates,
+  filtering.
+- **[Dataview](https://github.com/blacksmithgu/obsidian-dataview)** (plugin id `dataview`) — kept
+  for one reason: Obsidian's built-in Bases queries cached metadata, not file bodies, so it
+  cannot read inline checkbox task lines at all. Dataview covers exactly that gap and is
+  removable the day Bases can read task lines natively. It's also, deliberately, a read path this
+  image now exposes further than the vault's content model strictly requires: an MCP server
+  sitting in front of this container can serve Dataview query-language (DQL) searches, which is a
+  welcome capability, not an incidental one — nothing is written to the vault by a query, and the
+  "no query engine" requirement in the vault's design is about the vault's *content* staying
+  plain and portable, not a ban on a richer read path. The one real residual: Dataview has had no
+  commits to `master` since 2025-04-08, so a read path that leans on it leans on a dormant
+  plugin — a cost already accepted, since Dataview is retained regardless for inline task queries
+  that Bases structurally cannot serve.
+
+**Deliberately excluded** (`ppat/images#538`, `ppat/obsidian-vault#2`): Templater and QuickAdd
+(both require Obsidian `>= 1.13.0`, today's beta/insider channel only — this image pins stable
+`1.12.7`), Linter and Frontmatter Date Manager (frontmatter normalisation is owned entirely by
+the maintenance pass that runs outside the application), a validation plugin such as Propsec (a
+second, lossy source of truth competing with the JSON-Schema validator that is the authoritative
+gate), and Kanban (publicly seeking maintainers, unmaintained; board views come from Bases
+instead). Don't install any of these by hand — that recreates exactly the conflict the ratified
+set exists to avoid.
+
 ## What the entrypoint does
 
 `docker-entrypoint.sh` runs under `tini` as PID 1 (no s6-overlay, no init supervisor, no `sudo`)
 and, as uid 1000:
 
-- **Installs the plugin into the vault.** `/vault` and `/config` are external volumes at runtime,
-  so anything baked into those paths would be shadowed by the mount; everything baked in lives
-  under `/opt/obsidian-seed` and is applied at start. `main.js`/`manifest.json`/`styles.css` are
-  overwritten unconditionally — plugin code tracks the image, and copy-if-absent would mean a
-  Renovate version bump never reached a vault that had already been started once. The plugin's
-  own `data.json` (API key and settings) is never overwritten.
-- **Merges** the plugin id into `.obsidian/community-plugins.json`, preserving any other plugins
-  an operator enabled through the GUI.
+- **Force-copies every baked-in plugin's code into the vault, on every start, no exceptions.**
+  `/vault` and `/config` are external volumes at runtime, so anything baked into those paths
+  would be shadowed by the mount; everything baked in lives under `/opt/obsidian-seed` and is
+  applied at start. `main.js`/`manifest.json`/`styles.css` are overwritten unconditionally —
+  plugin code tracks the image, and copy-if-absent would mean a Renovate version bump never
+  reached a vault that had already been started once. A plugin's own state, such as the REST API
+  plugin's `data.json` (API key and settings), is never in this list and is never overwritten.
+- **Enables plugins differently depending on which one it is.** The Local REST API plugin is
+  merged into `.obsidian/community-plugins.json` on *every* start — it's load-bearing, nothing
+  outside the container can reach the vault without it, so its enabled state must never be
+  allowed to drift. Tasks and Dataview are merged in only the *first* time their plugin directory
+  is seeded (i.e. it did not already exist before this start); after that, an operator who
+  disables one of them at the GUI has that choice respected on every later restart instead of the
+  container silently re-enabling it out from under them. Code and enablement are deliberately
+  decoupled for exactly this reason — see `seed_plugin()` in `docker-entrypoint.sh`.
 - **Registers the vault** in `${XDG_CONFIG_HOME}/obsidian/obsidian.json` if that file is absent,
   with a vault id derived from the vault path so it is stable if `/config` is lost. This does not
   establish trust; it only makes Obsidian open the vault instead of the vault picker.

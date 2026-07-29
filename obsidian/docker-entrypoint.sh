@@ -13,12 +13,13 @@ umask 0027
 
 VAULT_DIR="${OBSIDIAN_VAULT_DIR:-/vault}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-/config}"
-PLUGIN_ID="${OBSIDIAN_PLUGIN_ID:-obsidian-local-rest-api}"
+REST_API_PLUGIN_ID="${OBSIDIAN_PLUGIN_ID:-obsidian-local-rest-api}"
 GEOMETRY="${OBSIDIAN_SCREEN_GEOMETRY:-1920x1080x24}"
 CDP_PORT="${OBSIDIAN_CDP_PORT:-9222}"
 
-SEED_PLUGIN_DIR="/opt/obsidian-seed/plugins/${PLUGIN_ID}"
-VAULT_PLUGIN_DIR="${VAULT_DIR}/.obsidian/plugins/${PLUGIN_ID}"
+SEED_PLUGINS_DIR="/opt/obsidian-seed/plugins"
+VAULT_PLUGINS_DIR="${VAULT_DIR}/.obsidian/plugins"
+REST_API_VAULT_PLUGIN_DIR="${VAULT_PLUGINS_DIR}/${REST_API_PLUGIN_ID}"
 ELECTRON_CONFIG_DIR="${CONFIG_DIR}/obsidian"
 
 log() {
@@ -37,27 +38,13 @@ die() {
 # image put there, so nothing plugin-related can simply be baked into its final location -- the
 # mount would shadow it. Everything baked in lives under /opt/obsidian-seed and is applied here.
 # ----------------------------------------------------------------------------------------------
-mkdir -p "${VAULT_PLUGIN_DIR}" "${ELECTRON_CONFIG_DIR}" \
+mkdir -p "${VAULT_PLUGINS_DIR}" "${ELECTRON_CONFIG_DIR}" \
   || die "cannot write to ${VAULT_DIR} / ${CONFIG_DIR}; both must be writable by uid $(id -u)"
-
-# Plugin code tracks the IMAGE, not the volume, so this overwrites unconditionally. This is a
-# deliberate departure from the copy-if-absent seeding the openclaw image uses: main.js/
-# manifest.json/styles.css are build artifacts pinned by a Renovate-tracked version in the
-# Dockerfile, and copy-if-absent would mean a plugin version bump never actually reached any
-# vault that had already been started once. The plugin's own state -- data.json, which holds the
-# generated API key and settings -- is NOT in this list and is never overwritten.
-install -m 0640 \
-  "${SEED_PLUGIN_DIR}/main.js" \
-  "${SEED_PLUGIN_DIR}/manifest.json" \
-  "${SEED_PLUGIN_DIR}/styles.css" \
-  "${VAULT_PLUGIN_DIR}/" \
-  || die "failed to install the ${PLUGIN_ID} plugin into ${VAULT_PLUGIN_DIR}"
-log "installed ${PLUGIN_ID} $(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
-  "${VAULT_PLUGIN_DIR}/manifest.json") into ${VAULT_PLUGIN_DIR}"
 
 # Obsidian reads the set of enabled community plugins from this file. Merge rather than write:
 # an operator may have enabled other plugins through the GUI and we must not drop them.
-python3 - "${VAULT_DIR}/.obsidian/community-plugins.json" "${PLUGIN_ID}" <<'PY'
+enable_plugin() {
+  python3 - "${VAULT_DIR}/.obsidian/community-plugins.json" "$1" <<'PY'
 import json
 import os
 import sys
@@ -77,6 +64,65 @@ if plugin_id not in plugins:
         json.dump(plugins, handle, indent=2)
     print("docker-entrypoint: added %s to %s" % (plugin_id, os.path.basename(path)))
 PY
+}
+
+# seed_plugin <plugin_id> <always|first-seed>
+#
+# Plugin CODE is force-copied on every start no matter which mode is passed -- no exceptions.
+# This is a deliberate departure from the copy-if-absent seeding the openclaw image uses:
+# main.js/manifest.json/styles.css are build artifacts pinned by a Renovate-tracked version in
+# the Dockerfile, and copy-if-absent would mean a plugin version bump never actually reached any
+# vault that had already been started once. A plugin's own state -- data.json, where the REST API
+# plugin keeps its generated key and settings -- is never in this list and is never overwritten.
+#
+# Plugin ENABLEMENT (whether its id is added to .obsidian/community-plugins.json) is where the
+# mode argument matters, and is the one place the three baked-in plugins deliberately diverge:
+#   - "always": added to the enabled list on every start, unconditionally. Reserved for
+#     obsidian-local-rest-api, which is load-bearing -- without it nothing outside this container
+#     can touch the vault at all, so its enabled state must never be allowed to drift.
+#   - "first-seed": added to the enabled list only the first time this plugin's directory is
+#     seeded, i.e. only when the directory did not already exist before this start. Used for
+#     obsidian-tasks-plugin and dataview. After the first boot, an operator who deliberately
+#     disables one of these at the GUI has that choice respected on every later restart --
+#     re-enabling it out from under them would be the container fighting a deliberate human
+#     decision, which is exactly the behaviour "always" mode must NOT generalize to.
+seed_plugin() {
+  local plugin_id="$1" enable_mode="$2"
+  local seed_dir="${SEED_PLUGINS_DIR}/${plugin_id}"
+  local vault_dir="${VAULT_PLUGINS_DIR}/${plugin_id}"
+  local is_first_seed="false"
+  [[ -d "${vault_dir}" ]] || is_first_seed="true"
+
+  mkdir -p "${vault_dir}" || die "cannot write to ${vault_dir}"
+  install -m 0640 \
+    "${seed_dir}/main.js" \
+    "${seed_dir}/manifest.json" \
+    "${seed_dir}/styles.css" \
+    "${vault_dir}/" \
+    || die "failed to install the ${plugin_id} plugin into ${vault_dir}"
+  log "installed ${plugin_id} $(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
+    "${vault_dir}/manifest.json") into ${vault_dir}"
+
+  case "${enable_mode}" in
+    always)
+      enable_plugin "${plugin_id}"
+      ;;
+    first-seed)
+      if [[ "${is_first_seed}" == "true" ]]; then
+        enable_plugin "${plugin_id}"
+      else
+        log "leaving ${plugin_id} enablement as-is: already seeded from a previous start"
+      fi
+      ;;
+    *)
+      die "seed_plugin: unknown enable_mode ${enable_mode}"
+      ;;
+  esac
+}
+
+seed_plugin "${REST_API_PLUGIN_ID}" always
+seed_plugin obsidian-tasks-plugin first-seed
+seed_plugin dataview first-seed
 
 # obsidian.json is Electron-side (not vault-side) state listing the vaults Obsidian knows about.
 # Written only when absent, so anything an operator does in the GUI afterwards wins. The vault id
@@ -96,7 +142,7 @@ fi
 # declaratively. Setting OBSIDIAN_API_KEY (e.g. from a Kubernetes Secret) pins it instead. Opt-in:
 # unset, the plugin keeps generating and owning its own key. Merged into any existing data.json so
 # settings an operator changed in the GUI survive.
-DATA_JSON="${VAULT_PLUGIN_DIR}/data.json"
+DATA_JSON="${REST_API_VAULT_PLUGIN_DIR}/data.json"
 if [[ -n "${OBSIDIAN_API_KEY}" ]]; then
   python3 - "${DATA_JSON}" <<'PY'
 import json

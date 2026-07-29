@@ -10,7 +10,9 @@
         "custom.regex"
       ],
       "matchPackageNames": [
+        "blacksmithgu/obsidian-dataview",
         "coddingtonbear/obsidian-local-rest-api",
+        "obsidian-tasks-group/obsidian-tasks",
         "obsidianmd/obsidian-releases"
       ],
       "semanticCommitScope": "obsidian"
