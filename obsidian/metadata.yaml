@@ -3,6 +3,6 @@
 image_version: "1.12.7"
 
 label_title: "obsidian"
-label_description: "Headless Obsidian with the Local REST API plugin baked in and auto-trusted."
+label_description: "Headless Obsidian with the Local REST API plugin, Tasks, and Dataview baked in and auto-trusted."
 
 build_timeout: 30

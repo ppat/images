@@ -64,6 +64,45 @@ RUN mkdir -p /opt/obsidian-seed/plugins/obsidian-local-rest-api && \
     done && \
     grep -q '"id": "obsidian-local-rest-api"' /opt/obsidian-seed/plugins/obsidian-local-rest-api/manifest.json
 
+# The rest of the ratified community plugin set (ppat/images#538): Tasks and Dataview, and
+# nothing else -- Templater, QuickAdd, Linter, Frontmatter Date Manager, Kanban, and any
+# validation plugin were all considered and dropped; see the issue for why each one specifically.
+# Fetched the same way as the REST API plugin above: prebuilt release assets into the seed, not
+# built from source. Whether a given plugin ends up actually turned ON in a vault is decided at
+# runtime, not here -- see docker-entrypoint.sh for why the REST API plugin and these two are
+# seeded identically but enabled differently.
+#
+# minAppVersion checked against this image's pinned stable release (1.12.7) rather than assumed
+# -- this is exactly the check that disqualified Templater and QuickAdd (both declare 1.13.0,
+# today's beta/insider channel only). Tasks' latest release declares minAppVersion 1.8.7, well
+# under 1.12.7.
+# renovate: datasource=github-releases depName=obsidian-tasks-group/obsidian-tasks
+ARG TASKS_VERSION="8.3.0"
+RUN mkdir -p /opt/obsidian-seed/plugins/obsidian-tasks-plugin && \
+    for asset in main.js manifest.json styles.css; do \
+        curl -fsSL -o "/opt/obsidian-seed/plugins/obsidian-tasks-plugin/${asset}" \
+            "https://github.com/obsidian-tasks-group/obsidian-tasks/releases/download/${TASKS_VERSION}/${asset}"; \
+    done && \
+    grep -q '"id": "obsidian-tasks-plugin"' /opt/obsidian-seed/plugins/obsidian-tasks-plugin/manifest.json
+
+# Dataview's latest (and, as of this pin, only recent) release declares minAppVersion 0.13.11,
+# also comfortably under 1.12.7. This is upstream's last release: no commits to `master` since
+# 2025-04-08, so there is nothing newer to weigh -- see #538 ("Bases is primary, Dataview is
+# minimised") for why it's kept anyway (inline task-line queries, which Bases cannot serve at
+# all, being metadata-only) and for the residual that comes with depending on a dormant plugin.
+# Note the manifest.json shipped inside this release still self-reports "version": "0.5.68" even
+# though the release is tagged 0.5.70 -- an upstream packaging slip, confirmed against upstream's
+# own versions.json (which maps 0.5.70 -> minAppVersion 0.13.11). Not a mismatch introduced here;
+# don't "fix" it by re-pinning to 0.5.68, which is an older, different release.
+# renovate: datasource=github-releases depName=blacksmithgu/obsidian-dataview
+ARG DATAVIEW_VERSION="0.5.70"
+RUN mkdir -p /opt/obsidian-seed/plugins/dataview && \
+    for asset in main.js manifest.json styles.css; do \
+        curl -fsSL -o "/opt/obsidian-seed/plugins/dataview/${asset}" \
+            "https://github.com/blacksmithgu/obsidian-dataview/releases/download/${DATAVIEW_VERSION}/${asset}"; \
+    done && \
+    grep -q '"id": "dataview"' /opt/obsidian-seed/plugins/dataview/manifest.json
+
 
 # =======================================================================================================================================
 # Final stage. Debian rather than Alpine because Obsidian is a stock glibc-linked Electron build;
