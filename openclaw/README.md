@@ -1,19 +1,18 @@
 # openclaw
 
 An [OpenClaw](https://docs.openclaw.ai/) gateway image, built on top of the official
-[`ghcr.io/openclaw/openclaw`](https://github.com/openclaw/openclaw) `-slim` tag, with eight
+[`ghcr.io/openclaw/openclaw`](https://github.com/openclaw/openclaw) `-slim` tag, with seven
 plugins installed at build time:
 
 | Plugin | Purpose |
 | --- | --- |
-| `@openclaw/whatsapp` | WhatsApp/Baileys channel |
-| `@openclaw/diagnostics-prometheus` | Prometheus metrics exporter |
-| `@openclaw/memory-lancedb` | LanceDB-backed long-term memory store |
-| `@openclaw/lobster` | Action-approval gating |
 | `@openclaw/brave-plugin` | Brave Search web-search provider (needs `BRAVE_API_KEY`) |
+| `@openclaw/diagnostics-prometheus` | Prometheus metrics exporter |
+| `@openclaw/lobster` | Action-approval gating |
+| `@openclaw/memory-lancedb` | LanceDB-backed long-term memory store |
 | `@openclaw/searxng-plugin` | Self-hosted SearXNG web-search provider (no third-party key) |
-| `@openclaw/diffs` | Read-only diff viewer / file renderer for agents |
 | `@openclaw/voice-call` | Twilio/Telnyx/Plivo calling (available, not wired -- see below) |
+| `@openclaw/whatsapp` | WhatsApp/Baileys channel |
 
 No official OpenClaw tag bundles these plugins -- they're external ClawHub/npm packages
 that OpenClaw otherwise installs itself the first time a gateway references them, which
@@ -27,7 +26,41 @@ everything else is available but inert until a deployment's config allowlists it
 
 `duckduckgo`, `document-extract`, `web-readability` and `xai` are already bundled in the base
 image under `/app/dist/extensions`. They need allowlisting in the deployment config, not an
-install -- don't add redundant install lines for them.
+install -- don't add redundant install lines for them. `xai` in particular cannot be *removed*
+from this image without deleting an upstream extension directory; it stays inert as long as the
+deployment leaves it out of `plugins.allow`.
+
+`@openclaw/diffs` was dropped: its useful mode (rendering a diff to PNG/PDF) needs Chromium,
+which the `-slim` base image strips along with Puppeteer.
+
+## Install integrity
+
+`assert-plugin-integrity.mjs` runs as a build step and **fails the build** if any plugin install
+record lacks an `integrity` hash. It also fails if it finds no install records at all, so a change
+to `openclaw plugins inspect --all --json` can't silently turn the check into a no-op.
+
+Nothing backfills integrity onto an existing record -- the only documented remedy is reinstalling,
+which a deployed gateway cannot do (read-only rootfs, no registry egress, `OPENCLAW_OFFLINE=1`).
+Build time is the only place it can be guaranteed, hence the gate.
+
+### Why `openclaw status --deep` can still report missing integrity
+
+`plugins.installs_missing_integrity` on a running gateway is **not** caused by the install source.
+The npm source records an integrity hash, which is why the plugins installed into the first
+version of this image (`whatsapp`, `diagnostics-prometheus`) do not appear in that finding while
+every plugin added later does.
+
+The cause is that the install index lives in the gateway *state* directory
+(`state/openclaw.sqlite`), which a deployment typically mounts a PVC over, and
+`docker-entrypoint.sh` restores the build-time seed with `cp -an` (copy-if-absent). On a PVC's
+very first boot the seed's index is copied out intact, hashes and all. After that the file
+exists, so every later image -- including the newer install records it baked -- is skipped.
+Plugin *directories* still get copied, so the gateway rediscovers those plugins and writes fresh
+index rows with no integrity.
+
+So the hashes are correct in the image and lost on the way into an already-initialised state
+directory. Removing `state/openclaw.sqlite` lets the gateway reseed it from the image on next
+start -- **back up the state directory first**, that DB holds more than the plugin index.
 
 ## `voice-call` caveats
 
