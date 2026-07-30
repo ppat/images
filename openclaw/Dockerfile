@@ -1,14 +1,30 @@
 FROM --platform=$TARGETPLATFORM ghcr.io/openclaw/openclaw:2026.7.1-slim@sha256:6a31d44b2944e7adcd2b582bf6fb463111264ebca97a0201795b799135bd102c
 
-# The WhatsApp/Baileys channel, diagnostics-prometheus, memory-lancedb, and lobster plugins are
-# external ClawHub/npm packages, not bundled in any official tag (verified absent from both
-# /app/dist/extensions and /app/extensions in this image). OpenClaw otherwise tries to
-# `npm install` them at gateway startup, which fails under a locked-down deployment (read-only
-# rootfs, no ClawHub/npm egress) and is treated as a fatal startup migration for a *configured*
-# channel/plugin. Installing them here, where registry egress exists, removes that runtime
-# dependency. memory-lancedb is a LanceDB-backed memory store; lobster is action-approval
-# gating -- both are baked in here so they're available, but neither is enabled unless a
-# deployment's config turns it on.
+# Every plugin below is an external ClawHub/npm package, not bundled in any official tag
+# (verified absent from both /app/dist/extensions and /app/extensions in this image). OpenClaw
+# otherwise tries to `npm install` them at gateway startup, which fails under a locked-down
+# deployment (read-only rootfs, no ClawHub/npm egress) and is treated as a fatal startup
+# migration for a *configured* channel/plugin. Installing them here, where registry egress
+# exists, removes that runtime dependency. They're baked in so they're *available*; each stays
+# dormant unless the deployment's config allowlists it (a non-empty `plugins.allow` is a hard
+# gate -- an installed-or-bundled plugin absent from it never loads).
+#   whatsapp                - WhatsApp/Baileys channel
+#   diagnostics-prometheus  - Prometheus metrics exporter
+#   memory-lancedb          - LanceDB-backed memory store
+#   lobster                 - action-approval gating
+#   brave-plugin            - Brave Search web-search provider (needs BRAVE_API_KEY)
+#   searxng-plugin          - self-hosted SearXNG web-search provider (no third-party API key;
+#                             unlike key-free providers it can win provider auto-detection)
+#   diffs                   - read-only diff viewer / file renderer for agents
+#   voice-call              - Twilio/Telnyx/Plivo outbound calling. Baked in but NOT wired yet:
+#                             notify-mode outbound needs no public webhook (the initial <Say>
+#                             TwiML ships inside the create-call request), so it suits this
+#                             ingress-free gateway -- but the plugin exposes no destination
+#                             allowlist, so a deployment enabling it must pin `toNumber` and
+#                             keep the `voice_call` tool denied to the agent.
+# NOT installed here, deliberately: duckduckgo, document-extract, web-readability and xai are
+# ALREADY bundled in the base image under /app/dist/extensions. They need allowlisting in the
+# deployment config, not an install -- don't add redundant install lines for them.
 # Pin exact plugin versions for reproducibility/supply-chain. `npm:<scoped>@<version>` is the
 # doc-confirmed form for scoped packages with an explicit version; `--pin` records the resolved
 # exact version, and `--force` confirms the non-ClawHub (npm) source non-interactively during
@@ -17,7 +33,11 @@ FROM --platform=$TARGETPLATFORM ghcr.io/openclaw/openclaw:2026.7.1-slim@sha256:6
 RUN openclaw plugins install npm:@openclaw/whatsapp@2026.7.1 --pin --force && \
     openclaw plugins install npm:@openclaw/diagnostics-prometheus@2026.7.1 --pin --force && \
     openclaw plugins install npm:@openclaw/memory-lancedb@2026.7.1 --pin --force && \
-    openclaw plugins install npm:@openclaw/lobster@2026.7.1 --pin --force
+    openclaw plugins install npm:@openclaw/lobster@2026.7.1 --pin --force && \
+    openclaw plugins install npm:@openclaw/brave-plugin@2026.7.1 --pin --force && \
+    openclaw plugins install npm:@openclaw/searxng-plugin@2026.7.1 --pin --force && \
+    openclaw plugins install npm:@openclaw/diffs@2026.7.1 --pin --force && \
+    openclaw plugins install npm:@openclaw/voice-call@2026.7.1 --pin --force
 
 # npm-source installs land plugin package state (npm/projects/*) and the pinned install records
 # under $OPENCLAW_DATA_DIR (defaults to /home/node/.openclaw) -- exactly the path a deployment

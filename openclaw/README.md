@@ -1,17 +1,47 @@
 # openclaw
 
 An [OpenClaw](https://docs.openclaw.ai/) gateway image, built on top of the official
-[`ghcr.io/openclaw/openclaw`](https://github.com/openclaw/openclaw) `-slim` tag, with four
-plugins installed at build time: the WhatsApp channel (`@openclaw/whatsapp`),
-diagnostics-prometheus (`@openclaw/diagnostics-prometheus`), a LanceDB-backed memory store
-(`@openclaw/memory-lancedb`), and action-approval gating (`@openclaw/lobster`).
+[`ghcr.io/openclaw/openclaw`](https://github.com/openclaw/openclaw) `-slim` tag, with eight
+plugins installed at build time:
+
+| Plugin | Purpose |
+| --- | --- |
+| `@openclaw/whatsapp` | WhatsApp/Baileys channel |
+| `@openclaw/diagnostics-prometheus` | Prometheus metrics exporter |
+| `@openclaw/memory-lancedb` | LanceDB-backed long-term memory store |
+| `@openclaw/lobster` | Action-approval gating |
+| `@openclaw/brave-plugin` | Brave Search web-search provider (needs `BRAVE_API_KEY`) |
+| `@openclaw/searxng-plugin` | Self-hosted SearXNG web-search provider (no third-party key) |
+| `@openclaw/diffs` | Read-only diff viewer / file renderer for agents |
+| `@openclaw/voice-call` | Twilio/Telnyx/Plivo calling (available, not wired -- see below) |
 
 No official OpenClaw tag bundles these plugins -- they're external ClawHub/npm packages
 that OpenClaw otherwise installs itself the first time a gateway references them, which
 requires a writable home directory and network access to ClawHub/npm at startup. This image
 installs them ahead of time so a gateway with a read-only root filesystem and no outbound
-network access can still use them. memory-lancedb and lobster are baked in and available but
-not enabled unless a deployment's config turns them on.
+network access can still use them. Only the WhatsApp channel is expected to be on by default;
+everything else is available but inert until a deployment's config allowlists it -- a non-empty
+`plugins.allow` is a hard gate, so an installed plugin missing from it never loads.
+
+## Plugins deliberately *not* installed here
+
+`duckduckgo`, `document-extract`, `web-readability` and `xai` are already bundled in the base
+image under `/app/dist/extensions`. They need allowlisting in the deployment config, not an
+install -- don't add redundant install lines for them.
+
+## `voice-call` caveats
+
+Baked in for availability; wiring is left to the deployment. Two things to know before
+enabling it:
+
+- **Outbound notify mode needs no public webhook.** Twilio notify-mode calls carry their
+  initial `<Say>` TwiML inside the create-call request, so a gateway with no public ingress can
+  still place alert calls. Inbound calls, multi-turn conversation, status callbacks and
+  realtime media streams *do* require a publicly reachable webhook URL.
+- **There is no outbound destination allowlist.** The `voice_call` tool takes a free-form `to`
+  argument, so an agent holding it can dial arbitrary numbers. A deployment enabling this should
+  pin `toNumber`, add `voice_call` to `tools.deny`, and drive alerts from its automation layer
+  via the `voicecall.initiate` gateway RPC with `to` omitted (it falls back to `toNumber`).
 
 ## Entrypoint wrapper
 
