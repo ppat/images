@@ -166,6 +166,46 @@ if settings.get("apiKey") != os.environ["OBSIDIAN_API_KEY"]:
 PY
 fi
 
+# The plugin binds its listeners to 127.0.0.1 by default (settings key "bindingHost", read by
+# both the HTTPS and the disabled-here HTTP listener's `.listen()` call; default unset, which
+# falls back to the constant DefaultBindingHost = "127.0.0.1" -- confirmed against the plugin's
+# own src/main.ts and src/constants.ts at release 5.0.2, the version baked into this image). That
+# default is right for a desktop app talking to itself; it is wrong here. This container's only
+# reason to exist is to be reached from outside itself -- the MCP server pods that proxy the REST
+# API run on a *different node* -- and the kubelet's probes also connect to the pod IP, never to
+# loopback. Loopback-only means the startup/readiness/liveness probes can never succeed (the
+# kubelet is not "inside" this container) and the MCP servers can never reach the API at all, so
+# this isn't a hardening setting worth preserving -- it just breaks the one thing this image
+# exists to serve.
+#
+# Setting it to 0.0.0.0 is not the security boundary and was never meant to be one: the actual
+# boundary is the Service being ClusterIP with no ingress, a NetworkPolicy admitting only the MCP
+# server pods, and the plugin still requiring its bearer token (OBSIDIAN_API_KEY, above) on every
+# request. Binding wider than loopback does not weaken any of those.
+#
+# Merged into the same data.json as the API key, for the same reason: don't clobber whatever else
+# is in there (the API key just set above, or settings an operator changed in the GUI).
+REST_API_BINDING_HOST="0.0.0.0"
+python3 - "${DATA_JSON}" "${REST_API_BINDING_HOST}" <<'PY'
+import json
+import sys
+
+path, binding_host = sys.argv[1], sys.argv[2]
+try:
+    with open(path) as handle:
+        settings = json.load(handle)
+    if not isinstance(settings, dict):
+        settings = {}
+except (OSError, ValueError):
+    settings = {}
+
+if settings.get("bindingHost") != binding_host:
+    settings["bindingHost"] = binding_host
+    with open(path, "w") as handle:
+        json.dump(settings, handle, indent=2)
+    print("docker-entrypoint: set bindingHost to %s so the REST API is reachable off-host" % binding_host)
+PY
+
 # Re-tighten after the kubelet's fsGroup mount re-added group rw to it (see the umask comment).
 # A one-off manual chmod would be undone by the next mount; doing it on every start is what makes
 # it stick.

@@ -110,6 +110,11 @@ and, as uid 1000:
 - **Pins the REST API key** from `OBSIDIAN_API_KEY` if that variable is set (see below), then
   `chmod 0600`s `data.json` on every start — a Kubernetes `fsGroup` mount re-adds group `rw` to
   every existing file before the container starts, so a one-off `chmod` would not survive.
+- **Binds the REST API listeners to all interfaces** (`bindingHost: "0.0.0.0"` in `data.json`,
+  merged in the same way as the API key) instead of the plugin's own default of `127.0.0.1`.
+  Loopback-only is right for the desktop use case the plugin was built for, but wrong for a
+  container whose only purpose is to be reached from outside itself — see "Health" below for why
+  this is load-bearing, not just a convenience.
 - **Starts `Xvfb`** on `$DISPLAY` and waits for its socket.
 - **Starts `auto-trust.py`** in the background (it polls, so starting it before Obsidian is fine).
 - **`exec`s Obsidian**, which becomes the container's long-running process.
@@ -154,6 +159,17 @@ readinessProbe:
 The plaintext listener on `27123` is left disabled — the plugin defaults it off and nothing here
 needs it.
 
+This only works because the entrypoint forces the plugin's `bindingHost` to `0.0.0.0` (see above):
+`kubelet` connects to the pod IP, never to loopback, so a `startupProbe`/`readinessProbe`/
+`livenessProbe` against `27124` on a loopback-bound listener fails every attempt — the startup
+probe exhausts its budget and liveness then restarts the container in a loop, never reaching
+`Running`. The same bind is what lets anything else reach the plugin over the pod network at all,
+including MCP server pods proxying this API from a different node. Binding wider than loopback is
+not the security boundary for this API and was never meant to be one: that boundary is the
+`Service` being `ClusterIP` with no ingress, a `NetworkPolicy` admitting only the intended peers,
+and the plugin still requiring its bearer token on every request regardless of which interface the
+request arrived on.
+
 ## GUI access
 
 The GUI is for the handful of settings that are only reachable through it — property types,
@@ -183,6 +199,31 @@ would break the single-writer invariant.
 
 4. When finished, stop `x11vnc` with `Ctrl-C` in the `kubectl exec` terminal. Obsidian keeps
    running; only the viewer goes away.
+
+## Expected startup log noise
+
+Three lines show up on every boot that look like failures and are not — the boot chain completes
+past all of them, so treat any of the three, alone, as expected rather than as something to chase:
+
+- `_XSERVTransmkdir: Owner of /tmp/.X11-unix should be set to root` — `Xvfb` wants that directory
+  root-owned; this container runs as uid 1000 with `/tmp` as an `emptyDir`. Warning only, the X11
+  socket is still created (the entrypoint waits on it and would `die` if it were not).
+- `Failed to connect to the bus: ... /run/dbus/system_bus_socket` — Electron/Chromium probing the
+  system D-Bus for desktop integration (notifications, power/screensaver inhibition, and the
+  Secret Service keyring API). There is no D-Bus daemon in this image and none is needed for a
+  headless vault.
+- `LaunchProcess: failed to execvp: xdg-settings` — Chromium checking default-browser association,
+  which is meaningless for this container.
+
+Related to the D-Bus line: this image installs `libsecret-1-0` (Chromium's Secret Service /
+GNOME-keyring backend for its `safeStorage` API), but it is `dlopen()`ed by soname at runtime, not
+a link-time dependency — confirmed by inspecting the shipped Electron binary: `readelf -d obsidian`
+lists no `libsecret` `NEEDED` entry, while `strings obsidian` contains
+`key_storage_libsecret.cc`, `chrome_libsecret_os_crypt_password_v2`, and the literal fallback
+message `Could not load libsecret-1.so.0:`. With no D-Bus daemon here, that dlopen always fails and
+the keyring backend silently degrades — harmless today, since Obsidian Sync is unused and the REST
+API key arrives via `OBSIDIAN_API_KEY`/`data.json` rather than the OS keyring, but it is the first
+place a future plugin that wants OS-level credential storage would fail silently.
 
 ## Architectures
 
