@@ -182,12 +182,21 @@ would break the single-writer invariant.
 
     ```bash
     kubectl exec -it deploy/<deployment> -c obsidian -- \
-      x11vnc -display :99 -localhost -rfbport 5900 -nopw -shared -forever
+      x11vnc -display :99 -localhost -rfbport 5900 -passwd <throwaway> -shared -forever
     ```
 
-    `-localhost` binds `127.0.0.1` only. `-nopw` is safe *because of* `-localhost`: the port is
+    `-localhost` binds `127.0.0.1` only, and that's the actual security boundary: the port is
     reachable only from inside the pod's network namespace, which is exactly what
-    `kubectl port-forward` connects to. Nothing on the cluster network can reach it.
+    `kubectl port-forward` connects to — nothing on the cluster network can reach it. A password is
+    required anyway, because `-nopw` offers RFB security type "None" and macOS's built-in Screen
+    Sharing client negotiates RFB 3.3, where the server dictates the security type — it won't
+    proceed against a no-auth server and instead sits at a password prompt it can never satisfy. The
+    connection reaches the pod and completes the handshake at the socket level (`x11vnc` logs `Got
+    connection from client 127.0.0.1`), so this looks like a networking problem and isn't one. Any
+    throwaway value works for `<throwaway>`; it lands in the pod's process list, which doesn't
+    weaken anything since `-localhost` is already what's carrying the boundary. TigerVNC and most
+    other viewers connect fine against a no-auth server, so this only bites with Screen Sharing —
+    but Screen Sharing is the default, most likely client on the operator's own Mac.
 
 2. In another terminal, forward the port:
 
@@ -195,7 +204,7 @@ would break the single-writer invariant.
     kubectl port-forward deploy/<deployment> 5900:5900
     ```
 
-3. Point a VNC viewer at `localhost:5900`.
+3. Point a VNC viewer at `localhost:5900`, entering `<throwaway>` when prompted for a password.
 
 4. When finished, stop `x11vnc` with `Ctrl-C` in the `kubectl exec` terminal. Obsidian keeps
    running; only the viewer goes away.
