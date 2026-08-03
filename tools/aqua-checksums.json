@@ -36,13 +36,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_amd64.tar.gz",
-      "checksum": "4092B367FD060097976FB7261601F79420ECF7266328417DFD8DFEE27DE0E6A3",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.3/flux_2.9.3_linux_amd64.tar.gz",
+      "checksum": "EAE4E8608C0ADE2BF4E8DEC1669DBB6B0C28B5822B252D97FECCFB4FB1181FD2",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.9.2/flux_2.9.2_linux_arm64.tar.gz",
-      "checksum": "665BFE5AEB843FAF907E7F77250C31840499FF2DC65A64C2479409E3728748D1",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.3/flux_2.9.3_linux_arm64.tar.gz",
+      "checksum": "24EC315313621BF82EA97DB8A544725BC4F6DE19737681F01F49C651AD3B884E",
       "algorithm": "sha256"
     },
     {
