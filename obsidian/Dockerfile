@@ -7,7 +7,7 @@
 # emulation) or mounted via libfuse (which needs FUSE in the container). The tarball has neither
 # problem and its contents are byte-identical to what the AppImage unpacks to, so the arm64
 # image is assembled without emulating a single instruction here.
-FROM --platform=$BUILDPLATFORM debian:bookworm-slim@sha256:7b140f374b289a7c2befc338f42ebe6441b7ea838a042bbd5acbfca6ec875818 AS builder
+FROM --platform=$BUILDPLATFORM debian:bookworm-slim@sha256:abd67ffcfa541b485a3dff59865ab629aa048a6c613e639d36e7456b0b229241 AS builder
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /tmp
@@ -116,7 +116,7 @@ RUN mkdir -p /opt/obsidian-seed/plugins/dataview && \
 # Building from scratch also drops s6-overlay, the start-as-root-then-drop dance, and a
 # continuously-running desktop stack we don't need. The cost is owning the Electron dependency
 # set below, which is bounded: it is exactly the DT_NEEDED list of /opt/obsidian/obsidian.
-FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:7b140f374b289a7c2befc338f42ebe6441b7ea838a042bbd5acbfca6ec875818
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim@sha256:abd67ffcfa541b485a3dff59865ab629aa048a6c613e639d36e7456b0b229241
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
