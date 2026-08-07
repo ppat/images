@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=github-releases depName=obsidianmd/obsidian-releases
-image_version: "1.12.7"
+image_version: "1.13.4"
 
 label_title: "obsidian"
 label_description: "Headless Obsidian with the Local REST API plugin, Tasks, and Dataview baked in and auto-trusted."
