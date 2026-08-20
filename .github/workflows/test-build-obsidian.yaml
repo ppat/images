@@ -32,7 +32,6 @@ jobs:
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       platforms: linux/amd64,linux/arm64
       private_registry_repository: ${{ vars.CONTAINER_REGISTRY_PATH }}/obsidian
-      private_registry_build_cache: ${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/obsidian
       git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
     secrets:
