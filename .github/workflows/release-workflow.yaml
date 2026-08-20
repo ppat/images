@@ -56,24 +56,26 @@ jobs:
         echo "Setting release tag to $RELEASE_TAG"
         echo "Setting release ref to $RELEASE_REF"
         echo
-        echo "release_ref=${RELEASE_REF}" >> $GITHUB_OUTPUT
-        echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
-        echo "release_timestamp=${RELEASE_TIMESTAMP}" >> $GITHUB_OUTPUT
+        {
+          echo "release_ref=${RELEASE_REF}"
+          echo "release_tag=${RELEASE_TAG}"
+          echo "release_timestamp=${RELEASE_TIMESTAMP}"
+        } >> "$GITHUB_OUTPUT"
         echo
         echo "Fetching all previous releases..."
-        gh api repos/${GITHUB_REPOSITORY}/releases > /tmp/all_releases.json
+        gh api "repos/${GITHUB_REPOSITORY}/releases" > /tmp/all_releases.json
         cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[].tag_name' | pr -t -o 4
         echo
         echo "Filtering down to releases for this image..."
-        cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'${IMAGE_NAME}'/")) | .tag_name' > /tmp/image_release_tags.list
+        cat /tmp/all_releases.json | jq -r '. | sort_by(.published_at) | reverse | .[] | select(.tag_name | startswith("'"${IMAGE_NAME}"'/")) | .tag_name' > /tmp/image_release_tags.list
         cat /tmp/image_release_tags.list | pr -t -o 4
         echo
         echo "Determining previous release for this image..."
         LAST_RELEASE="$(head -1 /tmp/image_release_tags.list)"
         if [[ ! -z "${LAST_RELEASE}" ]]; then
-          LAST_RELEASE_SHA=$(git rev-list -n 1 $LAST_RELEASE)
-          echo $LAST_RELEASE | pr -t -o 4
-          echo $LAST_RELEASE_SHA | pr -t -o 4
+          LAST_RELEASE_SHA=$(git rev-list -n 1 "$LAST_RELEASE")
+          echo "$LAST_RELEASE" | pr -t -o 4
+          echo "$LAST_RELEASE_SHA" | pr -t -o 4
           CHANGELOG_RANGE="${LAST_RELEASE_SHA}..main"
         else
           echo "No previous release for ${IMAGE_NAME}." | pr -t -o 4
@@ -81,7 +83,7 @@ jobs:
         fi
         echo
         echo "Determining release notes..."
-        git log --no-decorate --no-color --no-merges --pretty=format:"- %s" $CHANGELOG_RANGE -- "${IMAGE_NAME}/" > /tmp/release_notes.txt
+        git log --no-decorate --no-color --no-merges --pretty=format:"- %s" "$CHANGELOG_RANGE" -- "${IMAGE_NAME}/" > /tmp/release_notes.txt
         cat /tmp/release_notes.txt | pr -t -o 4
         echo
         if (( $(wc -m < /tmp/release_notes.txt) > 0 )); then
@@ -96,7 +98,7 @@ jobs:
 
   publish:
     needs: [load-image-metadata, create-release]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@10103e49c72fbd6d3e06d7e29f51815b9b8644a6 # v4.2.0
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@667d20d10c8756b11feeab1ee691825ccea8f991 # v5.0.1
     with:
       image_context_path: ${{ inputs.image_name }}
       dockerhub_repository: ppatlabs/${{ inputs.image_name }}

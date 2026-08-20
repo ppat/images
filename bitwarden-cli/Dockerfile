@@ -31,6 +31,8 @@ COPY --link --chown=root:root --chmod=755 entrypoint.sh /entrypoint.sh
 
 ENV BW_HOST=""
 ENV BW_USER=""
+# Empty placeholder documenting a runtime `-e BW_PASSWORD=...` override, not a baked-in secret.
+# hadolint ignore=DL3064
 ENV BW_PASSWORD=""
 
 ENTRYPOINT ["/entrypoint.sh"]

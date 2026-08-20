@@ -7,3 +7,8 @@ ignored:
 - DL3018
 - DL4001
 - SC2155
+# hadolint v2.15.1 (pulled in by the ppat/github-workflows v5.0.1 bump) added this rule. It
+# flags `FROM --platform=$TARGETPLATFORM` as redundant, but every final stage in this repo sets
+# it explicitly to mirror the `--platform=$BUILDPLATFORM` builder stages -- see CLAUDE.md's
+# "Conventions specific to this repo". Functionally a no-op either way; keep it for the symmetry.
+- DL3065
