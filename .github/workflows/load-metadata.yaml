@@ -41,8 +41,11 @@ jobs:
       shell: bash
       env:
         METADATA_FILE: "./${{ inputs.image_name }}/metadata.yaml"
+      # yamllint disable-line rule:indentation
       run: |
-        echo "image_version=$(yq .image_version $METADATA_FILE)" >> $GITHUB_OUTPUT
-        echo "label_title=$(yq .label_title $METADATA_FILE)" >> $GITHUB_OUTPUT
-        echo "label_description=$(yq .label_description $METADATA_FILE)" >> $GITHUB_OUTPUT
-        echo "build_timeout=$(yq .build_timeout $METADATA_FILE)" >> $GITHUB_OUTPUT
+        {
+          echo "image_version=$(yq .image_version "$METADATA_FILE")"
+          echo "label_title=$(yq .label_title "$METADATA_FILE")"
+          echo "label_description=$(yq .label_description "$METADATA_FILE")"
+          echo "build_timeout=$(yq .build_timeout "$METADATA_FILE")"
+        } >> "$GITHUB_OUTPUT"
