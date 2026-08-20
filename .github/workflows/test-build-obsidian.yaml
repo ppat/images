@@ -25,7 +25,7 @@ jobs:
 
   test-build-obsidian:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@59629d576a6f1f02a5794257e7a6bea4f31f9992 # v6.0.0
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@5a96ced8ceefd58062f6b91ee9d6f3a31cd06e1c # v6.0.0
     with:
       image_context_path: obsidian
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
