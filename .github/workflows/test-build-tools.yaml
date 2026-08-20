@@ -15,6 +15,7 @@ concurrency:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   load-image-metadata:
@@ -24,7 +25,7 @@ jobs:
 
   test-build-tools:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@667d20d10c8756b11feeab1ee691825ccea8f991 # v5.0.1
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@a6829b4b819f7c39adabf277c7d87a1e663c186d # v6.0.0
     with:
       image_context_path: tools
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
@@ -32,7 +33,7 @@ jobs:
       platforms: linux/amd64,linux/arm64
       private_registry_repository: ${{ vars.CONTAINER_REGISTRY_PATH }}/tools
       private_registry_build_cache: ${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/tools
-      source_git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
+      git_ref: ${{ (github.event_name == 'pull_request') && format('refs/heads/{0}', github.head_ref) || github.ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
     secrets:
       private_registry_username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
