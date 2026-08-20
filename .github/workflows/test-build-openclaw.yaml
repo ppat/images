@@ -24,7 +24,7 @@ jobs:
 
   test-build-openclaw:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@10103e49c72fbd6d3e06d7e29f51815b9b8644a6 # v4.2.0
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@53fe31687a5d45d36fb9089090851c82f0294095 # v5.0.0
     with:
       image_context_path: openclaw
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
