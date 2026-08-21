@@ -14,7 +14,7 @@ packages:
 - name: bootandy/dust@v1.2.4
 - name: dalance/procs@v0.14.12
 - name: fluxcd/flux2@v2.9.4
-- name: helm/helm@v4.2.3
+- name: helm/helm@v4.2.4
 - name: junegunn/fzf@v0.74.2
 - name: kubernetes/kubectl@v1.36.3
 - name: kubernetes-sigs/krew@v0.5.0
