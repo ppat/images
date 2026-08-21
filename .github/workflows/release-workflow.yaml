@@ -98,16 +98,17 @@ jobs:
 
   publish:
     needs: [load-image-metadata, create-release]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@667d20d10c8756b11feeab1ee691825ccea8f991 # v5.0.1
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@5a96ced8ceefd58062f6b91ee9d6f3a31cd06e1c # v6.0.0
     with:
       image_context_path: ${{ inputs.image_name }}
       dockerhub_repository: ppatlabs/${{ inputs.image_name }}
+      ghcr_repository: ppat/${{ inputs.image_name }}
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
       label_description: ${{ needs.load-image-metadata.outputs.label_description }}
       platforms: ${{ inputs.platforms }}
       private_registry_repository: ${{ vars.CONTAINER_REGISTRY_PATH }}/${{ inputs.image_name }}
       private_registry_build_cache: ${{ vars.CONTAINER_REGISTRY_CACHE_PATH }}/${{ inputs.image_name }}
-      source_git_ref: ${{ needs.create-release.outputs.release_ref }}
+      git_ref: ${{ needs.create-release.outputs.release_ref }}
       timeout_minutes: ${{ fromJSON(needs.load-image-metadata.outputs.build_timeout) }}
     secrets:
       dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
