@@ -56,7 +56,7 @@ RUN --mount=type=tmpfs,target=/tmp \
 # These land in a seed directory rather than straight into the vault because the vault is an
 # externally-mounted volume at runtime -- see docker-entrypoint.sh for how the seed is applied.
 # renovate: datasource=github-releases depName=coddingtonbear/obsidian-local-rest-api
-ARG LOCAL_REST_API_VERSION="5.0.3"
+ARG LOCAL_REST_API_VERSION="5.1.0"
 RUN mkdir -p /opt/obsidian-seed/plugins/obsidian-local-rest-api && \
     for asset in main.js manifest.json styles.css; do \
         curl -fsSL -o "/opt/obsidian-seed/plugins/obsidian-local-rest-api/${asset}" \
