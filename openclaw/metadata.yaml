@@ -1,9 +1,11 @@
 ---
-# yamllint disable-line rule:line-length
-# renovate: datasource=docker depName=ghcr.io/openclaw/openclaw
+# The image version tracks the OpenClaw npm package, which is what the Dockerfile installs and
+# what the baked-in plugin versions are pinned to. Keep this in step with the Dockerfile's
+# OPENCLAW_VERSION arg -- Renovate bumps both from this one datasource.
+# renovate: datasource=npm depName=openclaw
 image_version: "2026.7.1"
 
 label_title: "openclaw"
-label_description: "OpenClaw with WhatsApp, memory, search, diff and voice plugins baked in for locked-down deploys."
+label_description: "OpenClaw with WhatsApp, memory, search and voice plugins baked in for locked-down deploys."
 
 build_timeout: 20

@@ -10,7 +10,7 @@
         "custom.regex"
       ],
       "matchPackageNames": [
-        "ghcr.io/openclaw/openclaw"
+        "openclaw"
       ],
       "semanticCommitScope": "openclaw"
     }
