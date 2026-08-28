@@ -151,6 +151,11 @@ build timeout; the target homelab node is x64/amd64, so `arm64` isn't built. Res
 ## Security scanning
 
 `scan-openclaw.yaml` runs Trivy, Dockle and an SBOM generator against this image on every PR
-touching it and weekly on a schedule, currently report-only (findings surface in PR logs and the
-Security tab without failing a build). Accepted findings are documented in the repo-root
-`.trivyignore`.
+touching it and weekly on a schedule. It reports everything and gates on the subset somebody can
+act on: a vulnerability with a fix published upstream, a secret baked into a layer, or a Dockle
+finding at WARN or above. Findings with no upstream fix -- currently all of them are Debian
+packages trixie has not patched -- are reported to the run log and the Security tab but do not
+block a merge, because no change to this image can clear them. Fixed-upstream findings that this
+repository still cannot reach are waived individually, with a reason and an expiry date, in the
+repo-root `.trivyignore.yaml`; the report half of the workflow does not apply those waivers, so
+waiving a finding never hides it.

@@ -1,0 +1,78 @@
+---
+# Reviewed and accepted vulnerability waivers for the `scan-openclaw` gate.
+#
+# Scope and mechanics, because both are easy to get wrong:
+#
+#   - This file is applied ONLY to the gating Trivy step in `.github/workflows/scan-openclaw.yaml`,
+#     which names it explicitly via the action's `trivyignores:` input. The two report-only Trivy
+#     steps (the SARIF upload feeding the Security tab, and the human-readable table in the run
+#     log) deliberately do not reference it, so everything waived here stays fully visible there --
+#     a waiver removes a finding from what blocks a merge, never from what is reported.
+#   - Trivy 0.70.0 does NOT auto-discover a file with this name. Only the bare `.trivyignore` name
+#     is picked up from the working directory automatically. That is load-bearing: it is what keeps
+#     these waivers off the report-only steps. If a future Trivy starts auto-discovering
+#     `.trivyignore.yaml`, the report steps would silently begin filtering, and the file would need
+#     renaming to something outside Trivy's discovery set to restore the split.
+#   - The YAML form (rather than the one-CVE-per-line plain form) is chosen for `expired_at`. A
+#     waiver with no expiry outlives the reasoning that justified it; an expired one stops
+#     suppressing and turns the gate red until someone re-triages it, which is the intended
+#     behaviour, not a bug to work around by extending the date reflexively.
+#
+# What belongs here: a HIGH/CRITICAL finding with a fix published upstream that this repository
+# cannot reach -- reviewed, understood, and accepted for a stated period. What does not: anything
+# fixable by bumping the base image digest or `OPENCLAW_VERSION` (bump it instead), and anything
+# with no fix available at all (the gate already excludes unfixed findings wholesale, since no
+# change here or upstream can action them).
+#
+# The same "suppress with a written reason" convention is used by `.hadolint.yaml`'s `ignored:`
+# list and by the Dockle `--ignore`/`--accept-file` flags in `scan-openclaw.yaml`.
+vulnerabilities:
+# All entries below share one root cause. The openclaw npm package ships an `npm-shrinkwrap.json`,
+# so `npm install -g openclaw@<version>` resolves its entire transitive tree to versions the
+# upstream release fixed; nothing in this repository's Dockerfile selects them and no override is
+# possible without abandoning the shrinkwrap (and with it the build's determinism). The
+# `brace-expansion`, `ip-address` and `tar` findings additionally appear in the npm bundled inside
+# the `node:24-trixie-slim` base image, which is likewise not ours to repoint.
+#
+# These clear on their own when Renovate bumps `OPENCLAW_VERSION` or the base image digest to a
+# release carrying the newer transitive versions -- which is the re-evaluation trigger: on any
+# openclaw or base-image bump, re-run the scan and delete whichever of these no longer appears,
+# rather than letting the list accrete. The shared expiry forces that review by 2027-03-01 even if
+# no bump has happened by then.
+- id: CVE-2026-13676
+  statement: >-
+    fast-uri 3.1.2, pinned transitively by openclaw's npm-shrinkwrap.json (also inside the
+    @openclaw/lobster plugin's own tree). Not selectable from this Dockerfile.
+  expired_at: 2027-03-01
+- id: CVE-2026-16221
+  statement: >-
+    fast-uri 3.1.2, same shrinkwrap-pinned dependency as CVE-2026-13676.
+  expired_at: 2027-03-01
+- id: CVE-2026-18446
+  statement: >-
+    fast-uri 3.1.2, same shrinkwrap-pinned dependency as CVE-2026-13676.
+  expired_at: 2027-03-01
+- id: CVE-2026-13697
+  statement: >-
+    undici 8.5.0, pinned transitively by openclaw's npm-shrinkwrap.json. Not selectable from this
+    Dockerfile.
+  expired_at: 2027-03-01
+- id: CVE-2026-14257
+  statement: >-
+    brace-expansion 5.0.7, present both in openclaw's shrinkwrap-pinned tree and in the npm that
+    ships inside the node:24-trixie-slim base image. Neither is repointable from here.
+  expired_at: 2027-03-01
+- id: CVE-2026-69152
+  statement: >-
+    brace-expansion 5.0.7, same two locations as CVE-2026-14257.
+  expired_at: 2027-03-01
+- id: CVE-2026-69192
+  statement: >-
+    ip-address 10.2.0, present both in openclaw's shrinkwrap-pinned tree and in the base image's
+    bundled npm.
+  expired_at: 2027-03-01
+- id: CVE-2026-73566
+  statement: >-
+    tar 7.5.19, present both in openclaw's shrinkwrap-pinned tree and in the base image's bundled
+    npm.
+  expired_at: 2027-03-01
