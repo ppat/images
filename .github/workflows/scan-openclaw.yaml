@@ -1,12 +1,43 @@
 ---
 # yamllint disable rule:line-length
 #
-# Report-only security scan for the openclaw image (soft launch). Every scan/upload step below
-# carries `continue-on-error: true` (and Trivy/Dockle are told to always exit 0), so findings are
-# surfaced in PR logs, the weekly scheduled run, and the Security tab without ever failing a build.
-# To flip this to a gating check once the plugin/base image findings have been triaged (see
-# .trivyignore): drop `continue-on-error: true` from the steps below and change Trivy's
-# `exit-code: '0'` / Dockle's `--exit-code 0` to `1`.
+# Security scan for the openclaw image, split into a report half and a gate half.
+#
+# The report half (Trivy SARIF -> Security tab, Trivy table -> run log, Dockle full check list,
+# SBOM) is unfiltered and never fails the job: it carries `continue-on-error: true`, applies no
+# waivers, and shows every HIGH/CRITICAL finding including the ones nothing can be done about.
+# It exists so that suppressing a finding from the gate never removes it from view.
+#
+# The gate half is the last two steps and is what blocks a merge. It asserts a narrower claim than
+# "the image has no findings" -- that claim is not achievable and a permanently-red gate teaches
+# people to bypass it. What it asserts is: no finding that somebody could act on. Concretely,
+# three filters narrow the report set down to the actionable one:
+#
+#   ignore-unfixed        Drops vulnerabilities with no upstream fix published. Nobody can action
+#                         these -- not a base digest bump, not a Dockerfile change -- so blocking
+#                         on them would only ever produce a red check with no remedy. As of this
+#                         workflow's last measurement they are all Debian OS packages (perl-base,
+#                         libsqlite3-0, gzip, ncurses, libacl1) that trixie has not patched. They
+#                         stay fully visible in the report half and in the Security tab.
+#   .trivyignore.yaml     Individually reviewed waivers for fixed-upstream findings this repo
+#                         still cannot reach, each with a written reason and an expiry date. Read
+#                         that file before adding to it; the bar is deliberately high.
+#   Dockle -i / -af       Two false positives, suppressed by their specific check code rather than
+#                         by lowering Dockle's exit level -- see the flags on the gate step.
+#
+# What still trips the gate, i.e. why this is not ceremony: a fixed-upstream OS CVE means the
+# pinned base digest has fallen behind and a Renovate bump clears it -- the exact failure mode
+# this image was rebuilt off its old upstream base to escape. A fixed-upstream npm CVE that is not
+# already waived means an `OPENCLAW_VERSION` bump either introduced it or can clear it, and either
+# way a human decides (bump, waive with a reason, or drop the plugin that drags it in) instead of
+# it passing silently. A leaked credential baked into the image trips Trivy's secret scanner,
+# which `ignore-unfixed` does not touch. Any Dockle finding at WARN or above other than the two
+# suppressed codes trips Dockle, whose exit level is left at its default of WARN rather than
+# relaxed to FATAL.
+#
+# The gate steps run last, after every report and upload step, so that a red gate never suppresses
+# the evidence explaining it -- and the second gate carries `if: '!cancelled()'` so a failure in
+# the first still reports both rather than one failure per push.
 name: scan-openclaw
 
 on:
@@ -14,6 +45,7 @@ on:
     paths:
     - 'openclaw/**'
     - '.github/workflows/scan-openclaw.yaml'
+    - '.trivyignore.yaml'
   schedule:
   - cron: '0 6 * * 1'
   workflow_dispatch:
@@ -46,7 +78,9 @@ jobs:
         push: false
         tags: openclaw:scan
 
-    - name: Trivy scan (SARIF)
+    # Report half. No waivers, no ignore-unfixed, never fails the job -- the complete picture,
+    # including everything the gate below deliberately does not block on.
+    - name: Trivy report (SARIF)
       id: trivy-sarif
       continue-on-error: true
       uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
@@ -58,7 +92,17 @@ jobs:
         output: 'trivy-results.sarif'
         exit-code: '0'
 
-    - name: Trivy scan (table, human-readable log)
+    # Stays non-blocking on purpose: this upload requires `security-events: write`, which a pull
+    # request from a fork does not get. A fork PR must not be un-mergeable because GitHub declined
+    # a SARIF upload -- the gate steps below are what decide mergeability.
+    - name: Upload Trivy SARIF to Security tab
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
+      with:
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy'
+
+    - name: Trivy report (table, human-readable log)
       continue-on-error: true
       uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
       with:
@@ -68,24 +112,19 @@ jobs:
         format: 'table'
         exit-code: '0'
 
-    - name: Upload Trivy SARIF to Security tab
-      continue-on-error: true
-      uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
-      with:
-        sarif_file: 'trivy-results.sarif'
-        category: 'trivy'
-
     # goodwithtech's org isn't a GitHub-verified creator, so goodwithtech/dockle-action is
     # rejected by this repo's actions/permissions allow-list (github-owned + verified-creator +
     # an explicit pattern list). Run the official dockle image directly instead -- a `run:` step
     # invoking a container isn't subject to that allow-list, only `uses:` steps are.
-    - name: Dockle scan (CIS/best-practices)
+    - name: Dockle report (all checks, unsuppressed)
       continue-on-error: true
       run: >-
         docker run --rm -v /var/run/docker.sock:/var/run/docker.sock
         goodwithtech/dockle:v0.4.15@sha256:eade932f793742de0aa8755406c7677cd7696f8675b6180926f7eeffa7abe6b9
         --exit-code 0 --format list openclaw:scan
 
+    # An SBOM is inventory, not a finding. Failing to produce or upload one says nothing about the
+    # image's security posture, so neither step gates.
     - name: Generate SBOM
       id: sbom
       continue-on-error: true
@@ -102,3 +141,40 @@ jobs:
       with:
         name: openclaw-sbom
         path: openclaw-sbom.spdx.json
+
+    # Gate half. These two steps decide whether the image may merge; see the header for what the
+    # narrowing filters do and do not concede.
+    - name: Trivy gate (actionable findings only)
+      uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+      with:
+        image-ref: openclaw:scan
+        scanners: 'vuln,secret,misconfig'
+        severity: 'HIGH,CRITICAL'
+        format: 'table'
+        ignore-unfixed: true
+        trivyignores: '.trivyignore.yaml'
+        exit-code: '1'
+
+    # `-i DKL-DI-0005` (clear apt-get caches): a text check over the build history looking for
+    # `rm -rf /var/lib/apt/lists` in the apt RUN. Every image in this repo mounts apt's state as a
+    # BuildKit cache mount instead, so the lists are never committed to a layer and there is
+    # nothing for that rm to delete -- the check cannot recognise the pattern and has no
+    # file-scoped equivalent of `-af`, so the whole code has to go. Evidence it is a false positive
+    # rather than a convenient silence: the previously published image, built without cache mounts,
+    # trips this same check six times over genuinely unpruned caches.
+    #
+    # `-af .env` (CIS-DI-0010, credential in files): scopes the acceptance to that one filename,
+    # keeping the check itself live -- a planted `id_rsa` still fails the gate, verified. The file
+    # is `node_modules/bottleneck/.env`, shipped inside the `bottleneck` npm package's own source
+    # tree as a transitive dependency of openclaw, present in the upstream image too. Prefer this
+    # over `-i CIS-DI-0010`, which would blind the gate to every credential file in the image.
+    #
+    # Dockle's exit level is left at its default (WARN), not relaxed to FATAL: the image currently
+    # has no WARN findings, and the WARN-level checks (root user, ADD over COPY, `latest` tags) are
+    # ones this repo would want to block on.
+    - name: Dockle gate (CIS/best-practices)
+      if: '!cancelled()'
+      run: >-
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock
+        goodwithtech/dockle:v0.4.15@sha256:eade932f793742de0aa8755406c7677cd7696f8675b6180926f7eeffa7abe6b9
+        --exit-code 1 --format list -i DKL-DI-0005 -af .env openclaw:scan
