@@ -10,7 +10,18 @@ set -eo pipefail
 # (fs.state_dir.perms_group_writable).
 umask 077
 
-STATE_DIR="${OPENCLAW_STATE_DIR:-${OPENCLAW_DATA_DIR:-/home/node/.openclaw}}"
+# Mirror the gateway's own state-dir resolution exactly, in its order: OPENCLAW_STATE_DIR, else
+# the directory holding OPENCLAW_CONFIG_PATH, else $HOME/.openclaw. OPENCLAW_DATA_DIR is NOT a
+# variable OpenClaw reads -- resolving it here would have this script seed one directory while
+# the gateway read another, so a deployment that relocates state via OPENCLAW_CONFIG_PATH gets
+# its seed in the right place only because of the middle branch.
+if [[ -n "${OPENCLAW_STATE_DIR:-}" ]]; then
+  STATE_DIR="${OPENCLAW_STATE_DIR}"
+elif [[ -n "${OPENCLAW_CONFIG_PATH:-}" ]]; then
+  STATE_DIR="$(dirname "${OPENCLAW_CONFIG_PATH}")"
+else
+  STATE_DIR="${HOME:-/home/node}/.openclaw"
+fi
 
 # The plugins installed at image build time (see Dockerfile) live under the OpenClaw state dir
 # (npm/projects/* + the pinned install records). Deployments commonly mount external storage (a
