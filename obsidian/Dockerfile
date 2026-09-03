@@ -77,7 +77,7 @@ RUN mkdir -p /opt/obsidian-seed/plugins/obsidian-local-rest-api && \
 # today's beta/insider channel only). Tasks' latest release declares minAppVersion 1.8.7, well
 # under 1.12.7.
 # renovate: datasource=github-releases depName=obsidian-tasks-group/obsidian-tasks
-ARG TASKS_VERSION="8.3.0"
+ARG TASKS_VERSION="8.4.0"
 RUN mkdir -p /opt/obsidian-seed/plugins/obsidian-tasks-plugin && \
     for asset in main.js manifest.json styles.css; do \
         curl -fsSL -o "/opt/obsidian-seed/plugins/obsidian-tasks-plugin/${asset}" \
