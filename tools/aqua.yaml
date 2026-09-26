@@ -11,12 +11,12 @@ registries:
   ref: v4.553.0 # renovate: depName=aquaproj/aqua-registry
 packages:
 - name: aristocratos/btop@v1.4.7
-- name: bootandy/dust@v1.2.5
+- name: bootandy/dust@v1.2.6
 - name: dalance/procs@v0.14.12
 - name: fluxcd/flux2@v2.9.5
 - name: helm/helm@v4.2.4
 - name: junegunn/fzf@v0.74.4
-- name: kubernetes/kubectl@v1.36.4
+- name: kubernetes/kubectl@v1.37.0
 - name: kubernetes-sigs/krew@v0.5.0
   command_aliases:
   - command: krew
@@ -25,6 +25,6 @@ packages:
 - name: mikefarah/yq@v4.53.6
 - name: muesli/duf@v0.9.1
 - name: sharkdp/bat@v0.26.1
-- name: sharkdp/fd@v10.4.2
+- name: sharkdp/fd@v10.5.0
 - name: sharkdp/hyperfine@v1.20.0
 - name: BurntSushi/ripgrep@15.2.0
