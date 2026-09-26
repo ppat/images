@@ -89,7 +89,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=openclaw-cache-apt-${TARGETARCH}
 # layer deletes. Root owns this tree (`/usr/local/lib/node_modules`), so the prune has to happen
 # here too, before `USER node` -- the node user can't rm it later even if it wanted to.
 # renovate: datasource=npm depName=openclaw
-ARG OPENCLAW_VERSION="2026.7.1"
+ARG OPENCLAW_VERSION="2026.9.5"
 RUN --mount=type=cache,target=/root/.npm,id=openclaw-npm-root-${TARGETARCH} \
     npm install -g "openclaw@${OPENCLAW_VERSION}" && \
     openclaw --version && \
