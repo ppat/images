@@ -21,13 +21,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.5/dust-v1.2.5-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "331B328233A70E56F0509FF962B2A6EA606EB2E654CE8A0E9A3BEBE1BD54A2BE",
+      "id": "github_release/github.com/bootandy/dust/v1.2.6/dust-v1.2.6-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "A51CF42A4654864837CC116EACA914271D7A09A9C2A60DE90ECC2187B8D855A7",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.5/dust-v1.2.5-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "79813B5743FAB1E04C1D9C34042AAB865DBE09EFB76719E7C7D260568850FABC",
+      "id": "github_release/github.com/bootandy/dust/v1.2.6/dust-v1.2.6-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "CBF2CB5C9D6227E46FC4B29C03DC43B8632020DFC5CF269D263D6E29C399E044",
       "algorithm": "sha256"
     },
     {
@@ -106,13 +106,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.4.2/fd-v10.4.2-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "F32D3657473FBA74E2600BABC8DB0B93420D51169223B7E8143B2ED55D8FD9E8",
+      "id": "github_release/github.com/sharkdp/fd/v10.5.0/fd-v10.5.0-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "D76C4317F7D5DBA69F8A2A15856C90C777E7F0DD4E85F0DE8C76DE6992C374D4",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.4.2/fd-v10.4.2-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "E3257D48E29A6BE965187DBD24CE9AF564E0FE67B3E73C9BDCD180F4EC11BDDE",
+      "id": "github_release/github.com/sharkdp/fd/v10.5.0/fd-v10.5.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "761C72DC8E120D85B22292063BE8A796E2EEB20EB3E4F38B8FA2343CCF3514A7",
       "algorithm": "sha256"
     },
     {
@@ -126,13 +126,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.36.4/bin/linux/amd64/kubectl",
-      "checksum": "8B8F088DA2DAB964F853B38464033B1BE15EDE2839ECA751482357C45ABDD05A",
+      "id": "http/dl.k8s.io/v1.37.0/bin/linux/amd64/kubectl",
+      "checksum": "6129359F4E1F3848A5572CCB0B26CF28B8CA08CEF38C95A765B2F64A2C961A2F",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.36.4/bin/linux/arm64/kubectl",
-      "checksum": "0ECF44450EE6063BF19DD166A103EE6DF4A9034455C2ABCE626E6EEA657D73FB",
+      "id": "http/dl.k8s.io/v1.37.0/bin/linux/arm64/kubectl",
+      "checksum": "922DF28DF248CC00A9E025F947704F1D1482DE64ECE54CFE57E61F19EAF1EEF3",
       "algorithm": "sha256"
     },
     {
