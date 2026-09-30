@@ -37,7 +37,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=obsidian-cache-apt-builder-${TAR
 # Renovate can't drift this onto beta on its own: insider builds are not published as GitHub
 # releases in obsidianmd/obsidian-releases at all, so the datasource below only ever sees stable.
 # renovate: datasource=github-releases depName=obsidianmd/obsidian-releases
-ARG OBSIDIAN_VERSION="1.12.7"
+ARG OBSIDIAN_VERSION="1.13.8"
 RUN --mount=type=tmpfs,target=/tmp \
     case "${TARGETARCH}" in \
         amd64) ARCH_SUFFIX="" ;; \
