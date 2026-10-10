@@ -36,13 +36,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.9.5/flux_2.9.5_linux_amd64.tar.gz",
-      "checksum": "B853DF82ADFD7736F580692F9F734473D571606307139F8FD20C2A80DD1FF473",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.6/flux_2.9.6_linux_amd64.tar.gz",
+      "checksum": "B4D22673E9246CBD628881F1A9EF3B090085DCED291E42D804555CEE8E8D42C5",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/fluxcd/flux2/v2.9.5/flux_2.9.5_linux_arm64.tar.gz",
-      "checksum": "F3E159AF616EC0B9BD0A405C2185CF09D06B74652C1DE3C7F377E8166826651A",
+      "id": "github_release/github.com/fluxcd/flux2/v2.9.6/flux_2.9.6_linux_arm64.tar.gz",
+      "checksum": "6663C154755B732F43DC993D72321F71C2FC1FF0BCB94B2696E0A8638FA562B4",
       "algorithm": "sha256"
     },
     {
@@ -66,13 +66,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz",
-      "checksum": "029A7F0F4E1932C52A0476CF02A0FD855C0BB85694B82C338FC648DCB53A819D",
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.2/kustomize_v5.8.2_linux_amd64.tar.gz",
+      "checksum": "06AF0A202C2B831207D0173F9C9CDB1B30ABCECA0747CB3FBB72792D26055C95",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.1/kustomize_v5.8.1_linux_arm64.tar.gz",
-      "checksum": "0953EA3E476F66D6DDFCD911D750F5167B9365AA9491B2326398E289FEF2C142",
+      "id": "github_release/github.com/kubernetes-sigs/kustomize/kustomize/v5.8.2/kustomize_v5.8.2_linux_arm64.tar.gz",
+      "checksum": "0991957191951CB7DDDD142403B5BB98A1FCD6378BA0079DDDC1E2C309080A7F",
       "algorithm": "sha256"
     },
     {
@@ -136,13 +136,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.4-linux-amd64.tar.gz",
-      "checksum": "C306B46F719B0A4DA32D0F78EE21BF90CE8D602F15B22AB753F0674D1670A7F3",
+      "id": "http/get.helm.sh/helm-v4.3.0-linux-amd64.tar.gz",
+      "checksum": "86584A54DEF73570558F66F5111CC53DFED56689637AE32C1201205D494F54FB",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.2.4-linux-arm64.tar.gz",
-      "checksum": "564DE2191B881E9F71B5606B25345821EA1682F06AB90499D3AB22B530176DA1",
+      "id": "http/get.helm.sh/helm-v4.3.0-linux-arm64.tar.gz",
+      "checksum": "31C5794DD55C66A51E6B7D2E2AC7A114AE8B1DE41FF1D9BA51748AC973B06A08",
       "algorithm": "sha256"
     },
     {
