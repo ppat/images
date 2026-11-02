@@ -1,16 +1,15 @@
-const validateBodyMaxLengthIgnoringDeps = async (parsedCommit) => {
-  const { maxLineLength } = await import('@commitlint/ensure');
+const { maxLineLength } = require('@commitlint/ensure');
 
-  const { type, scope, body } = parsedCommit
-  const isDepsCommit = type === 'chore' && scope === 'deps'
-
+const validateBodyMaxLengthIgnoringDeps = (parsedCommit) => {
+  const { type, scope, body } = parsedCommit;
+  const isDepsCommit = type === 'chore' && scope === 'deps';
   const bodyMaxLineLength = 120;
 
   return [
     isDepsCommit || !body || maxLineLength(body, bodyMaxLineLength),
     `commit message body line length must not exceed ${bodyMaxLineLength}`,
-  ]
-}
+  ];
+};
 
 module.exports = {
   extends: ['@commitlint/config-conventional'],
