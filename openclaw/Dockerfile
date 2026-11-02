@@ -15,7 +15,7 @@
 #     20.19.2 and Ubuntu 26.04 packages 22.22.1 -- the latter two patch releases below the floor.
 #   - The official Node image republishes same-day when either Debian slim or Node itself moves,
 #     which is faster than the distro bases turn over on their own.
-FROM --platform=$TARGETPLATFORM node:24-trixie-slim@sha256:50c3b2f6988dfc307b86e5301d69611af31f4789bdf232863b07d3b02fe55ae0
+FROM --platform=$TARGETPLATFORM node:26-trixie-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
