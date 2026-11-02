@@ -16,7 +16,7 @@
   "extends": [
     "config:best-practices",
     "group:linters",
-    "github>aquaproj/aqua-renovate-config#2.13.0",
+    "github>aquaproj/aqua-renovate-config#2.14.0",
     "github>suzuki-shunsuke/renovate-config:yaml-language-server#4.0.0",
     "github>ppat/renovate-presets#v0.3.0",
     "github>ppat/renovate-presets:dev-tools#v0.3.0",
