@@ -15,7 +15,7 @@
 #     20.19.2 and Ubuntu 26.04 packages 22.22.1 -- the latter two patch releases below the floor.
 #   - The official Node image republishes same-day when either Debian slim or Node itself moves,
 #     which is faster than the distro bases turn over on their own.
-FROM --platform=$TARGETPLATFORM node:24-trixie-slim@sha256:50c3b2f6988dfc307b86e5301d69611af31f4789bdf232863b07d3b02fe55ae0
+FROM --platform=$TARGETPLATFORM node:26-trixie-slim@sha256:e4db4c914bf8ad241bd24804fc25d272d89bad97e68cdc8a1414862790a02c39
 ARG TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -89,7 +89,7 @@ RUN --mount=type=cache,target=/var/cache/apt,id=openclaw-cache-apt-${TARGETARCH}
 # layer deletes. Root owns this tree (`/usr/local/lib/node_modules`), so the prune has to happen
 # here too, before `USER node` -- the node user can't rm it later even if it wanted to.
 # renovate: datasource=npm depName=openclaw
-ARG OPENCLAW_VERSION="2026.7.1"
+ARG OPENCLAW_VERSION="2026.10.7"
 RUN --mount=type=cache,target=/root/.npm,id=openclaw-npm-root-${TARGETARCH} \
     npm install -g "openclaw@${OPENCLAW_VERSION}" && \
     openclaw --version && \
