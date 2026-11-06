@@ -116,33 +116,33 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/hyperfine/v1.20.0/hyperfine-v1.20.0-aarch64-unknown-linux-gnu.tar.gz",
-      "checksum": "90875CB1DB7A1D797C311174D061728361E58FC70E3B62262A00635AC3B1997C",
+      "id": "github_release/github.com/sharkdp/hyperfine/v1.21.0/hyperfine-v1.21.0-aarch64-unknown-linux-gnu.tar.gz",
+      "checksum": "7C3E7183E4178E5C1BB68EF714FBF2AC1CEF04D4D7FC751D645D290AC0041D7A",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/hyperfine/v1.20.0/hyperfine-v1.20.0-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "3285EC7959285288137043DD81DCE0DDE056227018A8277532D9A364B4F03C2B",
+      "id": "github_release/github.com/sharkdp/hyperfine/v1.21.0/hyperfine-v1.21.0-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "2C64127C1A0FC3BC58E365060B4D8A09E4632082E4DEA843B8E4AFB6A7B09F36",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.37.1/bin/linux/amd64/kubectl",
-      "checksum": "65691FF77EB6FA44C908B77A1082C9F092C3B9733B5CEFABEC0D1104890E21A8",
+      "id": "http/dl.k8s.io/v1.37.2/bin/linux/amd64/kubectl",
+      "checksum": "C04487523E7AA7D1493F7808174C899DB93D7A9CF57531420CD76B9BD415F8F4",
       "algorithm": "sha256"
     },
     {
-      "id": "http/dl.k8s.io/v1.37.1/bin/linux/arm64/kubectl",
-      "checksum": "FF749F4B78D9C4F1EC87307DF9B50119ED819E2094AA9810CB9ACFFC3286C8C7",
+      "id": "http/dl.k8s.io/v1.37.2/bin/linux/arm64/kubectl",
+      "checksum": "FCC16F63186659D9722014B7E02D5FDD2D4E669CB8C0AB66365D7D3B8BA03509",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.3.0-linux-amd64.tar.gz",
-      "checksum": "86584A54DEF73570558F66F5111CC53DFED56689637AE32C1201205D494F54FB",
+      "id": "http/get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz",
+      "checksum": "0403A88AE20913D11B10A2467B50087721FEA7581736DA6B9D3992F5357FE54B",
       "algorithm": "sha256"
     },
     {
-      "id": "http/get.helm.sh/helm-v4.3.0-linux-arm64.tar.gz",
-      "checksum": "31C5794DD55C66A51E6B7D2E2AC7A114AE8B1DE41FF1D9BA51748AC973B06A08",
+      "id": "http/get.helm.sh/helm-v4.3.1-linux-arm64.tar.gz",
+      "checksum": "8CF8F66ECBC252AC8F7F06CCA68ABA88508DDFDE3A6A34FEB1678AD1694B4F88",
       "algorithm": "sha256"
     },
     {
