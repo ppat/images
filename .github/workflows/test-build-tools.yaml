@@ -25,7 +25,7 @@ jobs:
 
   test-build-tools:
     needs: [load-image-metadata]
-    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@e95dcb3a80a8e832d6ab2749d0e36329641c72b9 # v8.5.0
+    uses: ppat/github-workflows/.github/workflows/build-docker-image.yaml@bd0f4ff0d64b30c217a45bf3fbdc530c06bb5586 # v9.0.0
     with:
       image_context_path: tools
       label_title: ${{ needs.load-image-metadata.outputs.label_title }}
