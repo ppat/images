@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   update-aqua-checksums:
-    uses: ppat/github-workflows/.github/workflows/update-aqua-checksums.yaml@e95dcb3a80a8e832d6ab2749d0e36329641c72b9 # v8.5.0
+    uses: ppat/github-workflows/.github/workflows/update-aqua-checksums.yaml@bd0f4ff0d64b30c217a45bf3fbdc530c06bb5586 # v9.0.0
     with:
       git_ref: ${{ github.head_ref || github.ref_name }}
       aqua_dirs: |
