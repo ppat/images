@@ -116,6 +116,7 @@ WORKDIR /home/node
 # never loads).
 #   brave-plugin            - Brave Search web-search provider (needs BRAVE_API_KEY)
 #   diagnostics-prometheus  - Prometheus metrics exporter
+#   duckduckgo-plugin       - key-free DuckDuckGo web-search provider
 #   lobster                 - action-approval gating
 #   memory-lancedb          - LanceDB-backed memory store. Also the single largest thing in the
 #                             image: one 153 MB prebuilt native library, about a third of the
@@ -129,8 +130,8 @@ WORKDIR /home/node
 #                             allowlist, so a deployment enabling it must pin `toNumber` and
 #                             keep the `voice_call` tool denied to the agent.
 #   whatsapp                - WhatsApp/Baileys channel
-# NOT installed here, deliberately: duckduckgo, document-extract, web-readability and xai are
-# ALREADY bundled in the npm package under dist/extensions. They need allowlisting in the
+# NOT installed here, deliberately: document-extract, web-readability and xai are ALREADY bundled
+# in the npm package under dist/extensions. They need allowlisting in the
 # deployment config, not an install -- don't add redundant install lines for them.
 # Plugins track ${OPENCLAW_VERSION} rather than carrying their own pins: they are published in
 # lockstep with the app, and a plugin with no matching version fails the build loudly here
@@ -155,6 +156,7 @@ WORKDIR /home/node
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000,id=openclaw-npm-node-${TARGETARCH} \
     openclaw plugins install "npm:@openclaw/brave-plugin@${OPENCLAW_VERSION}" --pin --force && \
     openclaw plugins install "npm:@openclaw/diagnostics-prometheus@${OPENCLAW_VERSION}" --pin --force && \
+    openclaw plugins install "npm:@openclaw/duckduckgo-plugin@${OPENCLAW_VERSION}" --pin --force && \
     openclaw plugins install "npm:@openclaw/lobster@${OPENCLAW_VERSION}" --pin --force && \
     openclaw plugins install "npm:@openclaw/memory-lancedb@${OPENCLAW_VERSION}" --pin --force && \
     openclaw plugins install "npm:@openclaw/searxng-plugin@${OPENCLAW_VERSION}" --pin --force && \
