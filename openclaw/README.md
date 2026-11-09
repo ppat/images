@@ -108,7 +108,7 @@ enabling it:
 
 ## Entrypoint wrapper
 
-`tini -s --` is `ENTRYPOINT`/PID 1; `docker-entrypoint.sh` is invoked via `CMD` and does five
+`tini -s --` is `ENTRYPOINT`/PID 1; `docker-entrypoint.sh` is invoked via `CMD` and does six
 things before `exec`-ing the gateway command:
 
 - **State seeding**: restores the build-time plugin/state seed (`/home/node/.openclaw-seed`)
@@ -130,6 +130,24 @@ things before `exec`-ing the gateway command:
   login, doctor) without hitting `EBUSY` against a read-only mount. This is a no-op when
   `OPENCLAW_CONFIG_SEED` is unset. Copy-if-absent means an in-place edit in a writable volume
   always wins.
+- **Baked-in plugin install records**: OpenClaw keeps plugin install records in the state
+  database (`state/openclaw.sqlite`), which `cp -n` never overwrites once it exists. A plugin
+  first baked into a newer image would land with its package but no record, and
+  `openclaw plugins registry --refresh` then refuses to persist the registry. So
+  `sync-baked-plugin-records.mjs` copies each baked-in plugin's record from the seed's database
+  when the state database has none for it, or has one for the same package directory at a
+  different version or integrity; it then runs `openclaw plugins registry --refresh` to rebuild
+  the derived registry. Records end up identical to what a fresh state dir gets, an npm-source
+  record with its pin and integrity. Records pointing anywhere else are left alone, and the step
+  is a no-op once the records match the image. It writes OpenClaw's internal state directly
+  because no CLI adopts an already-unpacked npm package: `plugins install --link` records a
+  local-path source instead, and `plugins install npm:...` needs registry access at boot.
+  A state dir that went through an OpenClaw version which bundled one of these plugins (duckduckgo
+  was bundled in 2026.7.1) can also carry a deferred settings migration, which `openclaw update
+  status` reports as "data/settings upgrade is unfinished: The migration owner is unavailable".
+  A record does not settle it. Run `openclaw doctor --non-interactive` once, after the record
+  exists. Leave off `--fix`: it also rewrites the live config file, for example replacing
+  `${...}` references with literals and adding `plugins.bundledDiscovery`.
 - **`umask 077`**: everything the gateway *creates* this boot lands owner-only (files 600, dirs
   700), satisfying OpenClaw's `fs.config.perms_world_readable` audit check and keeping fresh
   state tight.
