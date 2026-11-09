@@ -37,6 +37,38 @@ if [[ -d /home/node/.openclaw-seed ]]; then
   fi
 fi
 
+# The plugins baked into this image are image-owned: they are published in lockstep with the gateway
+# and must match its version. `cp -n` above never overwrites, and a project's directory name
+# (npm/projects/<package>-<hash>) does not change between versions, so a state dir first populated by
+# an older image keeps that image's plugin packages. The gateway then loads them against a newer
+# plugin SDK and they fail to register (WhatsApp: "cannot import openclaw/plugin-sdk/..."). Replace
+# every baked-in project whose installed version differs from this image's seed. Plugins an operator
+# installed into the state dir are not in the seed and are left alone.
+plugin_version() {
+  local pkg
+  for pkg in "$1"/node_modules/@openclaw/*/package.json; do
+    [[ -f "${pkg}" ]] && node -p 'require(process.argv[1]).version' "${pkg}" 2>/dev/null
+    return
+  done
+}
+SEED_PROJECTS=/home/node/.openclaw-seed/npm/projects
+if [[ -d "${SEED_PROJECTS}" && -d "${STATE_DIR}/npm/projects" ]]; then
+  for seed in "${SEED_PROJECTS}"/*/; do
+    name="$(basename "${seed}")"
+    target="${STATE_DIR}/npm/projects/${name}"
+    [[ -d "${target}" ]] || continue
+    want="$(plugin_version "${seed}")"
+    have="$(plugin_version "${target}")"
+    [[ -n "${want}" && "${want}" != "${have}" ]] || continue
+    if rm -rf "${target}.refresh" && cp -a "${seed}" "${target}.refresh" \
+      && rm -rf "${target}" && mv "${target}.refresh" "${target}"; then
+      echo "docker-entrypoint: refreshed baked-in plugin ${name} ${have:-unknown} -> ${want}" >&2
+    else
+      echo "docker-entrypoint: could not refresh baked-in plugin ${name}, continuing" >&2
+    fi
+  done
+fi
+
 # Seed the gateway config from a read-only source (e.g. a Kubernetes ConfigMap mount) into its
 # writable config path, so OpenClaw's CLI can write the file back (channels login, doctor) without
 # EBUSY against a read-only mount. Copy only if the target is absent (an in-place edit in a

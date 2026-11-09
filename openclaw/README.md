@@ -1,12 +1,13 @@
 # openclaw
 
 An [OpenClaw](https://docs.openclaw.ai/) gateway image, built from the `openclaw` npm package
-onto `node:24-trixie-slim`, with seven plugins installed at build time:
+onto `node:24-trixie-slim`, with eight plugins installed at build time:
 
 | Plugin | Purpose |
 | --- | --- |
 | `@openclaw/brave-plugin` | Brave Search web-search provider (needs `BRAVE_API_KEY`) |
 | `@openclaw/diagnostics-prometheus` | Prometheus metrics exporter |
+| `@openclaw/duckduckgo-plugin` | Key-free DuckDuckGo web-search provider |
 | `@openclaw/lobster` | Action-approval gating |
 | `@openclaw/memory-lancedb` | LanceDB-backed long-term memory store |
 | `@openclaw/searxng-plugin` | Self-hosted SearXNG web-search provider (no third-party key) |
@@ -41,8 +42,8 @@ Two consequences worth knowing:
 
 ## Plugins deliberately *not* installed here
 
-`duckduckgo`, `document-extract`, `web-readability` and `xai` are already bundled in the npm
-package under `dist/extensions`. They need allowlisting in the deployment config, not an
+`document-extract`, `web-readability` and `xai` are already bundled in the npm package under
+`dist/extensions`. They need allowlisting in the deployment config, not an
 install -- don't add redundant install lines for them.
 
 ## OS packages
@@ -107,7 +108,7 @@ enabling it:
 
 ## Entrypoint wrapper
 
-`tini -s --` is `ENTRYPOINT`/PID 1; `docker-entrypoint.sh` is invoked via `CMD` and does four
+`tini -s --` is `ENTRYPOINT`/PID 1; `docker-entrypoint.sh` is invoked via `CMD` and does five
 things before `exec`-ing the gateway command:
 
 - **State seeding**: restores the build-time plugin/state seed (`/home/node/.openclaw-seed`)
@@ -117,6 +118,12 @@ things before `exec`-ing the gateway command:
   `OPENCLAW_STATE_DIR`, else the directory holding `OPENCLAW_CONFIG_PATH`, else
   `$HOME/.openclaw`. (`OPENCLAW_DATA_DIR` is not a variable OpenClaw reads -- honouring it here
   would seed one directory while the gateway read another.)
+- **Baked-in plugin refresh**: the baked-in plugins are image-owned and must match the gateway's
+  version, but `cp -n` never overwrites, and a plugin's `npm/projects/<package>-<hash>` directory
+  name stays the same across versions. A state dir first populated by an older image would keep
+  that image's plugins, which then fail to register against the newer plugin SDK. So every
+  baked-in project whose installed version differs from the seed's is replaced from the seed.
+  Plugins an operator installed into the state dir aren't in the seed and are never touched.
 - **Config seeding**: if both `OPENCLAW_CONFIG_SEED` (e.g. a read-only ConfigMap mount) and
   `OPENCLAW_CONFIG_PATH` are set and the target doesn't already exist, copies the seed to the
   config path and `chmod 600`s it, so the gateway's own CLI can write the file back (channels
