@@ -84,6 +84,28 @@ if [[ -n "${CONFIG_SEED}" && -f "${CONFIG_SEED}" && -n "${CONFIG_PATH}" && ! -e 
   fi
 fi
 
+# The baked-in plugins' install records live in the state database, which the seeding above never
+# overwrites once it exists. A plugin first baked into a newer image would otherwise sit in the
+# state dir with no install record, and one refreshed above would keep its old version's record.
+# Sync those records from the seed's database (see sync-baked-plugin-records.mjs), then rebuild the
+# derived registry. This runs after config seeding because the refresh reads plugin policy from
+# the config. It is a no-op once the records match this image.
+SEED_DB=/home/node/.openclaw-seed/state/openclaw.sqlite
+STATE_DB="${STATE_DIR}/state/openclaw.sqlite"
+if [[ -f "${SEED_DB}" && -f "${STATE_DB}" ]]; then
+  if synced="$(node /usr/local/lib/sync-baked-plugin-records.mjs "${SEED_DB}" "${STATE_DB}")"; then
+    if [[ -n "${synced}" ]]; then
+      while read -r line; do
+        echo "docker-entrypoint: synced baked-in plugin install record ${line}" >&2
+      done <<< "${synced}"
+      openclaw plugins registry --refresh >&2 \
+        || echo "docker-entrypoint: plugin registry refresh failed, continuing" >&2
+    fi
+  else
+    echo "docker-entrypoint: could not sync baked-in plugin install records, continuing" >&2
+  fi
+fi
+
 # Re-tighten the uid-1000-owned sensitive state trees AFTER the kubelet's fsGroup mount (which
 # ran before this container started and re-added group rw to everything on the PVC, defeating
 # umask on files persisted from a prior boot). This is what makes the fixes stick across restarts

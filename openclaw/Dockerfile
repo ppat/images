@@ -183,6 +183,7 @@ USER root
 RUN cp -a /home/node/.openclaw /home/node/.openclaw-seed
 
 COPY --chown=root:root --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --chown=root:root --chmod=644 sync-baked-plugin-records.mjs /usr/local/lib/sync-baked-plugin-records.mjs
 USER node
 
 # NODE_ENV is not set by the base image and the gateway is a production deployment; upstream sets
