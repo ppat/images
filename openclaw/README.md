@@ -142,6 +142,12 @@ things before `exec`-ing the gateway command:
   is a no-op once the records match the image. It writes OpenClaw's internal state directly
   because no CLI adopts an already-unpacked npm package: `plugins install --link` records a
   local-path source instead, and `plugins install npm:...` needs registry access at boot.
+  A state dir that went through an OpenClaw version which bundled one of these plugins (duckduckgo
+  was bundled in 2026.7.1) can also carry a deferred settings migration, which `openclaw update
+  status` reports as "data/settings upgrade is unfinished: The migration owner is unavailable".
+  A record does not settle it. Run `openclaw doctor --non-interactive` once, after the record
+  exists. Leave off `--fix`: it also rewrites the live config file, for example replacing
+  `${...}` references with literals and adding `plugins.bundledDiscovery`.
 - **`umask 077`**: everything the gateway *creates* this boot lands owner-only (files 600, dirs
   700), satisfying OpenClaw's `fs.config.perms_world_readable` audit check and keeping fresh
   state tight.
