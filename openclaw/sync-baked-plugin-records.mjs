@@ -35,7 +35,10 @@ function readIndex(db) {
   return value;
 }
 
-const seedDb = new DatabaseSync(seedPath, { readOnly: true });
+// The seed sits on the image's root filesystem, which runs read-only. A plain read-only open still
+// needs to create SQLite's lock files beside the database and fails with "unable to open database
+// file"; `immutable=1` skips locking, which is safe because nothing ever writes the seed.
+const seedDb = new DatabaseSync(new URL(`file:${seedPath}?immutable=1`), { readOnly: true });
 const seed = readIndex(seedDb);
 seedDb.close();
 if (!seed) process.exit(0);
