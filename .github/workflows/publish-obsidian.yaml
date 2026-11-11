@@ -8,6 +8,7 @@ on:
     - main
     paths:
     - obsidian/**
+    - '!obsidian/**/*.md'
   workflow_dispatch:
 
 concurrency:

@@ -8,6 +8,7 @@ on:
     - main
     paths:
     - tools/**
+    - '!tools/**/*.md'
   workflow_dispatch:
 
 concurrency:
