@@ -8,6 +8,7 @@ on:
     - main
     paths:
     - bitwarden-cli/**
+    - '!bitwarden-cli/**/*.md'
   workflow_dispatch:
 
 concurrency:
