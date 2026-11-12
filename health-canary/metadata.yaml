@@ -1,0 +1,7 @@
+---
+image_version: "0.1.0"
+
+label_title: "health-canary"
+label_description: "ppatlabs/health-canary runs cluster health canaries and restore checks."
+
+build_timeout: 15

@@ -12,6 +12,7 @@ and [CLAUDE.md](CLAUDE.md) for build/lint commands.
 | [freeradius-server](./freeradius-server/) | [![test-build-freeradius-server](https://github.com/ppat/images/actions/workflows/test-build-freeradius-server.yaml/badge.svg)](https://github.com/ppat/images/actions/workflows/test-build-freeradius-server.yaml) |
 | [obsidian](./obsidian/) | [![test-build-obsidian](https://github.com/ppat/images/actions/workflows/test-build-obsidian.yaml/badge.svg)](https://github.com/ppat/images/actions/workflows/test-build-obsidian.yaml) |
 | [openclaw](./openclaw/) | [![test-build-openclaw](https://github.com/ppat/images/actions/workflows/test-build-openclaw.yaml/badge.svg)](https://github.com/ppat/images/actions/workflows/test-build-openclaw.yaml) |
+| [health-canary](./health-canary/) | [![test-build-health-canary](https://github.com/ppat/images/actions/workflows/test-build-health-canary.yaml/badge.svg)](https://github.com/ppat/images/actions/workflows/test-build-health-canary.yaml) |
 
 ## Releases
 

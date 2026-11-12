@@ -39,6 +39,7 @@ module.exports = {
         'dev-tools',
         'freeradius-server',
         'github-actions',
+        'health-canary',
         'obsidian',
         'openclaw',
         'release',
