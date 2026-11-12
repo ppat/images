@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "image-updates | all | health-canary | configure labels and semantic commit scope",
+      "addLabels": [
+        "image:health-canary"
+      ],
+      "matchFileNames": [
+        "health-canary/**"
+      ],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "semanticCommitScope": "health-canary"
+    }
+  ]
+}
