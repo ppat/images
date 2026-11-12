@@ -21,13 +21,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.6/dust-v1.2.6-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "A51CF42A4654864837CC116EACA914271D7A09A9C2A60DE90ECC2187B8D855A7",
+      "id": "github_release/github.com/bootandy/dust/v1.2.7/dust-v1.2.7-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "4C8EBAF224179BFD42DB45D8A50FD5304BBD89532EDA94DB684D309C7B734ED6",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/bootandy/dust/v1.2.6/dust-v1.2.6-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "CBF2CB5C9D6227E46FC4B29C03DC43B8632020DFC5CF269D263D6E29C399E044",
+      "id": "github_release/github.com/bootandy/dust/v1.2.7/dust-v1.2.7-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "2F1A1106F1F14C0B684B2F0A5F4482C6D53E07A871DF4AFC11E3B91ADE300B55",
       "algorithm": "sha256"
     },
     {
@@ -106,13 +106,13 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.5.0/fd-v10.5.0-aarch64-unknown-linux-musl.tar.gz",
-      "checksum": "D76C4317F7D5DBA69F8A2A15856C90C777E7F0DD4E85F0DE8C76DE6992C374D4",
+      "id": "github_release/github.com/sharkdp/fd/v10.5.1/fd-v10.5.1-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "64C20B9B154C9D4B36D4B7DF3521DE771C499C4768B4B5B045EF6B01532117BE",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/sharkdp/fd/v10.5.0/fd-v10.5.0-x86_64-unknown-linux-musl.tar.gz",
-      "checksum": "761C72DC8E120D85B22292063BE8A796E2EEB20EB3E4F38B8FA2343CCF3514A7",
+      "id": "github_release/github.com/sharkdp/fd/v10.5.1/fd-v10.5.1-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "F6C95EDB190C241DF6FDDC815A5BAB4051444993AC5D92DDC6EEC0E0DC2342C7",
       "algorithm": "sha256"
     },
     {
