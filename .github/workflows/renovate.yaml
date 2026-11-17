@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   renovate:
-    uses: ppat/github-workflows/.github/workflows/renovate.yaml@bd0f4ff0d64b30c217a45bf3fbdc530c06bb5586 # v9.0.0
+    uses: ppat/github-workflows/.github/workflows/renovate.yaml@71abc9fe3a7e32b786d2ce540e51d1ef0af749fb # v10.0.0
     with:
       dry_run: ${{ github.event_name == 'pull_request' }}
       git_ref: ${{ github.head_ref || github.ref }}
