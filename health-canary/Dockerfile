@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 WORKDIR /download
 
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION="1.37.2"
+ARG KUBECTL_VERSION="1.37.3"
 RUN curl -fsSLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" && \
     echo "$(curl -fsSL "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl.sha256")  kubectl" | sha256sum -c - && \
     install -m 0755 kubectl /usr/local/bin/kubectl
